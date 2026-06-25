@@ -1,0 +1,1224 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>De Digitale Tafel — Word de autoriteit in jouw markt</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    /* Blauw palet — vervangt het groen van Upmind */
+    --bg: #050a14;
+    --bg-2: #0a1424;
+    --surface: #0f1b2e;
+    --surface-2: #142339;
+    --line: #1c2d47;
+    --ink: #f4f7fb;
+    --ink-2: #c7d2e0;
+    --ink-3: #8a97ab;
+    --accent: #4d8bff;          /* helder kobalt-blauw — equivalent van het lime accent */
+    --accent-2: #6ea4ff;
+    --accent-soft: #1a3160;
+    --accent-glow: rgba(77,139,255,.35);
+    --cream: #f1ece1;           /* warm crème zoals upmind's lichte secties */
+    --cream-2: #e6dfd0;
+    --ink-on-cream: #131820;
+    --radius: 18px;
+    --radius-lg: 28px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink);font-family:'Inter Tight',sans-serif;-webkit-font-smoothing:antialiased;line-height:1.5}
+  body{overflow-x:hidden}
+  img{max-width:100%;display:block}
+  a{color:inherit;text-decoration:none}
+  button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
+
+  /* Layout */
+  .wrap{max-width:1240px;margin:0 auto;padding:0 28px}
+  section{position:relative}
+
+  /* Headings */
+  .display{font-family:'Fraunces',serif;font-weight:400;letter-spacing:-.02em;line-height:1.02}
+  .display em{font-style:italic;color:var(--accent);font-weight:400}
+
+  /* ============== NAV ============== */
+  .nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);background:rgba(5,10,20,.6);border-bottom:1px solid rgba(255,255,255,.04)}
+  .nav-inner{display:flex;align-items:center;justify-content:space-between;padding:18px 28px;max-width:1240px;margin:0 auto}
+  .logo{display:flex;align-items:center;gap:10px;font-family:'Fraunces',serif;font-size:22px;font-weight:500;letter-spacing:-.01em}
+  .logo-mark{width:26px;height:26px;border-radius:50%;background:radial-gradient(circle at 30% 30%, var(--accent-2), var(--accent) 60%, #1c47a8);box-shadow:0 0 24px var(--accent-glow)}
+  .nav-links{display:flex;gap:36px;font-size:14.5px;color:var(--ink-2)}
+  .nav-links a{position:relative;padding:6px 0;transition:color .2s}
+  .nav-links a:hover{color:var(--ink)}
+  .nav-links .more::after{content:"›";margin-left:6px;display:inline-block;transform:rotate(90deg);font-size:13px;color:var(--ink-3)}
+  .nav-toggle{display:none;flex-direction:column;gap:5px;padding:11px 10px;border-radius:10px;border:1px solid var(--line);background:rgba(15,27,46,.5)}
+  .nav-toggle span{display:block;width:22px;height:2px;background:var(--ink);border-radius:2px;transition:transform .25s ease,opacity .2s}
+  .nav-toggle.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+  .nav-toggle.open span:nth-child(2){opacity:0}
+  .nav-toggle.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+  .nav-cta{display:inline-flex}
+  .nav .nav-cta-mobile{display:none}
+  .btn{display:inline-flex;align-items:center;gap:10px;padding:13px 22px;border-radius:999px;font-weight:500;font-size:14.5px;transition:transform .15s ease,background .2s,color .2s}
+  .btn-primary{background:var(--accent);color:#031024}
+  .btn-primary:hover{background:var(--accent-2);transform:translateY(-1px)}
+  .btn-outline{border:1px solid var(--line);color:var(--ink);background:transparent}
+  .btn-outline:hover{border-color:var(--accent);color:var(--accent)}
+  .btn-dark{background:#0a1424;color:var(--ink);border:1px solid var(--line)}
+  .btn-dark:hover{background:#142339}
+  .btn-cream{background:#191919;color:var(--cream)}
+  .btn-cream:hover{background:#000}
+
+  /* ============== HERO ============== */
+  .hero{position:relative;padding:30px 0 70px;overflow:hidden}
+  .hero-bg{position:absolute;inset:0;z-index:0;background:
+    radial-gradient(1100px 500px at 50% 0%, rgba(77,139,255,.18), transparent 70%),
+    radial-gradient(800px 400px at 10% 30%, rgba(77,139,255,.10), transparent 70%);
+  }
+  .hero-portrait{position:absolute;inset:0 0 auto 0;height:520px;display:flex;justify-content:center;z-index:1;overflow:hidden;will-change:transform,opacity;transition:transform .4s cubic-bezier(.22,.61,.36,1);mask-image:linear-gradient(to bottom, #000 55%, transparent 100%);-webkit-mask-image:linear-gradient(to bottom, #000 55%, transparent 100%)}
+  .hero-portrait svg{height:100%;width:auto;opacity:.85}
+  .hero-content{position:relative;z-index:2;text-align:center;padding-top:280px}
+  .tag-pill{display:inline-flex;align-items:center;gap:8px;padding:8px 16px;border-radius:999px;background:rgba(15,27,46,.7);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.06);font-size:13px;color:var(--ink-2)}
+  .tag-pill .dot{width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent-glow)}
+  .tag-pill.cream{background:var(--cream);color:var(--ink-on-cream);border:0}
+  .tag-pill.cream .dot{background:#1e3a8a}
+
+  .floating-tags{position:absolute;inset:0;pointer-events:none}
+  .floating-tags .tag-pill{position:absolute;animation:float 6s ease-in-out infinite}
+  .ft-1{top:230px;left:8%}
+  .ft-2{top:230px;right:8%;animation-delay:-2s}
+  .ft-3{top:380px;right:5%;animation-delay:-4s}
+  .ft-4{top:430px;left:7%;animation-delay:-1s}
+  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+
+  h1.hero-h1{font-size:clamp(40px, 6.4vw, 88px);max-width:1100px;margin:24px auto 0}
+  .hero-sub{max-width:680px;margin:26px auto 0;font-size:17px;color:var(--ink-2);line-height:1.55}
+  .hero-cta{display:flex;gap:14px;justify-content:center;margin-top:36px;flex-wrap:wrap}
+  .hero-bullets{display:flex;gap:32px;justify-content:center;flex-wrap:wrap;margin-top:46px;font-size:13.5px;color:var(--ink-3)}
+  .hero-bullets li{list-style:none;display:flex;align-items:center;gap:8px}
+  .hero-bullets li::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--accent)}
+
+  /* ============== PARTNERSHIPS / STATS ============== */
+  .stats{padding:80px 0 60px;border-top:1px solid var(--line)}
+  .stats-grid{display:grid;grid-template-columns:.6fr 1.4fr;gap:60px;align-items:start}
+  .label-row{display:flex;align-items:center;gap:10px;font-size:12.5px;letter-spacing:.18em;color:var(--accent);text-transform:uppercase}
+  .label-row::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--accent)}
+  .stats h2{font-size:clamp(28px, 3.5vw, 44px);max-width:560px;margin-top:6px}
+  .stats-sub{margin-top:24px;color:var(--ink-3);max-width:520px;font-size:14.5px;line-height:1.6}
+  .stats-numbers{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:46px}
+  .stat-num{font-family:'Fraunces',serif;font-size:54px;color:var(--accent);letter-spacing:-.02em}
+  .stat-lbl{margin-top:8px;color:var(--ink-3);font-size:13.5px;max-width:160px}
+
+  /* Marquee logo's */
+  .marquee{margin-top:56px;overflow:hidden;mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+  .marquee-track{display:flex;gap:18px;animation:scroll 38s linear infinite;width:max-content}
+  @keyframes scroll{to{transform:translateX(-50%)}}
+  .logo-chip{display:inline-flex;align-items:center;gap:10px;padding:14px 26px;border:1px solid var(--line);border-radius:999px;background:rgba(15,27,46,.4);font-size:15px;white-space:nowrap;color:var(--ink-2)}
+  .logo-chip .lc-mark{width:18px;height:18px;border-radius:50%;background:var(--accent);opacity:.85}
+  .logo-chip.alt .lc-mark{background:transparent;border:2px solid var(--accent)}
+
+  /* ============== ABOUT (voor wie) ============== */
+  .about{padding:90px 0;border-top:1px solid var(--line)}
+  .about-grid{display:grid;grid-template-columns:1.4fr .9fr;gap:60px;align-items:start}
+  .about h2{font-size:clamp(32px, 4vw, 52px);max-width:620px;margin-top:14px}
+  .about-text{margin-top:24px;color:var(--ink-2);font-size:15.5px;max-width:560px;line-height:1.6}
+  .about-list{margin-top:28px;display:flex;flex-direction:column;gap:14px}
+  .about-list li{list-style:none;display:flex;gap:12px;color:var(--ink-2);font-size:15px}
+  .about-list li::before{content:"";flex:none;margin-top:9px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+  .about-cta{margin-top:36px}
+
+  /* Performance card mockup */
+  .perf-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-lg);padding:22px;position:relative;overflow:hidden}
+  .perf-head{display:flex;justify-content:space-between;align-items:flex-start}
+  .perf-head .small{font-size:11px;color:var(--ink-3);letter-spacing:.1em;text-transform:uppercase}
+  .perf-addr{font-size:12px;color:var(--ink-3);text-align:right;line-height:1.4}
+  .perf-big{font-family:'Fraunces',serif;font-size:64px;color:var(--accent);margin-top:18px;letter-spacing:-.03em;display:flex;align-items:baseline;gap:10px}
+  .perf-delta{font-size:11px;background:var(--accent-soft);color:var(--accent-2);padding:4px 8px;border-radius:6px;font-family:'Inter Tight';font-weight:600}
+  .perf-bars{margin-top:8px;display:flex;align-items:flex-end;gap:6px;height:54px}
+  .perf-bars span{flex:1;background:linear-gradient(180deg, var(--accent), var(--accent-soft));border-radius:4px;opacity:.85}
+  .perf-bars span:nth-child(1){height:30%}
+  .perf-bars span:nth-child(2){height:55%}
+  .perf-bars span:nth-child(3){height:42%}
+  .perf-bars span:nth-child(4){height:78%}
+  .perf-bars span:nth-child(5){height:62%}
+  .perf-bars span:nth-child(6){height:95%;background:var(--accent-2)}
+  .perf-bars span:nth-child(7){height:48%}
+  .perf-tags{display:flex;gap:8px;margin-top:18px;flex-wrap:wrap}
+  .perf-tag{font-size:11.5px;padding:6px 12px;border-radius:999px;background:var(--bg-2);color:var(--ink-2);border:1px solid var(--line)}
+  .perf-tag.dot::before{content:"";display:inline-block;width:6px;height:6px;background:var(--accent);border-radius:50%;margin-right:6px;vertical-align:middle}
+
+  /* ============== SERVICES (Wat krijg je) ============== */
+  .services{padding:90px 0;border-top:1px solid var(--line)}
+  .services-head{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:30px;margin-bottom:50px}
+  .services-head h2{font-size:clamp(32px, 4vw, 52px);max-width:540px;margin-top:14px}
+  .services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .svc-card{background:var(--cream);color:var(--ink-on-cream);border-radius:var(--radius);padding:28px;display:flex;flex-direction:column;gap:18px;min-height:220px;position:relative;overflow:hidden;transition:transform .25s ease}
+  .svc-card:hover{transform:translateY(-4px)}
+  .svc-icon{width:46px;height:46px;border-radius:12px;background:var(--accent);display:flex;align-items:center;justify-content:center;color:#fff}
+  .svc-title{font-family:'Fraunces',serif;font-size:22px;letter-spacing:-.01em}
+  .svc-desc{font-size:14px;color:#3a4458;line-height:1.55;margin-top:auto}
+
+  /* ============== HOE WERKT HET — process slide ============== */
+  .process{padding:90px 0;border-top:1px solid var(--line)}
+  .process-head{display:flex;justify-content:space-between;align-items:center;gap:30px;margin-bottom:30px}
+  .process-counter{font-family:'Fraunces',serif;font-size:24px;color:var(--ink-2)}
+  .process-counter strong{color:var(--accent);font-weight:500}
+  .slide{position:relative;border-radius:var(--radius-lg);overflow:hidden;min-height:520px;background:linear-gradient(135deg, #0a1424 0%, #152849 60%, #1d3a6b 100%)}
+  .slide-bg{position:absolute;inset:0;opacity:.8}
+  .slide-visual{position:absolute;right:-20px;top:50%;transform:translateY(-50%);width:60%;display:flex;align-items:center;justify-content:center}
+  .slide-content{position:relative;z-index:2;padding:60px 60px;display:flex;flex-direction:column;height:100%;justify-content:space-between;min-height:520px}
+  .slide-tag{font-size:12.5px;color:var(--accent);letter-spacing:.18em;text-transform:uppercase;display:flex;align-items:center;gap:10px}
+  .slide-tag::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--accent)}
+  .slide-title{font-family:'Fraunces',serif;font-size:clamp(48px,5vw,72px);color:var(--accent);line-height:1;letter-spacing:-.02em;margin-top:auto}
+  .slide-desc{color:var(--ink-2);max-width:380px;margin-top:18px;font-size:15px;line-height:1.6}
+  .slide-nav{display:flex;gap:10px;margin-top:30px}
+  .slide-dot{width:36px;height:3px;background:var(--line);border-radius:2px;transition:background .2s}
+  .slide-dot.active{background:var(--accent)}
+
+  /* ============== TESTIMONIALS ============== */
+  .testimonials{padding:110px 0;background:var(--cream);color:var(--ink-on-cream);text-align:center}
+  .testimonials .label-row{color:#1e3a8a;justify-content:center;display:inline-flex}
+  .testimonials .label-row::before{background:#1e3a8a}
+  .test-quote{font-family:'Fraunces',serif;font-size:clamp(28px, 3.4vw, 44px);max-width:900px;margin:24px auto 0;line-height:1.18;letter-spacing:-.015em;color:#0a1424}
+  .test-quote em{color:#1e3a8a;font-style:italic}
+  .test-author{margin-top:36px;display:flex;flex-direction:column;align-items:center;gap:4px}
+  .test-avatar{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg, #4d8bff, #1e3a8a);margin-bottom:10px}
+  .test-name{font-weight:600;font-size:15px}
+  .test-role{font-size:13px;color:#5a6478}
+  .test-nav{display:flex;gap:12px;justify-content:center;margin-top:28px}
+  .test-arrow{width:38px;height:38px;border-radius:50%;background:rgba(0,0,0,.05);display:flex;align-items:center;justify-content:center;color:#0a1424;border:0;cursor:pointer;transition:background .2s}
+  .test-arrow:hover{background:#1e3a8a;color:#fff}
+
+  /* ============== PRICING / OFFER STACK ============== */
+  .pricing{padding:90px 0;border-top:1px solid var(--line)}
+  .pricing-head{margin-bottom:40px}
+  .pricing-head h2{font-size:clamp(32px, 4vw, 52px);margin-top:14px;color:var(--accent)}
+  .pricing-head .sub{margin-top:18px;color:var(--ink-3);max-width:600px}
+  .pricing-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  .price-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:32px;display:flex;flex-direction:column;gap:18px}
+  .price-card.featured{background:linear-gradient(180deg, var(--surface-2), var(--surface));border-color:var(--accent-soft)}
+  .price-tag{display:flex;align-items:center;gap:10px;font-size:12px;letter-spacing:.18em;color:var(--ink-3);text-transform:uppercase}
+  .price-tag .sq{width:14px;height:14px;background:var(--accent);border-radius:4px}
+  .price-name{font-family:'Fraunces',serif;font-size:24px;line-height:1.3;color:var(--ink);max-width:340px}
+  .price-feats{display:flex;flex-direction:column;gap:12px;border-top:1px solid var(--line);padding-top:18px;margin-top:6px}
+  .price-feats li{list-style:none;display:flex;align-items:center;gap:10px;color:var(--ink-2);font-size:14.5px}
+  .price-feats li::before{content:"✓";color:var(--accent);font-weight:600;font-size:14px}
+  .price-bottom{display:flex;align-items:center;justify-content:space-between;margin-top:18px;padding-top:18px;border-top:1px solid var(--line)}
+  .price-amt{font-family:'Fraunces',serif;font-size:34px;color:var(--ink)}
+  .price-amt s{color:var(--ink-3);font-size:18px;margin-left:8px;font-family:'Inter Tight'}
+
+  /* ============== WAAROM BETER (vergelijking) ============== */
+  .compare{padding:90px 0;border-top:1px solid var(--line)}
+  .compare-head{margin-bottom:40px}
+  .compare-head h2{font-size:clamp(32px,4vw,52px);margin-top:14px;max-width:760px}
+  .compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  .compare-card{border-radius:var(--radius);padding:34px;border:1px solid var(--line)}
+  .compare-card.bad{background:var(--surface)}
+  .compare-card.good{background:linear-gradient(180deg, rgba(77,139,255,.10), rgba(77,139,255,.02));border-color:var(--accent-soft)}
+  .compare-card h3{font-family:'Fraunces',serif;font-size:24px;margin-bottom:18px;display:flex;align-items:center;gap:10px}
+  .compare-card.bad h3{color:var(--ink-2)}
+  .compare-card.good h3{color:var(--accent)}
+  .compare-card ul{display:flex;flex-direction:column;gap:12px}
+  .compare-card li{list-style:none;display:flex;align-items:flex-start;gap:10px;font-size:14.5px;color:var(--ink-2)}
+  .compare-card.bad li::before{content:"×";color:#7a8497;font-weight:600;font-size:18px;line-height:1}
+  .compare-card.good li::before{content:"→";color:var(--accent);font-weight:600;line-height:1.2}
+  .compare-foot{margin-top:30px;color:var(--ink-3);font-size:14.5px;max-width:680px;font-style:italic}
+
+  /* ============== FAQ ============== */
+  .faq{padding:90px 0;border-top:1px solid var(--line)}
+  .faq-grid{display:grid;grid-template-columns:.6fr 1.4fr;gap:60px;align-items:start}
+  .faq h2{font-size:clamp(32px,4vw,52px);max-width:380px;margin-top:14px}
+  .faq-list{display:flex;flex-direction:column;gap:2px;border-top:1px solid var(--line)}
+  .faq-item{border-bottom:1px solid var(--line);padding:22px 0;cursor:pointer}
+  .faq-q{display:flex;justify-content:space-between;align-items:center;gap:20px;font-size:18px;color:var(--ink);font-family:'Fraunces',serif;font-weight:500}
+  .faq-q .plus{flex:none;width:32px;height:32px;border-radius:50%;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--accent);transition:transform .2s}
+  .faq-item[open] .plus{transform:rotate(45deg)}
+  .faq-a{color:var(--ink-2);font-size:15px;margin-top:14px;line-height:1.6;max-width:740px}
+
+  /* ============== BLOG / Insights (we hergebruiken voor cases) ============== */
+  .cases{padding:90px 0;border-top:1px solid var(--line)}
+  .cases-head{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:30px;margin-bottom:50px}
+  .cases-head h2{font-size:clamp(32px,4vw,52px);max-width:560px;margin-top:14px}
+  .cases-grid{display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:start}
+  .case-feature{border-radius:var(--radius-lg);overflow:hidden;background:var(--surface)}
+  .case-feature-img{aspect-ratio:4/3;background:linear-gradient(135deg, #1d3a6b, #4d8bff);position:relative;overflow:hidden}
+  .case-list{display:flex;flex-direction:column;gap:24px}
+  .case-row{display:grid;grid-template-columns:130px 1fr;gap:24px;align-items:center;padding-bottom:24px;border-bottom:1px solid var(--line)}
+  .case-row:last-child{border-bottom:0}
+  .case-thumb{width:130px;height:100px;border-radius:14px;overflow:hidden;background:linear-gradient(135deg, #142339, #1e3a8a)}
+  .case-meta{font-size:11.5px;color:var(--ink-3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px}
+  .case-title{font-family:'Fraunces',serif;font-size:18px;line-height:1.3;color:var(--ink)}
+
+  /* ============== FINAL CTA ============== */
+  .final-cta{position:relative;padding:120px 0;text-align:center;overflow:hidden;background:linear-gradient(180deg, #0a1424 0%, #061226 100%)}
+  .final-bg{position:absolute;inset:0;background:
+    radial-gradient(800px 400px at 50% 50%, rgba(77,139,255,.25), transparent 70%),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='400'><filter id='n'><feTurbulence baseFrequency='0.9' /><feColorMatrix values='0 0 0 0 0.3 0 0 0 0 0.55 0 0 0 0 1 0 0 0 0.12 0'/></filter><rect width='400' height='400' filter='url(%23n)'/></svg>");
+    opacity:.9}
+  .final-content{position:relative;z-index:2}
+  .final-content h2{font-size:clamp(40px, 5.5vw, 78px);max-width:900px;margin:24px auto 0}
+  .final-content .sub{margin-top:24px;color:var(--ink-2);max-width:540px;margin-left:auto;margin-right:auto}
+  .final-cta-row{margin-top:38px;display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+
+  /* ============== FORM ============== */
+  .form-section{padding:100px 0;border-top:1px solid var(--line);background:var(--bg-2)}
+  .form-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:60px;align-items:start}
+  .form-grid h2{font-size:clamp(32px,4vw,48px);margin-top:14px;max-width:380px}
+  .form-grid .form-sub{color:var(--ink-2);margin-top:20px;font-size:15px;max-width:380px;line-height:1.6}
+  .form-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-lg);padding:40px}
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px}
+  .form-row.full{grid-template-columns:1fr}
+  .field label{display:block;font-size:13px;color:var(--ink-3);margin-bottom:8px;letter-spacing:.04em}
+  .field input,.field select,.field textarea{
+    width:100%;padding:14px 16px;background:var(--bg);border:1px solid var(--line);border-radius:12px;color:var(--ink);
+    font-family:inherit;font-size:14.5px;transition:border-color .2s
+  }
+  .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--accent)}
+  .field textarea{min-height:90px;resize:vertical}
+  .checks{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
+  .check{display:flex;align-items:center;gap:8px;padding:10px 14px;border:1px solid var(--line);border-radius:10px;font-size:13.5px;color:var(--ink-2);cursor:pointer;transition:all .2s}
+  .check input{accent-color:var(--accent)}
+  .check:hover{border-color:var(--accent-soft)}
+  .form-submit{margin-top:24px;width:100%;display:flex;align-items:center;justify-content:center}
+  .form-microcopy{margin-top:14px;text-align:center;font-size:12.5px;color:var(--ink-3)}
+
+  /* ============== FOOTER ============== */
+  .footer{background:#040810;padding:80px 0 0;border-top:1px solid var(--line)}
+  .footer-grid{display:grid;grid-template-columns:1.4fr repeat(3,1fr) 1.3fr;gap:40px}
+  .foot-col h4{font-size:13px;color:var(--ink-3);letter-spacing:.18em;text-transform:uppercase;margin-bottom:18px}
+  .foot-col a{display:block;color:var(--ink-2);font-size:14.5px;padding:6px 0;transition:color .2s}
+  .foot-col a:hover{color:var(--accent)}
+  .foot-addr{font-size:14px;color:var(--ink-2);line-height:1.55}
+  .foot-socials{display:flex;gap:10px;margin-top:18px}
+  .foot-socials a{width:36px;height:36px;border-radius:50%;background:var(--surface);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--ink-2);padding:0}
+  .foot-socials a:hover{background:var(--accent);color:#031024;border-color:var(--accent)}
+  .wordmark{
+    font-family:'Fraunces',serif;
+    font-size:clamp(120px, 28vw, 360px);
+    line-height:.85;
+    color:var(--accent);
+    text-align:center;
+    letter-spacing:-.04em;
+    margin-top:60px;
+    overflow:hidden;
+    padding-bottom:0;
+  }
+
+  .process-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:18px}
+
+  /* Form feedback */
+  .form-success{display:none;text-align:center;padding:30px 10px}
+  .form-success.show{display:block}
+  .form-success .ok{width:56px;height:56px;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;font-size:26px}
+  .form-success h3{font-family:'Fraunces',serif;font-size:24px;margin-bottom:10px}
+  .form-success p{color:var(--ink-2);font-size:14.5px;max-width:340px;margin:0 auto}
+  .field input:invalid:not(:placeholder-shown){border-color:#e06464}
+
+  /* ============== ANIMATIES ============== */
+  html{scroll-behavior:smooth}
+  /* Scroll-reveal */
+  .reveal{opacity:0;transform:translateY(28px);transition:opacity .7s cubic-bezier(.22,.61,.36,1),transform .7s cubic-bezier(.22,.61,.36,1)}
+  .reveal.in{opacity:1;transform:none}
+  .reveal.d1{transition-delay:.08s}
+  .reveal.d2{transition-delay:.16s}
+  .reveal.d3{transition-delay:.24s}
+  .reveal.d4{transition-delay:.32s}
+  /* Nav verdicht bij scroll */
+  .nav.scrolled{background:rgba(5,10,20,.85);box-shadow:0 8px 30px rgba(0,0,0,.35)}
+  /* Magnetische/zachte hover op primaire knoppen */
+  .btn-primary{box-shadow:0 0 0 0 var(--accent-glow);transition:transform .15s ease,background .2s,color .2s,box-shadow .35s ease}
+  .btn-primary:hover{box-shadow:0 10px 34px -8px var(--accent-glow)}
+  /* Perf-bars groeien bij reveal */
+  .perf-bars span{transform:scaleY(0);transform-origin:bottom;transition:transform .8s cubic-bezier(.22,.61,.36,1)}
+  .perf-card.in .perf-bars span{transform:scaleY(1)}
+  .perf-card.in .perf-bars span:nth-child(1){transition-delay:.05s}
+  .perf-card.in .perf-bars span:nth-child(2){transition-delay:.12s}
+  .perf-card.in .perf-bars span:nth-child(3){transition-delay:.19s}
+  .perf-card.in .perf-bars span:nth-child(4){transition-delay:.26s}
+  .perf-card.in .perf-bars span:nth-child(5){transition-delay:.33s}
+  .perf-card.in .perf-bars span:nth-child(6){transition-delay:.40s}
+  .perf-card.in .perf-bars span:nth-child(7){transition-delay:.47s}
+  /* Service-cards: glans-sweep bij hover */
+  .svc-card::after{content:"";position:absolute;top:0;left:-60%;width:50%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.45),transparent);transform:skewX(-18deg);transition:left .6s ease;pointer-events:none}
+  .svc-card:hover::after{left:130%}
+  /* Slide-tekst fade bij wissel */
+  .slide-content.swapping #slideTitle,.slide-content.swapping #slideDesc,.slide-content.swapping #slideTag{opacity:0;transform:translateY(10px)}
+  #slideTitle,#slideDesc,#slideTag{transition:opacity .35s ease,transform .35s ease}
+  .test-quote,.test-name,.test-role{transition:opacity .3s ease}
+  .testimonials.swapping .test-quote,.testimonials.swapping .test-name,.testimonials.swapping .test-role{opacity:0}
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto}
+    *,*::before,*::after{animation:none !important;transition:none !important}
+    .reveal{opacity:1;transform:none}
+    .perf-bars span{transform:scaleY(1)}
+  }
+
+  /* ============== RESPONSIVE ============== */
+  @media (max-width: 900px){
+    .nav-toggle{display:flex}
+    .nav-links{
+      display:flex;flex-direction:column;gap:0;
+      position:absolute;top:100%;left:0;right:0;
+      background:var(--bg-2);border-bottom:1px solid var(--line);
+      padding:6px 28px 18px;
+      transform:translateY(-12px);opacity:0;pointer-events:none;
+      transition:opacity .2s ease,transform .2s ease
+    }
+    .nav-links.open{transform:none;opacity:1;pointer-events:auto}
+    .nav-links a{padding:15px 0;border-bottom:1px solid var(--line);font-size:16px;color:var(--ink)}
+    .nav-links a:last-child{border-bottom:0}
+    .nav .nav-cta-mobile{display:inline-flex;margin-top:14px;justify-content:center}
+    .nav-cta-mobile::after{display:none}
+    .stats-grid,.about-grid,.faq-grid,.form-grid,.cases-grid{grid-template-columns:1fr;gap:40px}
+    .services-grid,.pricing-grid,.compare-grid,.process-steps{grid-template-columns:1fr 1fr}
+    .stats-numbers{grid-template-columns:1fr}
+    .footer-grid{grid-template-columns:1fr 1fr;gap:30px}
+    .form-row{grid-template-columns:1fr}
+    .slide-content{padding:36px 28px}
+    .slide-visual{width:100%;opacity:.25}
+    .hero-content{padding-top:200px}
+    .floating-tags{display:none}
+    .hero-portrait{height:380px}
+    .case-row{grid-template-columns:90px 1fr}
+    .case-thumb{width:90px;height:70px}
+  }
+  @media (max-width: 600px){
+    .wrap{padding:0 18px}
+    .nav-inner{padding:14px 18px}
+    .nav-links{padding:6px 18px 18px}
+    .logo{font-size:19px}
+    .nav-cta{display:none}
+    .hero{padding:20px 0 50px}
+    .hero-content{padding-top:170px}
+    .hero-portrait{height:300px}
+    .hero-cta{flex-direction:column}
+    .hero-cta .btn,.final-cta-row .btn{width:100%;justify-content:center}
+    .hero-bullets{gap:14px}
+    .stats,.about,.services,.process,.pricing,.compare,.cases,.faq{padding:60px 0}
+    .testimonials{padding:70px 0}
+    .final-cta{padding:80px 0}
+    .form-section{padding:64px 0}
+    .stat-num{font-size:46px}
+    .perf-big{font-size:48px}
+    .services-grid,.pricing-grid,.compare-grid,.process-steps,.footer-grid,.checks{grid-template-columns:1fr}
+    .slide{min-height:auto}
+    .slide-content{padding:30px 22px;min-height:auto;gap:24px}
+    .slide-title{margin-top:0}
+    .svc-card{min-height:0}
+    .form-card{padding:26px 20px}
+    .price-card{padding:26px 22px}
+    .compare-card{padding:26px 22px}
+  }
+</style>
+</head>
+<body>
+
+<!-- ============== NAV ============== -->
+<header class="nav">
+  <div class="nav-inner">
+    <a class="logo" href="#">
+      <span class="logo-mark"></span>
+      De Digitale Tafel
+    </a>
+    <nav class="nav-links" id="navLinks">
+      <a href="#format">Het format</a>
+      <a href="#hoe">Hoe het werkt</a>
+      <a href="#cases">Cases</a>
+      <a href="#aanvragen">Trajecten</a>
+      <a href="#aanvragen" class="btn btn-primary nav-cta-mobile">Plan een gesprek</a>
+    </nav>
+    <a href="#aanvragen" class="btn btn-primary nav-cta">Plan een gesprek</a>
+    <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- ============== HERO ============== -->
+<section class="hero">
+  <div class="hero-bg"></div>
+
+  <!-- Stylized "portrait" / studio scene als SVG (geen externe assets) -->
+  <div class="hero-portrait">
+    <svg viewBox="0 0 1200 600" preserveAspectRatio="xMidYMin slice" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="spot" cx="50%" cy="20%" r="60%">
+          <stop offset="0%" stop-color="#4d8bff" stop-opacity=".55"/>
+          <stop offset="60%" stop-color="#1c47a8" stop-opacity=".18"/>
+          <stop offset="100%" stop-color="#050a14" stop-opacity="0"/>
+        </radialGradient>
+        <linearGradient id="silhouette" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#23467e"/>
+          <stop offset="100%" stop-color="#0a1424"/>
+        </linearGradient>
+        <linearGradient id="micGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#6ea4ff"/>
+          <stop offset="100%" stop-color="#1e3a8a"/>
+        </linearGradient>
+        <radialGradient id="lightBeam" cx="50%" cy="0%" r="80%">
+          <stop offset="0%" stop-color="#6ea4ff" stop-opacity=".4"/>
+          <stop offset="100%" stop-color="#6ea4ff" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <rect width="1200" height="600" fill="url(#spot)"/>
+      <!-- Light beam left -->
+      <polygon points="200,0 0,600 360,600 380,0" fill="url(#lightBeam)" opacity=".5"/>
+      <polygon points="900,0 1200,600 840,600 820,0" fill="url(#lightBeam)" opacity=".4"/>
+
+      <!-- Studio table -->
+      <rect x="380" y="430" width="440" height="180" fill="#0a1424"/>
+      <ellipse cx="600" cy="430" rx="220" ry="20" fill="#152849"/>
+
+      <!-- Two silhouettes facing each other (interview) -->
+      <!-- Left figure -->
+      <g transform="translate(440,250)">
+        <ellipse cx="0" cy="60" rx="48" ry="56" fill="url(#silhouette)"/>
+        <path d="M -90,260 Q -80,170 0,140 Q 80,170 90,260 Z" fill="url(#silhouette)"/>
+      </g>
+      <!-- Right figure -->
+      <g transform="translate(760,250)">
+        <ellipse cx="0" cy="60" rx="48" ry="56" fill="url(#silhouette)"/>
+        <path d="M -90,260 Q -80,170 0,140 Q 80,170 90,260 Z" fill="url(#silhouette)"/>
+      </g>
+
+      <!-- Microphone in center -->
+      <g transform="translate(600,420)">
+        <rect x="-3" y="-50" width="6" height="50" fill="#1e3a8a"/>
+        <ellipse cx="0" cy="-65" rx="22" ry="28" fill="url(#micGrad)"/>
+        <ellipse cx="0" cy="-65" rx="14" ry="18" fill="#0a1424" opacity=".4"/>
+        <line x1="-14" y1="-78" x2="14" y2="-52" stroke="#4d8bff" stroke-width="1" opacity=".6"/>
+        <line x1="-14" y1="-72" x2="14" y2="-58" stroke="#4d8bff" stroke-width="1" opacity=".6"/>
+      </g>
+
+      <!-- Camera frame circles in top -->
+      <circle cx="600" cy="200" r="80" fill="none" stroke="#4d8bff" stroke-width="1.5" opacity=".4"/>
+      <circle cx="600" cy="200" r="120" fill="none" stroke="#4d8bff" stroke-width="1" opacity=".25"/>
+      <circle cx="600" cy="200" r="160" fill="none" stroke="#4d8bff" stroke-width=".8" opacity=".15"/>
+    </svg>
+  </div>
+
+  <!-- Floating pill tags (zoals Upmind) -->
+  <div class="wrap" style="position:relative">
+    <div class="floating-tags">
+      <span class="tag-pill cream ft-1"><span class="dot"></span> Premium format</span>
+      <span class="tag-pill ft-2"><span class="dot"></span> 30–60 dagen content</span>
+      <span class="tag-pill ft-3 cream"><span class="dot"></span> Sales-asset</span>
+      <span class="tag-pill ft-4"><span class="dot"></span> Autoriteit</span>
+    </div>
+
+    <div class="hero-content">
+      <h1 class="display hero-h1">Word de autoriteit in jouw markt — met één <em>high-end interviewformat.</em></h1>
+      <p class="hero-sub">Geen losse content. Geen standaard podcast. Wij bouwen een premium interviewformat dat jou positioneert als thought leader — en één opname omzet in weken aan social content, sales-assets en advertentiemateriaal.</p>
+      <div class="hero-cta">
+        <a href="#aanvragen" class="btn btn-primary">Plan een strategiegesprek →</a>
+        <a href="#format" class="btn btn-outline">Bekijk hoe het werkt</a>
+      </div>
+      <ul class="hero-bullets">
+        <li>1 opname = 15–30 assets</li>
+        <li>30–60 dagen content</li>
+        <li>Voor social, sales & ads</li>
+        <li>Bouwt autoriteit én conversie</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============== STATS / PARTNERSHIPS ============== -->
+<section class="stats">
+  <div class="wrap">
+    <div class="stats-grid">
+      <div>
+        <div class="label-row">Het format</div>
+      </div>
+      <div>
+        <h2 class="display">Een interviewformat dat <em>autoriteit, vertrouwen en conversie</em> tegelijk verhoogt.</h2>
+        <p class="stats-sub">Vanuit één strategisch opgebouwde opname maken we content die niet alleen bekeken wordt, maar die je merk koppelt aan expertise, kwaliteit en geloofwaardigheid. Branding die gedrag verandert.</p>
+        <div class="stats-numbers">
+          <div>
+            <div class="stat-num">15–30</div>
+            <div class="stat-lbl">Assets uit één opname</div>
+          </div>
+          <div>
+            <div class="stat-num">60 dgn</div>
+            <div class="stat-lbl">Content uit één sessie</div>
+          </div>
+          <div>
+            <div class="stat-num">1×</div>
+            <div class="stat-lbl">Opname per kwartaal volstaat</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Marquee -->
+    <div class="marquee">
+      <div class="marquee-track">
+        <span class="logo-chip"><span class="lc-mark"></span>Coaches</span>
+        <span class="logo-chip alt"><span class="lc-mark"></span>Consultants</span>
+        <span class="logo-chip"><span class="lc-mark"></span>Agencies</span>
+        <span class="logo-chip alt"><span class="lc-mark"></span>SaaS founders</span>
+        <span class="logo-chip"><span class="lc-mark"></span>B2B experts</span>
+        <span class="logo-chip alt"><span class="lc-mark"></span>Trainers</span>
+        <span class="logo-chip"><span class="lc-mark"></span>Sprekers</span>
+        <span class="logo-chip alt"><span class="lc-mark"></span>Premium dienstverleners</span>
+        <!-- duplicate for seamless loop -->
+        <span class="logo-chip"><span class="lc-mark"></span>Coaches</span>
+        <span class="logo-chip alt"><span class="lc-mark"></span>Consultants</span>
+        <span class="logo-chip"><span class="lc-mark"></span>Agencies</span>
+        <span class="logo-chip alt"><span class="lc-mark"></span>SaaS founders</span>
+        <span class="logo-chip"><span class="lc-mark"></span>B2B experts</span>
+        <span class="logo-chip alt"><span class="lc-mark"></span>Trainers</span>
+        <span class="logo-chip"><span class="lc-mark"></span>Sprekers</span>
+        <span class="logo-chip alt"><span class="lc-mark"></span>Premium dienstverleners</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== VOOR WIE (about) ============== -->
+<section class="about" id="format">
+  <div class="wrap">
+    <div class="about-grid">
+      <div>
+        <div class="label-row">Voor wie</div>
+        <h2 class="display">Voor experts die niet méér content nodig hebben — maar <em>betere positionering.</em></h2>
+        <p class="about-text">Dit format is voor jou als je veel kennis hebt, maar dat online nog niet sterk genoeg overkomt. Als jouw content eruitziet als die van iedereen, word je ook beoordeeld als iedereen. Een commodity-aanbod trekt prijsvergelijking aan. Een sterk, onderscheidend offer niet.</p>
+        <ul class="about-list">
+          <li>Je verkoopt een dienst die uitleg en vertrouwen vraagt</li>
+          <li>Je wilt serieuzer, premiumer en geloofwaardiger overkomen</li>
+          <li>Je wilt social content die ook commercieel bruikbaar is</li>
+          <li>Je wilt niet elke week zelf bedenken wat je moet posten</li>
+          <li>Je wilt meer uit één contentmoment halen</li>
+        </ul>
+        <div class="about-cta">
+          <a href="#aanvragen" class="btn btn-primary">Plan een gesprek</a>
+        </div>
+      </div>
+      <div>
+        <div class="perf-card">
+          <div class="perf-head">
+            <div>
+              <div class="small">Output per opname</div>
+            </div>
+            <div class="perf-addr">De Digitale Tafel<br/>Premium interviewstudio</div>
+          </div>
+          <div class="perf-big">
+            22<span style="font-size:28px;color:var(--ink-2)">+</span>
+            <span class="perf-delta">↑ assets</span>
+          </div>
+          <div class="perf-bars">
+            <span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span>
+          </div>
+          <div class="perf-tags">
+            <span class="perf-tag dot">Strategie</span>
+            <span class="perf-tag">Interview</span>
+            <span class="perf-tag dot">Shorts</span>
+            <span class="perf-tag">FAQ-clips</span>
+            <span class="perf-tag dot">Ad-snippets</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== SERVICES — wat je krijgt ============== -->
+<section class="services">
+  <div class="wrap">
+    <div class="services-head">
+      <div>
+        <div class="label-row">Wat je concreet krijgt</div>
+        <h2 class="display">Eén sessie. <em>Maximale output.</em><br/>Minimale verspilling.</h2>
+      </div>
+      <a href="#aanvragen" class="btn btn-dark">Plan een gesprek →</a>
+    </div>
+    <div class="services-grid">
+      <div class="svc-card">
+        <div class="svc-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="9"/></svg>
+        </div>
+        <div>
+          <div class="svc-title">High-end interview</div>
+          <div class="svc-desc">Eén premium opnamesessie waarin we jouw expertise, visie en methode op tafel leggen — strategisch opgebouwd voor maximale herbruikbaarheid.</div>
+        </div>
+      </div>
+      <div class="svc-card">
+        <div class="svc-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="6" width="18" height="12" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        </div>
+        <div>
+          <div class="svc-title">Content-assets</div>
+          <div class="svc-desc">10–20 short-form clips, 3–5 long-form snippets, 5–10 FAQ-fragmenten en 4–8 social posts uit quotes en standpunten.</div>
+        </div>
+      </div>
+      <div class="svc-card">
+        <div class="svc-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l4-4h10l4 4-4 4H7z"/></svg>
+        </div>
+        <div>
+          <div class="svc-title">Sales & ad-materiaal</div>
+          <div class="svc-desc">2–4 advertentie-assets en een duidelijke contentlijn voor 30–60 dagen — bruikbaar in funnels, ads en sales-gesprekken.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== PROCESS SLIDE (Hoe het werkt) ============== -->
+<section class="process" id="hoe">
+  <div class="wrap">
+    <div class="process-head">
+      <div class="label-row">Hoe het werkt</div>
+      <div class="process-counter"><strong>1</strong> / 5</div>
+    </div>
+    <div class="slide">
+      <!-- Slide background visual -->
+      <div class="slide-visual">
+        <svg width="100%" height="520" viewBox="0 0 600 520" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="ringGrad" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#6ea4ff" stop-opacity="1"/>
+              <stop offset="100%" stop-color="#4d8bff" stop-opacity=".2"/>
+            </radialGradient>
+          </defs>
+          <!-- Concentric strategy rings -->
+          <g transform="translate(380,260)" fill="none" stroke="url(#ringGrad)" stroke-width="2.5">
+            <circle r="60" opacity=".9"/>
+            <circle r="100" opacity=".7"/>
+            <circle r="140" opacity=".5"/>
+            <circle r="180" opacity=".3"/>
+          </g>
+          <g transform="translate(380,260)" stroke="#6ea4ff" fill="none" stroke-width="1.5" opacity=".6">
+            <path d="M -200,0 L 200,0" stroke-dasharray="4 6"/>
+            <path d="M 0,-200 L 0,200" stroke-dasharray="4 6"/>
+          </g>
+          <circle cx="380" cy="260" r="14" fill="#6ea4ff"/>
+          <circle cx="380" cy="260" r="6" fill="#fff"/>
+        </svg>
+      </div>
+      <div class="slide-content">
+        <div class="slide-tag" id="slideTag">Stap 01 — Strategie</div>
+        <div>
+          <h3 class="slide-title" id="slideTitle">Strategie</h3>
+          <p class="slide-desc" id="slideDesc">We bepalen welke onderwerpen jouw doelgroep moet horen om jou sneller te vertrouwen en beter te begrijpen. Geen onderwerpen verzinnen — we halen ze uit jouw markt, aanbod en veelgestelde vragen.</p>
+          <div class="slide-nav">
+            <div class="slide-dot active"></div>
+            <div class="slide-dot"></div>
+            <div class="slide-dot"></div>
+            <div class="slide-dot"></div>
+            <div class="slide-dot"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Compact lijst andere stappen -->
+    <div class="process-steps">
+      <div style="padding:24px;background:var(--surface);border:1px solid var(--line);border-radius:14px">
+        <div class="slide-tag" style="font-size:11px">Stap 02</div>
+        <div style="font-family:'Fraunces',serif;font-size:22px;margin-top:10px;color:var(--ink)">Interviewdesign</div>
+        <div style="color:var(--ink-3);font-size:13.5px;margin-top:8px">Vragenset rondom expertise, visie, methode en bezwaren.</div>
+      </div>
+      <div style="padding:24px;background:var(--surface);border:1px solid var(--line);border-radius:14px">
+        <div class="slide-tag" style="font-size:11px">Stap 03</div>
+        <div style="font-family:'Fraunces',serif;font-size:22px;margin-top:10px;color:var(--ink)">Opname</div>
+        <div style="color:var(--ink-3);font-size:13.5px;margin-top:8px">In een high-end setting die je merk premium laat aanvoelen.</div>
+      </div>
+      <div style="padding:24px;background:var(--surface);border:1px solid var(--line);border-radius:14px">
+        <div class="slide-tag" style="font-size:11px">Stap 04</div>
+        <div style="font-family:'Fraunces',serif;font-size:22px;margin-top:10px;color:var(--ink)">Repurposing</div>
+        <div style="color:var(--ink-3);font-size:13.5px;margin-top:8px">Clips, FAQ's, social posts en ad-assets — vakkundig gemonteerd.</div>
+      </div>
+      <div style="padding:24px;background:var(--surface);border:1px solid var(--line);border-radius:14px">
+        <div class="slide-tag" style="font-size:11px">Stap 05</div>
+        <div style="font-family:'Fraunces',serif;font-size:22px;margin-top:10px;color:var(--ink)">Inzet</div>
+        <div style="color:var(--ink-3);font-size:13.5px;margin-top:8px">Voor zichtbaarheid, nurture, salesondersteuning en ads.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== TESTIMONIALS ============== -->
+<section class="testimonials" id="cases">
+  <div class="wrap">
+    <div class="label-row">Resultaten</div>
+    <p class="test-quote" id="testQuote">"Eindelijk content die niet alleen <em>bekeken</em> wordt, maar ook <em>opwarmt vóór</em> het eerste salesgesprek. Onze leads zijn warmer, de gesprekken korter en het merk voelt direct premiumer."</p>
+    <div class="test-author">
+      <div class="test-avatar"></div>
+      <div class="test-name" id="testName">Mark de Vries</div>
+      <div class="test-role" id="testRole">Founder, B2B Consultancy</div>
+      <div class="test-nav">
+        <button class="test-arrow" id="testPrev" aria-label="Vorige">‹</button>
+        <button class="test-arrow" id="testNext" aria-label="Volgende">›</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== OFFER / PRICING ============== -->
+<section class="pricing">
+  <div class="wrap">
+    <div class="pricing-head">
+      <div class="label-row">Trajecten</div>
+      <h2 class="display">Twee trajecten — beide bouwen autoriteit én conversie.</h2>
+      <p class="sub">Wij nemen per maand maximaal 4 interviewtrajecten aan. Nieuwe klanten starten alleen op vaste productiedagen.</p>
+    </div>
+    <div class="pricing-grid">
+      <div class="price-card">
+        <div class="price-tag"><span class="sq"></span> Foundation</div>
+        <div class="price-name">Voor experts die hun positionering willen versterken met één sterke opname per kwartaal.</div>
+        <ul class="price-feats">
+          <li>1 high-end interviewsessie</li>
+          <li>10+ short-form clips</li>
+          <li>3 long-form snippets</li>
+          <li>Contentlijn voor 30 dagen</li>
+          <li>Revisieronde inbegrepen</li>
+        </ul>
+        <div class="price-bottom">
+          <div class="price-amt">Op aanvraag</div>
+          <a href="#aanvragen" class="btn btn-primary">Aanvragen</a>
+        </div>
+      </div>
+      <div class="price-card featured">
+        <div class="price-tag"><span class="sq"></span> Authority</div>
+        <div class="price-name">Voor experts die structureel als thought leader willen worden gezien — content, ads én sales-assets.</div>
+        <ul class="price-feats">
+          <li>1 high-end interviewsessie</li>
+          <li>20+ short-form clips</li>
+          <li>5 long-form snippets + 10 FAQ-fragmenten</li>
+          <li>4 advertentie-assets</li>
+          <li>Contentlijn voor 60 dagen</li>
+          <li>Strategiesessie + format-design vooraf</li>
+        </ul>
+        <div class="price-bottom">
+          <div class="price-amt">Op aanvraag</div>
+          <a href="#aanvragen" class="btn btn-primary">Aanvragen</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== WAAROM BETER (compare) ============== -->
+<section class="compare">
+  <div class="wrap">
+    <div class="compare-head">
+      <div class="label-row">Waarom dit werkt</div>
+      <h2 class="display">Waarom losse content verliest van een <em>sterk format.</em></h2>
+    </div>
+    <div class="compare-grid">
+      <div class="compare-card bad">
+        <h3>Losse content</h3>
+        <ul>
+          <li>Ad hoc en weinig samenhang</li>
+          <li>Lastig schaalbaar</li>
+          <li>Snel vergeten</li>
+          <li>Vaak alleen voor bereik</li>
+          <li>Voelt niet premium</li>
+        </ul>
+      </div>
+      <div class="compare-card good">
+        <h3>High-end interviewformat</h3>
+        <ul>
+          <li>Strategisch opgebouwd verhaal</li>
+          <li>Premium uitstraling</li>
+          <li>Maanden herbruikbaar</li>
+          <li>Bruikbaar voor bereik, nurture én sales</li>
+          <li>Verlaagt CAC, verhoogt LTV</li>
+        </ul>
+      </div>
+    </div>
+    <p class="compare-foot">Advertising laat mensen weten dat je bestaat. Branding bepaalt wat ze vervolgens van je onthouden — en of ze naar je toe bewegen of juist weg.</p>
+  </div>
+</section>
+
+<!-- ============== CASES ============== -->
+<section class="cases">
+  <div class="wrap">
+    <div class="cases-head">
+      <div>
+        <div class="label-row">In de praktijk</div>
+        <h2 class="display">Wat dit oplevert<br/>voor experts zoals jij.</h2>
+      </div>
+    </div>
+    <div class="cases-grid">
+      <article class="case-feature">
+        <div class="case-feature-img">
+          <svg width="100%" height="100%" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice">
+            <defs>
+              <linearGradient id="cf1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#4d8bff"/><stop offset="100%" stop-color="#0a1424"/></linearGradient>
+            </defs>
+            <rect width="400" height="300" fill="url(#cf1)"/>
+            <circle cx="200" cy="160" r="60" fill="none" stroke="#fff" stroke-width="2" opacity=".4"/>
+            <circle cx="200" cy="160" r="100" fill="none" stroke="#fff" stroke-width="1" opacity=".25"/>
+            <circle cx="200" cy="160" r="20" fill="#fff" opacity=".9"/>
+          </svg>
+        </div>
+        <div style="padding:30px">
+          <div class="case-meta">Case · Premium positionering</div>
+          <h3 class="case-title" style="font-size:22px">Van losse posts naar herkenbare thought leader content — meer kwalitatieve gesprekken en sterkere premium positionering.</h3>
+        </div>
+      </article>
+      <div class="case-list">
+        <div class="case-row">
+          <div class="case-thumb">
+            <svg width="100%" height="100%" viewBox="0 0 130 100"><rect width="130" height="100" fill="#1e3a8a"/><circle cx="65" cy="50" r="22" fill="#6ea4ff" opacity=".7"/></svg>
+          </div>
+          <div>
+            <div class="case-meta">Case · Marktpropositie</div>
+            <div class="case-title">Van moeilijk uitlegbare dienst naar duidelijke marktpropositie — kortere salesgesprekken en betere leadkwaliteit.</div>
+          </div>
+        </div>
+        <div class="case-row">
+          <div class="case-thumb">
+            <svg width="100%" height="100%" viewBox="0 0 130 100"><rect width="130" height="100" fill="#142339"/><rect x="20" y="40" width="20" height="40" fill="#4d8bff"/><rect x="50" y="25" width="20" height="55" fill="#6ea4ff"/><rect x="80" y="55" width="20" height="25" fill="#4d8bff"/></svg>
+          </div>
+          <div>
+            <div class="case-meta">Case · Systeem</div>
+            <div class="case-title">Van "we moeten vaker posten" naar een herhaalbaar systeem — consistente zichtbaarheid, minder interne ruis.</div>
+          </div>
+        </div>
+        <div class="case-row">
+          <div class="case-thumb">
+            <svg width="100%" height="100%" viewBox="0 0 130 100"><rect width="130" height="100" fill="#0f1b2e"/><path d="M0 70 Q40 30 65 50 T130 30" stroke="#4d8bff" stroke-width="3" fill="none"/></svg>
+          </div>
+          <div>
+            <div class="case-meta">Case · Conversie</div>
+            <div class="case-title">Van koude leads naar opgewarmde prospects — gesprekken beginnen warmer en advertentiecreatives voelen echter.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== FAQ ============== -->
+<section class="faq">
+  <div class="wrap">
+    <div class="faq-grid">
+      <div>
+        <div class="label-row">FAQ</div>
+        <h2 class="display">Veelgestelde vragen.</h2>
+      </div>
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary class="faq-q">Is dit alleen voor social media? <span class="plus">+</span></summary>
+          <p class="faq-a">Nee. Dit format is juist waardevol omdat het ook werkt voor sales, lead nurturing, FAQ's, ads en positionering. Het is bewust gebouwd om commercieel inzetbaar te zijn op meerdere kanalen.</p>
+        </details>
+        <details class="faq-item">
+          <summary class="faq-q">Ik ben geen spreker. Werkt het dan wel? <span class="plus">+</span></summary>
+          <p class="faq-a">Ja. Jij hoeft geen presentator te zijn. Wij halen de juiste antwoorden uit jou met de juiste vragen. Het format is ontworpen om jouw expertise natuurlijk naar boven te halen.</p>
+        </details>
+        <details class="faq-item">
+          <summary class="faq-q">Is één opname wel genoeg? <span class="plus">+</span></summary>
+          <p class="faq-a">Ja, als het gesprek strategisch is opgebouwd. Eén goed interview levert vaak weken aan bruikbare content op — voor social, sales én ads.</p>
+        </details>
+        <details class="faq-item">
+          <summary class="faq-q">Wat als mijn dienst complex is? <span class="plus">+</span></summary>
+          <p class="faq-a">Juist dan werkt dit sterk. Complexe diensten hebben meer uitleg, vertrouwen en context nodig. Het interviewformat is bij uitstek geschikt om die nuance over te brengen.</p>
+        </details>
+        <details class="faq-item">
+          <summary class="faq-q">Moet ik zelf onderwerpen bedenken? <span class="plus">+</span></summary>
+          <p class="faq-a">Nee. Wij halen de juiste thema's uit jouw markt, aanbod en veelgestelde vragen. Jij hoeft alleen je expertise mee te nemen.</p>
+        </details>
+        <details class="faq-item">
+          <summary class="faq-q">Kan dit ook voor advertenties gebruikt worden? <span class="plus">+</span></summary>
+          <p class="faq-a">Ja. Sterke snippets uit echte gesprekken werken vaak beter dan gladde promovideo's, omdat ze geloofwaardiger voelen. We leveren standaard ad-snippets mee.</p>
+        </details>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== FINAL CTA ============== -->
+<section class="final-cta">
+  <div class="final-bg"></div>
+  <div class="final-content wrap">
+    <div class="label-row" style="justify-content:center;display:inline-flex">Klaar om te starten?</div>
+    <h2 class="display">Wil jij content die niet alleen bekeken wordt, <em>maar ook verkoopt?</em></h2>
+    <p class="sub">Plan een gesprek. Dan laten we je zien hoe we jouw expertise vertalen naar een high-end interviewformat dat autoriteit verhoogt, je merk premiumer positioneert en weken aan commerciële assets oplevert.</p>
+    <div class="final-cta-row">
+      <a href="#aanvragen" class="btn btn-primary">Plan je strategiegesprek →</a>
+      <a href="#hoe" class="btn btn-outline">Bekijk het proces</a>
+    </div>
+    <div style="margin-top:18px;font-size:12.5px;color:var(--ink-3)">Vrijblijvend. Wel strategisch. Geen standaard verkooppraatje.</div>
+  </div>
+</section>
+
+<!-- ============== FORMULIER ============== -->
+<section class="form-section" id="aanvragen">
+  <div class="wrap">
+    <div class="form-grid">
+      <div>
+        <div class="label-row">Aanvraag</div>
+        <h2 class="display">Vraag een <em>strategiegesprek</em> aan.</h2>
+        <p class="form-sub">We nemen per maand maximaal 4 trajecten aan. Vul het formulier zo compleet mogelijk in — dan kunnen we direct beoordelen of er een match is.</p>
+      </div>
+      <div class="form-card">
+        <form id="aanvraagForm" novalidate>
+        <div class="form-row">
+          <div class="field"><label>Naam *</label><input name="naam" type="text" required placeholder="Voor- en achternaam"/></div>
+          <div class="field"><label>Bedrijf</label><input name="bedrijf" type="text" placeholder="Bedrijfsnaam"/></div>
+        </div>
+        <div class="form-row">
+          <div class="field"><label>E-mail *</label><input name="email" type="email" required placeholder="jij@bedrijf.nl"/></div>
+          <div class="field"><label>Telefoon</label><input name="telefoon" type="tel" placeholder="06 ..."/></div>
+        </div>
+        <div class="form-row">
+          <div class="field"><label>Website</label><input name="website" type="url" placeholder="https://..."/></div>
+          <div class="field"><label>LinkedIn / Instagram</label><input name="social" type="url" placeholder="Profiel-link"/></div>
+        </div>
+        <div class="form-row full">
+          <div class="field"><label>Wat verkoop je?</label><textarea placeholder="Korte omschrijving van je aanbod"></textarea></div>
+        </div>
+        <div class="form-row full">
+          <div class="field"><label>Wat is nu je grootste bottleneck?</label><textarea placeholder="Zichtbaarheid, leads, conversie, positionering..."></textarea></div>
+        </div>
+        <div class="field">
+          <label>Wil je vooral groei in:</label>
+          <div class="checks">
+            <label class="check"><input type="checkbox"/> Autoriteit</label>
+            <label class="check"><input type="checkbox"/> Leads</label>
+            <label class="check"><input type="checkbox"/> Sales</label>
+            <label class="check"><input type="checkbox"/> Recruitment</label>
+            <label class="check"><input type="checkbox"/> Premium positionering</label>
+            <label class="check"><input type="checkbox"/> Iets anders</label>
+          </div>
+        </div>
+        <div class="form-row" style="margin-top:18px">
+          <div class="field"><label>Gemiddelde klantwaarde</label>
+            <select>
+              <option>Kies een range</option>
+              <option>&lt; € 1.000</option>
+              <option>€ 1.000 – € 5.000</option>
+              <option>€ 5.000 – € 15.000</option>
+              <option>€ 15.000 – € 50.000</option>
+              <option>&gt; € 50.000</option>
+            </select>
+          </div>
+          <div class="field"><label>Wanneer wil je starten?</label>
+            <select>
+              <option>Kies een termijn</option>
+              <option>Zo snel mogelijk</option>
+              <option>Binnen 4 weken</option>
+              <option>Binnen 2 maanden</option>
+              <option>Verkennend</option>
+            </select>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary form-submit">Verstuur aanvraag →</button>
+        <div class="form-microcopy">We nemen binnen 2 werkdagen contact op. Geen verkooppraatje, wel een strategisch gesprek.</div>
+        </form>
+        <div class="form-success" id="formSuccess">
+          <div class="ok">✓</div>
+          <h3>Aanvraag ontvangen</h3>
+          <p>Bedankt — we nemen binnen 2 werkdagen contact met je op om je strategiegesprek in te plannen.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== FOOTER ============== -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="foot-col">
+        <a class="logo" href="#" style="font-size:24px">
+          <span class="logo-mark"></span>
+          De Digitale Tafel
+        </a>
+        <p style="margin-top:18px;color:var(--ink-3);font-size:14px;line-height:1.6;max-width:300px">Een premium interviewformat dat experts positioneert als autoriteit — en één opname omzet in weken aan commerciële content.</p>
+      </div>
+      <div class="foot-col">
+        <h4>Format</h4>
+        <a href="#format">Voor wie</a>
+        <a href="#hoe">Hoe het werkt</a>
+        <a href="#">Output per sessie</a>
+        <a href="#">Trajecten</a>
+      </div>
+      <div class="foot-col">
+        <h4>Resources</h4>
+        <a href="#cases">Cases</a>
+        <a href="#">FAQ</a>
+        <a href="#">Blog</a>
+        <a href="#">Studio</a>
+      </div>
+      <div class="foot-col">
+        <h4>Contact</h4>
+        <a href="#aanvragen">Plan een gesprek</a>
+        <a href="mailto:hallo@digitaletafel.nl">hallo@digitaletafel.nl</a>
+        <a href="#">Algemene voorwaarden</a>
+        <a href="#">Privacy</a>
+      </div>
+      <div class="foot-col">
+        <h4>Studio</h4>
+        <p class="foot-addr">De Digitale Tafel<br/>Premium interviewstudio<br/>Nederland</p>
+        <div class="foot-socials">
+          <a href="#" aria-label="LinkedIn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0H5C2.2 0 0 2.2 0 5v14c0 2.8 2.2 5 5 5h14c2.8 0 5-2.2 5-5V5c0-2.8-2.2-5-5-5zM8 19H5V8h3v11zM6.5 6.7C5.5 6.7 4.8 6 4.8 5s.7-1.7 1.7-1.7 1.7.7 1.7 1.7-.7 1.7-1.7 1.7zM20 19h-3v-5.6c0-1.4-.5-2.4-1.8-2.4-1 0-1.5.7-1.8 1.3-.1.2-.1.5-.1.8V19h-3V8h3v1.3c.4-.6 1.1-1.5 2.7-1.5 2 0 3.5 1.3 3.5 4.1V19z"/></svg>
+          </a>
+          <a href="#" aria-label="Instagram">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.2c3.2 0 3.6 0 4.8.1 1.2.1 1.8.2 2.2.4.6.2 1 .5 1.4.9.4.4.7.8.9 1.4.2.4.4 1 .4 2.2.1 1.2.1 1.6.1 4.8s0 3.6-.1 4.8c-.1 1.2-.2 1.8-.4 2.2-.2.6-.5 1-.9 1.4-.4.4-.8.7-1.4.9-.4.2-1 .4-2.2.4-1.2.1-1.6.1-4.8.1s-3.6 0-4.8-.1c-1.2-.1-1.8-.2-2.2-.4-.6-.2-1-.5-1.4-.9-.4-.4-.7-.8-.9-1.4-.2-.4-.4-1-.4-2.2-.1-1.2-.1-1.6-.1-4.8s0-3.6.1-4.8c.1-1.2.2-1.8.4-2.2.2-.6.5-1 .9-1.4.4-.4.8-.7 1.4-.9.4-.2 1-.4 2.2-.4 1.2-.1 1.6-.1 4.8-.1M12 0C8.7 0 8.3 0 7.1.1c-1.3.1-2.1.3-2.9.6-.8.3-1.5.7-2.1 1.4C1.4 2.7 1 3.4.7 4.2.4 5 .2 5.8.1 7.1 0 8.3 0 8.7 0 12s0 3.7.1 4.9c.1 1.3.3 2.1.6 2.9.3.8.7 1.5 1.4 2.1.6.6 1.3 1.1 2.1 1.4.8.3 1.7.5 2.9.6C8.3 24 8.7 24 12 24s3.7 0 4.9-.1c1.3-.1 2.1-.3 2.9-.6.8-.3 1.5-.7 2.1-1.4.6-.6 1.1-1.3 1.4-2.1.3-.8.5-1.7.6-2.9.1-1.2.1-1.6.1-4.9s0-3.7-.1-4.9c-.1-1.3-.3-2.1-.6-2.9-.3-.8-.7-1.5-1.4-2.1C21.3 1.4 20.6 1 19.8.7 19 .4 18.2.2 16.9.1 15.7 0 15.3 0 12 0zm0 5.8c-3.4 0-6.2 2.8-6.2 6.2s2.8 6.2 6.2 6.2 6.2-2.8 6.2-6.2S15.4 5.8 12 5.8zm0 10.2c-2.2 0-4-1.8-4-4s1.8-4 4-4 4 1.8 4 4-1.8 4-4 4zm6.4-11.8c-.8 0-1.4.6-1.4 1.4s.6 1.4 1.4 1.4 1.4-.6 1.4-1.4-.6-1.4-1.4-1.4z"/></svg>
+          </a>
+          <a href="#" aria-label="YouTube">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.2c-.3-1-1-1.8-2-2C19.7 3.8 12 3.8 12 3.8s-7.7 0-9.5.5c-1 .3-1.8 1-2 2C0 8 0 12 0 12s0 4 .5 5.8c.3 1 1 1.8 2 2 1.8.5 9.5.5 9.5.5s7.7 0 9.5-.5c1-.3 1.8-1 2-2C24 16 24 12 24 12s0-4-.5-5.8zM9.6 15.6V8.4l6.4 3.6-6.4 3.6z"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+    <!-- Wordmark zoals Upmind -->
+    <div class="wordmark">Digitale Tafel</div>
+  </div>
+</footer>
+
+<script>
+  // ---- Mobiel menu ----
+  const navToggle = document.getElementById('navToggle');
+  const navLinks = document.getElementById('navLinks');
+  navToggle.addEventListener('click', ()=>{
+    const open = navLinks.classList.toggle('open');
+    navToggle.classList.toggle('open', open);
+    navToggle.setAttribute('aria-expanded', open);
+  });
+  // Sluit menu na klik op een link
+  navLinks.querySelectorAll('a').forEach(a=>{
+    a.addEventListener('click', ()=>{
+      navLinks.classList.remove('open');
+      navToggle.classList.remove('open');
+      navToggle.setAttribute('aria-expanded', false);
+    });
+  });
+
+  // ---- Process slider ----
+  const steps = [
+    {tag:'Stap 01 — Strategie', title:'Strategie', desc:'We bepalen welke onderwerpen jouw doelgroep moet horen om jou sneller te vertrouwen en beter te begrijpen. Geen onderwerpen verzinnen — we halen ze uit jouw markt, aanbod en veelgestelde vragen.'},
+    {tag:'Stap 02 — Interviewdesign', title:'Interviewdesign', desc:'We bouwen een vragenset rondom jouw expertise, visie, methode en de bezwaren van je doelgroep — zo komt het beste antwoord vanzelf naar boven.'},
+    {tag:'Stap 03 — Opname', title:'Opname', desc:'Eén premium opnamesessie in een high-end setting die je merk direct premiumer laat aanvoelen. Jij praat, wij sturen.'},
+    {tag:'Stap 04 — Repurposing', title:'Repurposing', desc:'Uit die ene opname monteren we clips, FAQ-fragmenten, social posts en ad-assets — vakkundig en strategisch geknipt.'},
+    {tag:'Stap 05 — Inzet', title:'Inzet', desc:'De assets gaan live voor zichtbaarheid, lead nurturing, salesondersteuning en advertenties — weken aan content uit één moment.'}
+  ];
+  const slideTag = document.getElementById('slideTag');
+  const slideTitle = document.getElementById('slideTitle');
+  const slideDesc = document.getElementById('slideDesc');
+  const dots = document.querySelectorAll('.slide-dot');
+  const counter = document.querySelector('.process-counter strong');
+  const slideContent = document.querySelector('.slide-content');
+  function showStep(i){
+    const s = steps[i];
+    slideContent.classList.add('swapping');
+    setTimeout(()=>{
+      slideTag.textContent = s.tag;
+      slideTitle.textContent = s.title;
+      slideDesc.textContent = s.desc;
+      slideContent.classList.remove('swapping');
+    }, 220);
+    dots.forEach((d,idx)=>d.classList.toggle('active', idx===i));
+    counter.textContent = i+1;
+  }
+  dots.forEach((dot, i)=>dot.addEventListener('click', ()=>showStep(i)));
+
+  // ---- Testimonials ----
+  const quotes = [
+    {q:'"Eindelijk content die niet alleen <em>bekeken</em> wordt, maar ook <em>opwarmt vóór</em> het eerste salesgesprek. Onze leads zijn warmer, de gesprekken korter en het merk voelt direct premiumer."', name:'Mark de Vries', role:'Founder, B2B Consultancy'},
+    {q:'"Met één opname hadden we ineens <em>weken</em> aan content. Geen wekelijks gestress meer over wat we moeten posten — en het ziet er eindelijk uit zoals we klinken."', name:'Sanne Bakker', role:'Oprichter, SaaS-platform'},
+    {q:'"De clips uit het interview presteren als ads <em>beter</em> dan onze gladde promovideo\'s. Ze voelen echt, en dat verkoopt."', name:'Joost Hendriks', role:'Marketing Lead, Trainingsbureau'}
+  ];
+  let ti = 0;
+  const tQuote = document.getElementById('testQuote');
+  const tName = document.getElementById('testName');
+  const tRole = document.getElementById('testRole');
+  const testSection = document.querySelector('.testimonials');
+  function showTest(i){
+    ti = (i + quotes.length) % quotes.length;
+    testSection.classList.add('swapping');
+    setTimeout(()=>{
+      tQuote.innerHTML = quotes[ti].q;
+      tName.textContent = quotes[ti].name;
+      tRole.textContent = quotes[ti].role;
+      testSection.classList.remove('swapping');
+    }, 200);
+  }
+  document.getElementById('testPrev').addEventListener('click', ()=>showTest(ti-1));
+  document.getElementById('testNext').addEventListener('click', ()=>showTest(ti+1));
+
+  // ---- Formulier ----
+  const form = document.getElementById('aanvraagForm');
+  form.addEventListener('submit', (e)=>{
+    e.preventDefault();
+    if(!form.checkValidity()){
+      form.reportValidity();
+      return;
+    }
+    form.style.display = 'none';
+    document.getElementById('formSuccess').classList.add('show');
+  });
+
+  // ---- Scroll-reveal animaties ----
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(!reduce){
+    // Markeer blokken die infaden
+    const sel = [
+      '.stats-grid > div','.stat-num','.about > .wrap > .about-grid > div','.perf-card',
+      '.svc-card','.services-head','.slide','.process-steps > div','.test-quote','.test-author',
+      '.price-card','.compare-card','.compare-foot','.case-feature','.case-row','.faq h2',
+      '.faq-item','.final-content > *','.form-grid > div','.footer-grid > div','.wordmark'
+    ];
+    document.querySelectorAll(sel.join(',')).forEach((el,i)=>{
+      el.classList.add('reveal');
+      el.classList.add('d'+((i%4)+1));
+    });
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{
+        if(e.isIntersecting){
+          e.target.classList.add('in');
+          if(e.target.classList.contains('perf-card')) e.target.classList.add('in');
+          io.unobserve(e.target);
+        }
+      });
+    }, {threshold:.15, rootMargin:'0px 0px -8% 0px'});
+    document.querySelectorAll('.reveal, .perf-card').forEach(el=>io.observe(el));
+
+    // ---- Tel-animatie perf-big (0 -> 22) ----
+    const perfBig = document.querySelector('.perf-big');
+    if(perfBig){
+      const node = perfBig.childNodes[0]; // tekstnode "22"
+      const target = 22; let started=false;
+      const co = new IntersectionObserver((es)=>{
+        es.forEach(e=>{
+          if(e.isIntersecting && !started){
+            started=true;
+            let v=0; const tick=setInterval(()=>{ v+=1; node.textContent=v; if(v>=target) clearInterval(tick); }, 45);
+            co.disconnect();
+          }
+        });
+      }, {threshold:.4});
+      co.observe(perfBig);
+    }
+
+    // ---- Hero parallax (muis + scroll) ----
+    const portrait = document.querySelector('.hero-portrait');
+    const heroContent = document.querySelector('.hero-content');
+    if(portrait){
+      window.addEventListener('mousemove', (ev)=>{
+        const x=(ev.clientX/window.innerWidth-.5), y=(ev.clientY/window.innerHeight-.5);
+        portrait.style.transform = `translate(${x*18}px, ${y*12}px)`;
+      }, {passive:true});
+      window.addEventListener('scroll', ()=>{
+        const sc = window.scrollY;
+        portrait.style.opacity = Math.max(0, 1 - sc/600);
+        if(heroContent) heroContent.style.transform = `translateY(${sc*0.12}px)`;
+      }, {passive:true});
+    }
+  }
+
+  // ---- Nav verdicht bij scroll (altijd, ook met reduced motion) ----
+  const navEl = document.querySelector('.nav');
+  window.addEventListener('scroll', ()=>{
+    navEl.classList.toggle('scrolled', window.scrollY > 40);
+  }, {passive:true});
+</script>
+
+</body>
+</html>
