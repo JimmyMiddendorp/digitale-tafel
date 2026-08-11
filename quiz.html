@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Maak kans — De Digitale Tafel</title>
+<meta name="description" content="Gratis giveaway t.w.v. € 2.500: win een luxe shootdag in de studio met 2 professionele camera's en 30 high-end video's." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg: #050a14;
+    --bg-2: #0a1424;
+    --surface: #0f1b2e;
+    --surface-2: #142339;
+    --line: #1c2d47;
+    --ink: #f4f7fb;
+    --ink-2: #c7d2e0;
+    --ink-3: #8a97ab;
+    --accent: #4d8bff;
+    --accent-2: #6ea4ff;
+    --accent-soft: #1a3160;
+    --accent-glow: rgba(77,139,255,.35);
+    --cream: #f1ece1;
+    --ink-on-cream: #131820;
+    --radius: 18px;
+    --radius-lg: 28px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  html,body{background:var(--bg);color:var(--ink);font-family:'Inter Tight',sans-serif;-webkit-font-smoothing:antialiased;line-height:1.5}
+  body{min-height:100vh;overflow-x:hidden}
+  a{color:inherit;text-decoration:none}
+  button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
+  .display{font-family:'Fraunces',serif;font-weight:400;letter-spacing:-.02em;line-height:1.05}
+  .display em{font-style:italic;color:var(--accent);font-weight:400}
+
+  /* Achtergrondsfeer */
+  .bg-glow{position:fixed;inset:0;z-index:0;pointer-events:none;background:
+    radial-gradient(1000px 520px at 50% -5%, rgba(77,139,255,.20), transparent 70%),
+    radial-gradient(700px 380px at 12% 75%, rgba(77,139,255,.10), transparent 70%)}
+  .orb{position:fixed;border-radius:50%;filter:blur(70px);opacity:.35;z-index:0;pointer-events:none;
+    background:radial-gradient(circle at 30% 30%, var(--accent-2), transparent 65%)}
+  .orb-1{width:420px;height:420px;top:-120px;left:-80px;animation:drift 18s ease-in-out infinite}
+  .orb-2{width:360px;height:360px;bottom:-140px;right:-100px;animation:drift 22s ease-in-out infinite reverse}
+  @keyframes drift{0%,100%{transform:translate(0,0)}50%{transform:translate(40px,30px)}}
+
+  /* ============== NAV ============== */
+  .nav{position:relative;z-index:5}
+  .nav-inner{display:flex;align-items:center;justify-content:space-between;padding:22px 28px;max-width:1080px;margin:0 auto}
+  .logo{display:flex;align-items:center;gap:10px;font-family:'Fraunces',serif;font-size:21px;font-weight:500;letter-spacing:-.01em}
+  .logo-mark{width:24px;height:24px;border-radius:50%;background:radial-gradient(circle at 30% 30%, var(--accent-2), var(--accent) 60%, #1c47a8);box-shadow:0 0 24px var(--accent-glow)}
+  .nav-note{font-size:12.5px;color:var(--ink-3);letter-spacing:.04em}
+
+  /* ============== SHELL ============== */
+  .shell{position:relative;z-index:2;max-width:780px;margin:0 auto;padding:10px 24px 90px}
+
+  /* Voortgang */
+  .progress-wrap{margin:14px 0 34px}
+  .progress-meta{display:flex;justify-content:space-between;align-items:center;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);margin-bottom:10px}
+  .progress-meta strong{color:var(--accent);font-weight:600}
+  .progress-bar{height:4px;border-radius:999px;background:var(--line);overflow:hidden}
+  .progress-fill{height:100%;width:0%;border-radius:999px;background:linear-gradient(90deg, var(--accent), var(--accent-2));
+    box-shadow:0 0 18px var(--accent-glow);transition:width .6s cubic-bezier(.22,.61,.36,1)}
+
+  /* Kaart + stappen */
+  .card{background:linear-gradient(180deg, var(--surface-2), var(--surface));border:1px solid var(--line);
+    border-radius:var(--radius-lg);padding:44px 42px;position:relative;overflow:hidden;
+    box-shadow:0 30px 80px -40px rgba(0,0,0,.9)}
+  .card::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;
+    background:linear-gradient(90deg,transparent,rgba(110,164,255,.5),transparent)}
+
+  .step{display:none;animation:stepIn .55s cubic-bezier(.22,.61,.36,1) both}
+  .step.active{display:block}
+  .step.leaving{animation:stepOut .28s ease forwards}
+  @keyframes stepIn{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+  @keyframes stepOut{to{opacity:0;transform:translateY(-14px)}}
+
+  .eyebrow{display:inline-flex;align-items:center;gap:9px;font-size:12px;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--accent);margin-bottom:16px}
+  .eyebrow::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--accent);
+    box-shadow:0 0 10px var(--accent-glow);animation:pulse 2.4s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.45;transform:scale(.8)}}
+
+  h1.q{font-size:clamp(30px,4.6vw,46px);font-family:'Fraunces',serif;font-weight:400;letter-spacing:-.02em;line-height:1.08}
+  h2.q{font-size:clamp(26px,3.7vw,38px);font-family:'Fraunces',serif;font-weight:400;letter-spacing:-.02em;line-height:1.12}
+  .q-sub{margin-top:16px;color:var(--ink-2);font-size:15.5px;line-height:1.6;max-width:520px}
+
+  /* Prijzenlijst */
+  .prizes{display:flex;flex-direction:column;gap:12px;margin:30px 0 6px}
+  .prize{display:flex;align-items:center;gap:16px;padding:18px 20px;border-radius:16px;
+    background:rgba(10,20,36,.6);border:1px solid var(--line);position:relative;overflow:hidden;
+    opacity:0;transform:translateY(16px);animation:prizeIn .6s cubic-bezier(.22,.61,.36,1) forwards}
+  .prize:nth-child(1){animation-delay:.15s}
+  .prize:nth-child(2){animation-delay:.28s}
+  .prize:nth-child(3){animation-delay:.41s}
+  @keyframes prizeIn{to{opacity:1;transform:none}}
+  .prize::after{content:"";position:absolute;top:0;left:-60%;width:45%;height:100%;
+    background:linear-gradient(100deg,transparent,rgba(110,164,255,.16),transparent);
+    transform:skewX(-18deg);animation:sweep 5.5s ease-in-out infinite}
+  @keyframes sweep{0%{left:-60%}55%,100%{left:150%}}
+  .prize-ico{flex:none;width:44px;height:44px;border-radius:13px;background:var(--accent-soft);
+    display:flex;align-items:center;justify-content:center;color:var(--accent-2)}
+  .prize-txt strong{display:block;font-size:16.5px;font-weight:600;color:var(--ink)}
+  .prize-txt span{font-size:13.5px;color:var(--ink-3)}
+
+  /* Velden */
+  .field{margin-top:30px}
+  .field label{display:block;font-size:13px;color:var(--ink-3);margin-bottom:9px;letter-spacing:.05em}
+  .field input{width:100%;padding:17px 18px;background:var(--bg);border:1px solid var(--line);
+    border-radius:14px;color:var(--ink);font-family:inherit;font-size:16px;transition:border-color .2s,box-shadow .25s}
+  .field input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 4px rgba(77,139,255,.12)}
+  .field input::placeholder{color:#56637a}
+  .hint{margin-top:12px;font-size:14px;color:var(--ink-2)}
+  .hint strong{color:var(--accent-2);font-weight:600}
+  .error{margin-top:10px;font-size:13.5px;color:#ff8b8b;display:none}
+  .error.show{display:block;animation:shake .35s ease}
+  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+
+  /* Keuze-opties */
+  .options{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:28px}
+  .options.single{grid-template-columns:1fr 1fr}
+  .opt{display:flex;align-items:center;gap:13px;padding:17px 18px;border-radius:14px;
+    background:rgba(10,20,36,.5);border:1px solid var(--line);cursor:pointer;font-size:15px;color:var(--ink-2);
+    transition:border-color .2s,background .2s,transform .15s,color .2s;user-select:none}
+  .opt:hover{border-color:var(--accent-soft);background:rgba(20,35,57,.7);transform:translateY(-2px)}
+  .opt .box{flex:none;width:22px;height:22px;border-radius:7px;border:1.5px solid var(--line);
+    display:flex;align-items:center;justify-content:center;transition:all .2s}
+  .opt .box svg{opacity:0;transform:scale(.5);transition:all .2s}
+  .opt.sel{border-color:var(--accent);background:rgba(77,139,255,.10);color:var(--ink)}
+  .opt.sel .box{background:var(--accent);border-color:var(--accent)}
+  .opt.sel .box svg{opacity:1;transform:scale(1)}
+  .opt input{display:none}
+
+  /* Knoppen */
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:16px 28px;
+    border-radius:999px;font-weight:600;font-size:15.5px;transition:transform .15s ease,background .2s,box-shadow .35s ease,color .2s}
+  .btn-primary{background:var(--accent);color:#031024;box-shadow:0 0 0 0 var(--accent-glow)}
+  .btn-primary:hover{background:var(--accent-2);transform:translateY(-2px);box-shadow:0 14px 38px -10px var(--accent-glow)}
+  .btn-primary:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none}
+  .btn-ghost{border:1px solid var(--line);color:var(--ink-2);background:transparent;padding:14px 22px;font-weight:500}
+  .btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
+  .actions{display:flex;align-items:center;gap:14px;margin-top:32px;flex-wrap:wrap}
+  .actions .btn-primary{flex:1;min-width:200px}
+  .micro{margin-top:16px;font-size:12.5px;color:var(--ink-3)}
+
+  /* Slot / bedankscherm */
+  .done-ico{width:74px;height:74px;border-radius:50%;background:var(--accent-soft);color:var(--accent-2);
+    display:flex;align-items:center;justify-content:center;margin-bottom:26px;
+    animation:popIn .6s cubic-bezier(.34,1.56,.64,1) both;box-shadow:0 0 44px var(--accent-glow)}
+  @keyframes popIn{from{opacity:0;transform:scale(.4)}to{opacity:1;transform:scale(1)}}
+  .share-box{margin-top:28px;padding:22px;border-radius:18px;background:rgba(10,20,36,.7);border:1px solid var(--accent-soft)}
+  .share-label{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);margin-bottom:12px}
+  .share-row{display:flex;gap:10px;align-items:stretch}
+  .share-link{flex:1;min-width:0;padding:15px 16px;background:var(--bg);border:1px solid var(--line);
+    border-radius:12px;color:var(--accent-2);font-size:14px;overflow:hidden;text-overflow:ellipsis;
+    white-space:nowrap;font-family:ui-monospace,Menlo,monospace}
+  .copy-btn{flex:none;padding:15px 22px;border-radius:12px;background:var(--accent);color:#031024;font-weight:600;font-size:14.5px;transition:background .2s,transform .15s}
+  .copy-btn:hover{background:var(--accent-2);transform:translateY(-1px)}
+  .copy-btn.ok{background:#2fbf71;color:#04210f}
+  .share-socials{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+  .share-socials a{display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:999px;
+    border:1px solid var(--line);font-size:13.5px;color:var(--ink-2);transition:all .2s}
+  .share-socials a:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-2px)}
+
+  /* Confetti */
+  .confetti{position:fixed;inset:0;pointer-events:none;z-index:9;overflow:hidden}
+  .confetti i{position:absolute;top:-14px;width:8px;height:14px;border-radius:2px;opacity:0;animation:fall 3.4s linear forwards}
+  @keyframes fall{0%{opacity:1;transform:translateY(-20px) rotate(0)}100%{opacity:0;transform:translateY(105vh) rotate(720deg)}}
+
+  .foot{position:relative;z-index:2;text-align:center;padding:0 24px 46px;color:var(--ink-3);font-size:12.5px}
+  .foot a{color:var(--ink-2);text-decoration:underline;text-underline-offset:3px}
+
+  @media (max-width:640px){
+    .nav-inner{padding:18px}
+    .nav-note{display:none}
+    .shell{padding:6px 16px 70px}
+    .card{padding:30px 22px;border-radius:22px}
+    .options,.options.single{grid-template-columns:1fr}
+    .actions{flex-direction:column-reverse;align-items:stretch}
+    .actions .btn-primary{width:100%}
+    .btn-ghost{width:100%}
+    .share-row{flex-direction:column}
+    .copy-btn{width:100%}
+  }
+  @media (prefers-reduced-motion: reduce){
+    *,*::before,*::after{animation:none !important;transition:none !important}
+    .prize{opacity:1;transform:none}
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-glow"></div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+
+<header class="nav">
+  <div class="nav-inner">
+    <a class="logo" href="/">
+      <span class="logo-mark"></span>
+      De Digitale Tafel
+    </a>
+    <div class="nav-note">Giveaway · beperkte deelname</div>
+  </div>
+</header>
+
+<main class="shell">
+
+  <div class="progress-wrap">
+    <div class="progress-meta">
+      <span>Vraag <strong id="stepNum">1</strong> van <span id="stepTotal">5</span></span>
+      <span id="stepPct">0%</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+  </div>
+
+  <div class="card">
+
+    <!-- ===== STAP 1 — Naam ===== -->
+    <section class="step active" data-step="0">
+      <div class="eyebrow">Wil jij kans maken?</div>
+      <h1 class="q display">Gratis giveaway t.w.v. € 2.500 — win een <em>luxe shootdag.</em></h1>
+
+      <div class="prizes">
+        <div class="prize">
+          <div class="prize-ico">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="8" width="18" height="13" rx="2"/><path d="M12 8v13M3 12h18"/><path d="M12 8s-3-5-5.5-3.5S9 8 12 8zM12 8s3-5 5.5-3.5S15 8 12 8z"/></svg>
+          </div>
+          <div class="prize-txt">
+            <strong>Gratis giveaway t.w.v. € 2.500</strong>
+            <span>Volledig verzorgd — deelname kost je niets</span>
+          </div>
+        </div>
+        <div class="prize">
+          <div class="prize-ico">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+          </div>
+          <div class="prize-txt">
+            <strong>Luxe shootdag in de studio</strong>
+            <span>Opgenomen met 2 professionele camera's</span>
+          </div>
+        </div>
+        <div class="prize">
+          <div class="prize-ico">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+          </div>
+          <div class="prize-txt">
+            <strong>30 high-end video's</strong>
+            <span>Klaar voor social, sales en advertenties</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="f-naam">Je naam</label>
+        <input id="f-naam" type="text" autocomplete="name" placeholder="Voor- en achternaam" />
+        <div class="hint">Doe mee en <strong>maak kans</strong> — deelname is gratis.</div>
+        <div class="error" data-err="0">Vul je naam in om verder te gaan.</div>
+      </div>
+
+      <div class="actions">
+        <button class="btn btn-primary" data-next>Doe mee →</button>
+      </div>
+      <div class="micro">Duurt ± 30 seconden. We bellen je alleen als je wint of als er een match is.</div>
+    </section>
+
+    <!-- ===== STAP 2 — Bedrijfsnaam ===== -->
+    <section class="step" data-step="1">
+      <div class="eyebrow">Vraag 2</div>
+      <h2 class="q display">Wat is je <em>bedrijfsnaam?</em></h2>
+      <p class="q-sub">Zo weten we voor welk merk we de shootdag zouden inrichten.</p>
+
+      <div class="field">
+        <label for="f-bedrijf">Bedrijfsnaam</label>
+        <input id="f-bedrijf" type="text" autocomplete="organization" placeholder="Naam van je bedrijf" />
+        <div class="error" data-err="1">Vul je bedrijfsnaam in om verder te gaan.</div>
+      </div>
+
+      <div class="actions">
+        <button class="btn btn-ghost" data-prev>← Terug</button>
+        <button class="btn btn-primary" data-next>Volgende →</button>
+      </div>
+    </section>
+
+    <!-- ===== STAP 3 — Telefoonnummer ===== -->
+    <section class="step" data-step="2">
+      <div class="eyebrow">Vraag 3</div>
+      <h2 class="q display">Op welk <em>telefoonnummer</em> bereiken we je?</h2>
+      <p class="q-sub">Alleen nodig om de winnaar persoonlijk te kunnen bereiken.</p>
+
+      <div class="field">
+        <label for="f-tel">Telefoonnummer</label>
+        <input id="f-tel" type="tel" autocomplete="tel" inputmode="tel" placeholder="06 12 34 56 78" />
+        <div class="error" data-err="2">Vul een geldig telefoonnummer in (minimaal 9 cijfers).</div>
+      </div>
+
+      <div class="actions">
+        <button class="btn btn-ghost" data-prev>← Terug</button>
+        <button class="btn btn-primary" data-next>Volgende →</button>
+      </div>
+    </section>
+
+    <!-- ===== STAP 4 — Hoe krijg jij klanten ===== -->
+    <section class="step" data-step="3">
+      <div class="eyebrow">Vraag 4</div>
+      <h2 class="q display">Hoe krijg jij nu <em>klanten?</em></h2>
+      <p class="q-sub">Meerdere antwoorden mogelijk.</p>
+
+      <div class="options" id="kanalen"></div>
+      <div class="error" data-err="3">Kies minimaal één optie.</div>
+
+      <div class="actions">
+        <button class="btn btn-ghost" data-prev>← Terug</button>
+        <button class="btn btn-primary" data-next>Volgende →</button>
+      </div>
+    </section>
+
+    <!-- ===== STAP 5 — Kracht van content ===== -->
+    <section class="step" data-step="4">
+      <div class="eyebrow">Laatste vraag</div>
+      <h2 class="q display">Zie jij de kracht van content en geloof jij in de <em>waarde hiervan?</em></h2>
+
+      <div class="options single" id="content-geloof"></div>
+      <div class="error" data-err="4">Kies ja of nee.</div>
+
+      <div class="actions">
+        <button class="btn btn-ghost" data-prev>← Terug</button>
+        <button class="btn btn-primary" data-submit>Verstuur →</button>
+      </div>
+    </section>
+
+    <!-- ===== SLOT — Bedankt + share ===== -->
+    <section class="step" data-step="5">
+      <div class="done-ico">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+      </div>
+      <div class="eyebrow">Gekwalificeerd</div>
+      <h2 class="q display">Dankjewel <em id="doneName">!</em> Gefeliciteerd — hierbij ben je <em>gekwalificeerd.</em></h2>
+      <p class="q-sub">Deel deze link en stuur hem naar iemand anders om <strong style="color:var(--accent-2)">dubbel zoveel kans</strong> te maken.</p>
+
+      <div class="share-box">
+        <div class="share-label">Jouw persoonlijke deellink</div>
+        <div class="share-row">
+          <div class="share-link" id="shareLink">—</div>
+          <button class="copy-btn" id="copyBtn">Kopieer</button>
+        </div>
+        <div class="share-socials">
+          <a id="shareWa" href="#" target="_blank" rel="noopener">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.7-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.7 1-.9 1.2-.2.2-.3.2-.6.1-1.7-.9-2.9-1.6-4-3.6-.3-.5.3-.5.8-1.5.1-.2 0-.4 0-.5s-.7-1.6-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.1.2 2.1 3.2 5.1 4.5 1.9.8 2.6.9 3.5.7.6-.1 1.7-.7 1.9-1.4.2-.7.2-1.2.2-1.4-.1-.2-.3-.3-.5-.5zM12 2C6.5 2 2 6.5 2 12c0 1.8.5 3.4 1.3 4.9L2 22l5.3-1.4c1.4.8 3 1.2 4.7 1.2 5.5 0 10-4.5 10-10S17.5 2 12 2z"/></svg>
+            WhatsApp
+          </a>
+          <a id="shareLi" href="#" target="_blank" rel="noopener">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0H5C2.2 0 0 2.2 0 5v14c0 2.8 2.2 5 5 5h14c2.8 0 5-2.2 5-5V5c0-2.8-2.2-5-5-5zM8 19H5V8h3v11zM6.5 6.7C5.5 6.7 4.8 6 4.8 5s.7-1.7 1.7-1.7 1.7.7 1.7 1.7-.7 1.7-1.7 1.7zM20 19h-3v-5.6c0-1.4-.5-2.4-1.8-2.4-1 0-1.5.7-1.8 1.3-.1.2-.1.5-.1.8V19h-3V8h3v1.3c.4-.6 1.1-1.5 2.7-1.5 2 0 3.5 1.3 3.5 4.1V19z"/></svg>
+            LinkedIn
+          </a>
+          <a id="shareMail" href="#">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>
+            E-mail
+          </a>
+        </div>
+      </div>
+
+      <div class="micro" id="saveStatus">Je gegevens zijn opgeslagen.</div>
+    </section>
+
+  </div>
+</main>
+
+<div class="foot">
+  De Digitale Tafel · <a href="/">terug naar de website</a> · Deelname is gratis. Je gegevens worden alleen gebruikt voor deze actie.
+</div>
+
+<div class="confetti" id="confetti"></div>
+
+<script>
+/* ============================================================
+   CRM-KOPPELING
+   Vul hieronder je webhook-URL in. Werkt met o.a. Zapier,
+   Make.com, HubSpot, Pipedrive, ActiveCampaign of Google Sheets.
+   Laat leeg om alleen lokaal op te slaan (test-modus).
+   ============================================================ */
+const CRM_ENDPOINT = ''; // bv. 'https://hooks.zapier.com/hooks/catch/123456/abcdef/'
+
+const KANALEN = [
+  'Mond-tot-mond',
+  'Marketing',
+  'Organisch zoekgedrag',
+  'Content',
+  'Adverteren',
+  'Eigen outreach',
+  'Koude acquisitie'
+];
+
+const CHECK_SVG = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#031024" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>';
+
+const data = {
+  naam: '',
+  bedrijf: '',
+  telefoon: '',
+  kanalen: [],
+  gelooft_in_content: '',
+  ref: new URLSearchParams(location.search).get('ref') || '',
+  bron: location.pathname,
+  gestart_op: new Date().toISOString()
+};
+
+/* ---- Opties renderen ---- */
+const kanalenEl = document.getElementById('kanalen');
+KANALEN.forEach(k => {
+  const el = document.createElement('label');
+  el.className = 'opt';
+  el.innerHTML = `<span class="box">${CHECK_SVG}</span><span>${k}</span>`;
+  el.addEventListener('click', () => {
+    el.classList.toggle('sel');
+    data.kanalen = [...kanalenEl.querySelectorAll('.opt.sel')].map(o => o.textContent.trim());
+    hideError(3);
+  });
+  kanalenEl.appendChild(el);
+});
+
+const geloofEl = document.getElementById('content-geloof');
+['Ja', 'Nee'].forEach(v => {
+  const el = document.createElement('label');
+  el.className = 'opt';
+  el.innerHTML = `<span class="box">${CHECK_SVG}</span><span>${v}</span>`;
+  el.addEventListener('click', () => {
+    geloofEl.querySelectorAll('.opt').forEach(o => o.classList.remove('sel'));
+    el.classList.add('sel');
+    data.gelooft_in_content = v;
+    hideError(4);
+  });
+  geloofEl.appendChild(el);
+});
+
+/* ---- Stap-navigatie ---- */
+const steps = [...document.querySelectorAll('.step')];
+const TOTAL_Q = steps.length - 1; // laatste stap = bedankscherm
+let current = 0;
+
+const fill = document.getElementById('progressFill');
+const stepNum = document.getElementById('stepNum');
+const stepPct = document.getElementById('stepPct');
+document.getElementById('stepTotal').textContent = TOTAL_Q;
+
+function updateProgress(){
+  const pct = Math.round((current / TOTAL_Q) * 100);
+  fill.style.width = pct + '%';
+  stepPct.textContent = pct + '%';
+  stepNum.textContent = Math.min(current + 1, TOTAL_Q);
+  document.querySelector('.progress-wrap').style.visibility = current >= TOTAL_Q ? 'hidden' : 'visible';
+}
+
+function goTo(i){
+  const from = steps[current];
+  from.classList.add('leaving');
+  setTimeout(() => {
+    from.classList.remove('active', 'leaving');
+    current = i;
+    steps[current].classList.add('active');
+    updateProgress();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    const inp = steps[current].querySelector('input[type="text"],input[type="tel"]');
+    if (inp) setTimeout(() => inp.focus(), 120);
+  }, 260);
+}
+
+function showError(i){
+  const e = document.querySelector(`.error[data-err="${i}"]`);
+  if (e) e.classList.add('show');
+}
+function hideError(i){
+  const e = document.querySelector(`.error[data-err="${i}"]`);
+  if (e) e.classList.remove('show');
+}
+
+/* ---- Validatie per stap ---- */
+function validate(i){
+  if (i === 0){
+    data.naam = document.getElementById('f-naam').value.trim();
+    if (data.naam.length < 2){ showError(0); return false; }
+  }
+  if (i === 1){
+    data.bedrijf = document.getElementById('f-bedrijf').value.trim();
+    if (data.bedrijf.length < 2){ showError(1); return false; }
+  }
+  if (i === 2){
+    data.telefoon = document.getElementById('f-tel').value.trim();
+    if ((data.telefoon.replace(/\D/g, '')).length < 9){ showError(2); return false; }
+  }
+  if (i === 3 && data.kanalen.length === 0){ showError(3); return false; }
+  if (i === 4 && !data.gelooft_in_content){ showError(4); return false; }
+  hideError(i);
+  return true;
+}
+
+document.querySelectorAll('[data-next]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    if (!validate(current)) return;
+    save('partieel');
+    goTo(current + 1);
+  });
+});
+document.querySelectorAll('[data-prev]').forEach(btn => {
+  btn.addEventListener('click', () => goTo(current - 1));
+});
+
+// Enter = volgende
+document.querySelectorAll('input').forEach(inp => {
+  inp.addEventListener('keydown', e => {
+    if (e.key === 'Enter'){
+      e.preventDefault();
+      const btn = steps[current].querySelector('[data-next],[data-submit]');
+      if (btn) btn.click();
+    }
+  });
+  inp.addEventListener('input', () => hideError(current));
+});
+
+/* ---- Opslaan naar CRM ---- */
+async function save(status){
+  const payload = { ...data, status, ingevuld_op: new Date().toISOString() };
+
+  // Altijd lokaal bewaren, zodat er nooit een lead verloren gaat
+  try {
+    const all = JSON.parse(localStorage.getItem('ddt_leads') || '[]');
+    const idx = all.findIndex(l => l.gestart_op === payload.gestart_op);
+    if (idx >= 0) all[idx] = payload; else all.push(payload);
+    localStorage.setItem('ddt_leads', JSON.stringify(all));
+  } catch(e){ /* private mode */ }
+
+  if (!CRM_ENDPOINT) return { ok: false, reason: 'geen endpoint' };
+
+  try {
+    const res = await fetch(CRM_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    return { ok: res.ok };
+  } catch(e){
+    return { ok: false, reason: e.message };
+  }
+}
+
+/* ---- Versturen ---- */
+document.querySelector('[data-submit]').addEventListener('click', async (e) => {
+  if (!validate(4)) return;
+  const btn = e.currentTarget;
+  btn.disabled = true;
+  btn.textContent = 'Versturen…';
+
+  const result = await save('compleet');
+
+  const statusEl = document.getElementById('saveStatus');
+  statusEl.textContent = result.ok
+    ? 'Je gegevens zijn opgeslagen. We nemen contact op zodra de winnaar bekend is.'
+    : 'Je deelname is geregistreerd. We nemen contact op zodra de winnaar bekend is.';
+
+  document.getElementById('doneName').textContent = data.naam.split(' ')[0] + '!';
+  buildShare();
+  goTo(5);
+  setTimeout(confetti, 400);
+});
+
+/* ---- Deellink ---- */
+function slug(s){
+  return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
+          .replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 24);
+}
+function buildShare(){
+  const code = slug(data.naam) || 'deelnemer';
+  const url = location.origin + location.pathname + '?ref=' + code;
+  data.deellink = url;
+
+  document.getElementById('shareLink').textContent = url;
+
+  const tekst = encodeURIComponent(
+    `Gratis giveaway t.w.v. € 2.500 van De Digitale Tafel: win een luxe shootdag in de studio met 2 professionele camera's en 30 high-end video's. Wil jij ook kans maken? ${url}`
+  );
+  document.getElementById('shareWa').href = 'https://wa.me/?text=' + tekst;
+  document.getElementById('shareLi').href = 'https://www.linkedin.com/sharing/share-offsite/?url=' + encodeURIComponent(url);
+  document.getElementById('shareMail').href =
+    'mailto:?subject=' + encodeURIComponent('Maak kans op een luxe shootdag') + '&body=' + tekst;
+
+}
+
+document.getElementById('copyBtn').addEventListener('click', async function(){
+  const url = data.deellink;
+  if (!url) return;
+  try {
+    await navigator.clipboard.writeText(url);
+  } catch(e){
+    const t = document.createElement('textarea');
+    t.value = url; document.body.appendChild(t); t.select();
+    document.execCommand('copy'); t.remove();
+  }
+  this.textContent = 'Gekopieerd ✓';
+  this.classList.add('ok');
+  setTimeout(() => { this.textContent = 'Kopieer'; this.classList.remove('ok'); }, 2200);
+});
+
+/* ---- Confetti ---- */
+function confetti(){
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const box = document.getElementById('confetti');
+  const kleuren = ['#4d8bff', '#6ea4ff', '#f1ece1', '#1e3a8a'];
+  for (let i = 0; i < 70; i++){
+    const p = document.createElement('i');
+    p.style.left = Math.random() * 100 + '%';
+    p.style.background = kleuren[i % kleuren.length];
+    p.style.animationDelay = (Math.random() * 1.1) + 's';
+    p.style.animationDuration = (2.6 + Math.random() * 1.6) + 's';
+    box.appendChild(p);
+    setTimeout(() => p.remove(), 5200);
+  }
+}
+
+/* ---- Export van lokaal opgeslagen leads: Ctrl+Shift+E ---- */
+document.addEventListener('keydown', e => {
+  if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'e'){
+    const all = JSON.parse(localStorage.getItem('ddt_leads') || '[]');
+    if (!all.length) return alert('Nog geen leads opgeslagen.');
+    const kop = ['naam','bedrijf','telefoon','kanalen','gelooft_in_content','ref','status','ingevuld_op'];
+    const csv = [kop.join(';')].concat(
+      all.map(l => kop.map(k => `"${String(Array.isArray(l[k]) ? l[k].join(', ') : (l[k] ?? '')).replace(/"/g,'""')}"`).join(';'))
+    ).join('\n');
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob(["﻿" + csv], { type: 'text/csv;charset=utf-8' }));
+    a.download = 'ddt-leads.csv';
+    a.click();
+  }
+});
+
+updateProgress();
+</script>
+
+</body>
+</html>
