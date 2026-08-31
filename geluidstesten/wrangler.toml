@@ -1,0 +1,16 @@
+name = "geluidstesten"
+main = "src/worker.js"
+compatibility_date = "2025-08-01"
+workers_dev = true
+
+rules = [
+  { type = "Text", globs = ["**/*.html"], fallthrough = false }
+]
+
+[vars]
+ADMIN_PASSWORD = "333"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "geluidstesten"
+database_id = "45abc631-79dd-4d70-b54f-1d2faa8f9035"

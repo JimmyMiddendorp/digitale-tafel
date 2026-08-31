@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="robots" content="noindex" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 fill=%22%23000%22/%3E%3Ctext x=%2216%22 y=%2223%22 font-family=%22Helvetica,Arial%22 font-size=%2220%22 font-weight=%22bold%22 fill=%22%23fff%22 text-anchor=%22middle%22%3Eg%3C/text%3E%3C/svg%3E" />
+<title>geluidstesten</title>
+<style>
+  :root{ --line:#000; --muted:#666; --bg:#fff; --ink:#000; --soft:#f4f4f4; }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{background:var(--bg);color:var(--ink);font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;padding-bottom:48px}
+  .wrap{max-width:720px;margin:0 auto;padding:0 16px}
+
+  header{border-bottom:2px solid var(--line);position:sticky;top:0;background:var(--bg);z-index:10}
+  .bar{max-width:720px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .logo{font-size:19px;font-weight:800;letter-spacing:-.02em}
+  .lang{display:flex;border:1px solid var(--line)}
+  .lang button{font:inherit;font-size:13px;font-weight:600;padding:5px 10px;background:var(--bg);color:var(--ink);border:0;cursor:pointer;min-width:40px}
+  .lang button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+
+  h1{font-size:22px;line-height:1.25;margin:22px 0 8px;letter-spacing:-.02em}
+  h2{font-size:13px;text-transform:uppercase;letter-spacing:.09em;margin:0 0 10px;font-weight:700}
+  section{border:1px solid var(--line);padding:14px;margin:14px 0}
+
+  .note{background:var(--soft);border:1px solid var(--line);padding:14px;margin:14px 0}
+  .note ul{margin:8px 0 0 18px}
+  .note li{margin-bottom:5px}
+  .note li:last-child{margin-bottom:0}
+
+  label{display:block;font-size:13px;font-weight:600;margin:0 0 4px}
+  input[type=text],input[type=date],input[type=time],textarea,input[type=password]{
+    width:100%;font:inherit;padding:10px;border:1px solid var(--line);border-radius:0;background:var(--bg);color:var(--ink);min-height:44px}
+  textarea{min-height:76px;resize:vertical}
+  input:focus,textarea:focus{outline:2px solid var(--ink);outline-offset:-2px}
+  .field{margin-bottom:10px}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  @media (max-width:480px){ .row{grid-template-columns:1fr} }
+
+  .dirs{display:flex;flex-wrap:wrap;gap:8px}
+  .dirs label{display:flex;align-items:center;gap:7px;border:1px solid var(--line);padding:9px 12px;font-size:14px;font-weight:600;margin:0;cursor:pointer;min-height:44px}
+  .dirs input{width:18px;height:18px;accent-color:#000}
+  .check{display:flex;align-items:flex-start;gap:9px;margin:10px 0;font-size:14px;font-weight:600;cursor:pointer}
+  .check input{width:20px;height:20px;margin-top:1px;accent-color:#000;flex:none}
+
+  button.btn{font:inherit;font-weight:700;width:100%;padding:13px;background:var(--ink);color:var(--bg);border:1px solid var(--ink);cursor:pointer;min-height:48px}
+  button.btn.ghost{background:var(--bg);color:var(--ink)}
+  button.btn:active{opacity:.75}
+  .btn-row{display:flex;gap:8px;margin-top:10px}
+  .hint{font-size:12px;color:var(--muted);margin-top:6px}
+  .now{font:inherit;font-size:12px;font-weight:700;border:1px solid var(--line);background:var(--bg);padding:3px 8px;cursor:pointer;float:right}
+
+  .item{border-top:1px solid var(--line);padding:11px 0}
+  .item:first-child{border-top:0}
+  .item .top{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+  .item .when{font-weight:700;font-size:15px}
+  .item .desc{margin-top:3px;white-space:pre-wrap;overflow-wrap:anywhere}
+  .item .away{display:inline-block;border:1px solid var(--line);font-size:11px;font-weight:700;padding:1px 6px;margin-top:5px;text-transform:uppercase;letter-spacing:.05em}
+  .del{font:inherit;font-size:12px;font-weight:600;background:none;border:0;border-bottom:1px solid var(--line);cursor:pointer;padding:0;color:var(--muted);flex:none}
+  .empty{color:var(--muted);font-size:14px}
+  .count{font-size:12px;color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0}
+
+  .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:18px;background:var(--ink);color:var(--bg);padding:11px 16px;font-size:14px;font-weight:600;z-index:50;opacity:0;pointer-events:none;transition:opacity .18s;max-width:92vw}
+  .toast.on{opacity:1}
+  footer{text-align:center;font-size:12px;color:var(--muted);padding:22px 16px 0}
+  footer a{color:var(--muted)}
+
+  @media print{
+    header,.note,.btn-row,button,.del,footer,#formNew{display:none!important}
+    section{border:0;padding:0}
+    body{padding:0}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="bar">
+    <div class="logo">geluidstesten</div>
+    <div class="lang" role="group" aria-label="Taal / Language">
+      <button type="button" data-lang="nl" aria-pressed="true">NL</button>
+      <button type="button" data-lang="en" aria-pressed="false">EN</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <h1 data-t="h1">Geluidsoverlast — registratieformulier</h1>
+
+  <div class="note">
+    <strong data-t="note_title">Vul alleen dit in</strong>
+    <ul>
+      <li data-t="note_1">Noteer alléén geluid dat <strong>niet van uzelf</strong> is.</li>
+      <li data-t="note_2">Geef ook aan wanneer u <strong>weg bent</strong>. Zet tijdens uw afwezigheid ieder geluid uit, zoals de televisie of radio.</li>
+      <li data-t="note_3">De tijd staat automatisch op <strong>nu</strong>. U kunt die altijd aanpassen.</li>
+    </ul>
+  </div>
+
+  <section>
+    <h2 data-t="s_melder">Adres melder</h2>
+    <div class="field"><label for="m_naam" data-t="f_naam">Naam</label><input type="text" id="m_naam" autocomplete="name" /></div>
+    <div class="row">
+      <div class="field"><label for="m_adres" data-t="f_adres">Adres</label><input type="text" id="m_adres" autocomplete="street-address" /></div>
+      <div class="field"><label for="m_plaats" data-t="f_plaats">Plaats</label><input type="text" id="m_plaats" autocomplete="address-level2" /></div>
+    </div>
+  </section>
+
+  <section>
+    <h2 data-t="s_veroorzaker">Adres veroorzaker</h2>
+    <div class="field"><label for="v_naam" data-t="f_naam">Naam</label><input type="text" id="v_naam" /></div>
+    <div class="row">
+      <div class="field"><label for="v_adres" data-t="f_adres">Adres</label><input type="text" id="v_adres" /></div>
+      <div class="field"><label for="v_plaats" data-t="f_plaats">Plaats</label><input type="text" id="v_plaats" /></div>
+    </div>
+  </section>
+
+  <section>
+    <h2 data-t="s_richting">Geluid komt van</h2>
+    <div class="dirs" id="dirs">
+      <label><input type="checkbox" value="boven" /><span data-t="d_boven">Boven</span></label>
+      <label><input type="checkbox" value="beneden" /><span data-t="d_beneden">Beneden</span></label>
+      <label><input type="checkbox" value="links" /><span data-t="d_links">Links</span></label>
+      <label><input type="checkbox" value="rechts" /><span data-t="d_rechts">Rechts</span></label>
+    </div>
+    <div class="btn-row"><button type="button" class="btn ghost" id="saveProfile" data-t="b_save">Gegevens opslaan</button></div>
+  </section>
+
+  <form id="formNew">
+    <section>
+      <h2 data-t="s_nieuw">Nieuwe registratie</h2>
+      <div class="field"><label for="datum" data-t="f_datum">Datum</label><input type="date" id="datum" required /></div>
+      <div class="row">
+        <div class="field">
+          <label for="start"><button type="button" class="now" data-now="start" data-t="b_nu">Nu</button><span data-t="f_start">Tijdstip start</span></label>
+          <input type="time" id="start" />
+        </div>
+        <div class="field">
+          <label for="stop"><button type="button" class="now" data-now="stop" data-t="b_nu">Nu</button><span data-t="f_stop">Tijdstip stop</span></label>
+          <input type="time" id="stop" />
+        </div>
+      </div>
+      <div class="field">
+        <label for="omschrijving" data-t="f_oms">Korte omschrijving</label>
+        <textarea id="omschrijving" maxlength="1000"></textarea>
+      </div>
+      <label class="check"><input type="checkbox" id="afwezig" /><span data-t="f_afwezig">Ik was op dit moment niet thuis (al mijn eigen geluid stond uit)</span></label>
+      <button type="submit" class="btn" data-t="b_add">Toevoegen aan overzicht</button>
+      <div class="hint" data-t="hint_save">Uw overzicht wordt bewaard op dit apparaat, u kunt later gewoon terugkomen.</div>
+    </section>
+  </form>
+
+  <section>
+    <h2><span data-t="s_overzicht">Mijn overzicht</span> <span class="count" id="count"></span></h2>
+    <div id="list"><p class="empty" data-t="empty">Nog geen registraties.</p></div>
+    <div class="btn-row"><button type="button" class="btn ghost" id="printBtn" data-t="b_print">Afdrukken / opslaan als PDF</button></div>
+  </section>
+
+  <footer><a href="/dashboard" data-t="f_dash">Dashboard (beheer)</a></footer>
+</main>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+  "use strict";
+
+  var T = {
+    nl: {
+      h1:"Geluidsoverlast — registratieformulier",
+      note_title:"Vul alleen dit in",
+      note_1:"Noteer alléén geluid dat <strong>niet van uzelf</strong> is.",
+      note_2:"Geef ook aan wanneer u <strong>weg bent</strong>. Zet tijdens uw afwezigheid ieder geluid uit, zoals de televisie of radio.",
+      note_3:"De tijd staat automatisch op <strong>nu</strong>. U kunt die altijd aanpassen.",
+      s_melder:"Adres melder", s_veroorzaker:"Adres veroorzaker", s_richting:"Geluid komt van",
+      f_naam:"Naam", f_adres:"Adres", f_plaats:"Plaats",
+      d_boven:"Boven", d_beneden:"Beneden", d_links:"Links", d_rechts:"Rechts",
+      b_save:"Gegevens opslaan", s_nieuw:"Nieuwe registratie",
+      f_datum:"Datum", f_start:"Tijdstip start", f_stop:"Tijdstip stop", f_oms:"Korte omschrijving",
+      b_nu:"Nu", f_afwezig:"Ik was op dit moment niet thuis (al mijn eigen geluid stond uit)",
+      b_add:"Toevoegen aan overzicht",
+      hint_save:"Uw overzicht wordt bewaard op dit apparaat, u kunt later gewoon terugkomen.",
+      s_overzicht:"Mijn overzicht", empty:"Nog geen registraties.",
+      b_print:"Afdrukken / opslaan als PDF", f_dash:"Dashboard (beheer)",
+      del:"Verwijderen", away:"Niet thuis", saved:"Opgeslagen", added:"Registratie toegevoegd",
+      err:"Opslaan mislukt. Probeer het opnieuw.", need_oms:"Vul een korte omschrijving in.",
+      cnt:function(n){ return n + (n===1 ? " registratie" : " registraties"); },
+      confirm:"Deze registratie verwijderen?"
+    },
+    en: {
+      h1:"Noise nuisance — logging form",
+      note_title:"Only fill in this",
+      note_1:"Only log noise that is <strong>not your own</strong>.",
+      note_2:"Also note when you are <strong>away</strong>. While you are out, switch off all your own sound, such as the TV or radio.",
+      note_3:"The time is filled in with <strong>the current time</strong>. You can always change it.",
+      s_melder:"Address of reporter", s_veroorzaker:"Address of the source", s_richting:"Noise comes from",
+      f_naam:"Name", f_adres:"Address", f_plaats:"City",
+      d_boven:"Above", d_beneden:"Below", d_links:"Left", d_rechts:"Right",
+      b_save:"Save details", s_nieuw:"New log entry",
+      f_datum:"Date", f_start:"Start time", f_stop:"End time", f_oms:"Short description",
+      b_nu:"Now", f_afwezig:"I was not at home at this moment (all my own sound was off)",
+      b_add:"Add to overview",
+      hint_save:"Your overview is kept on this device, you can simply come back later.",
+      s_overzicht:"My overview", empty:"No entries yet.",
+      b_print:"Print / save as PDF", f_dash:"Dashboard (admin)",
+      del:"Delete", away:"Not at home", saved:"Saved", added:"Entry added",
+      err:"Saving failed. Please try again.", need_oms:"Please add a short description.",
+      cnt:function(n){ return n + (n===1 ? " entry" : " entries"); },
+      confirm:"Delete this entry?"
+    }
+  };
+
+  var lang = "nl";
+  var reportId = null;
+  var entries = [];
+  var $ = function(id){ return document.getElementById(id); };
+
+  try { lang = localStorage.getItem("gt_lang") === "en" ? "en" : "nl"; } catch(e){}
+  try { reportId = localStorage.getItem("gt_report") || null; } catch(e){}
+
+  function esc(s){
+    return String(s == null ? "" : s).replace(/[&<>"']/g, function(c){
+      return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c];
+    });
+  }
+
+  function applyLang(){
+    var d = T[lang];
+    document.documentElement.lang = lang;
+    document.querySelectorAll("[data-t]").forEach(function(el){
+      var v = d[el.getAttribute("data-t")];
+      if (typeof v === "string") el.innerHTML = v;
+    });
+    document.querySelectorAll(".lang button").forEach(function(b){
+      b.setAttribute("aria-pressed", String(b.getAttribute("data-lang") === lang));
+    });
+    render();
+    try { localStorage.setItem("gt_lang", lang); } catch(e){}
+  }
+
+  var toastTimer;
+  function toast(msg){
+    var t = $("toast");
+    t.textContent = msg;
+    t.classList.add("on");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ t.classList.remove("on"); }, 2200);
+  }
+
+  function pad(n){ return (n < 10 ? "0" : "") + n; }
+  function today(){ var d = new Date(); return d.getFullYear() + "-" + pad(d.getMonth()+1) + "-" + pad(d.getDate()); }
+  function clock(){ var d = new Date(); return pad(d.getHours()) + ":" + pad(d.getMinutes()); }
+
+  function fmtDate(iso){
+    var p = String(iso || "").split("-");
+    if (p.length !== 3) return iso || "";
+    return p[2] + "-" + p[1] + "-" + p[0];
+  }
+
+  var PROFILE = ["m_naam","m_adres","m_plaats","v_naam","v_adres","v_plaats"];
+
+  function readProfile(){
+    var out = {};
+    PROFILE.forEach(function(k){ out[k] = $(k).value.trim(); });
+    var dirs = [];
+    $("dirs").querySelectorAll("input:checked").forEach(function(i){ dirs.push(i.value); });
+    out.richting = dirs.join(",");
+    if (reportId) out.id = reportId;
+    return out;
+  }
+
+  function fillProfile(r){
+    PROFILE.forEach(function(k){ if (r[k]) $(k).value = r[k]; });
+    var dirs = String(r.richting || "").split(",");
+    $("dirs").querySelectorAll("input").forEach(function(i){ i.checked = dirs.indexOf(i.value) !== -1; });
+  }
+
+  function api(path, body){
+    return fetch(path, {
+      method: body ? "POST" : "GET",
+      headers: body ? { "content-type": "application/json" } : undefined,
+      body: body ? JSON.stringify(body) : undefined
+    }).then(function(r){
+      if (!r.ok) throw new Error("http " + r.status);
+      return r.json();
+    });
+  }
+
+  function saveProfile(){
+    return api("/api/report", readProfile()).then(function(res){
+      reportId = res.id;
+      try { localStorage.setItem("gt_report", reportId); } catch(e){}
+      return reportId;
+    });
+  }
+
+  function render(){
+    var d = T[lang];
+    var list = $("list");
+    $("count").textContent = entries.length ? d.cnt(entries.length) : "";
+    if (!entries.length){
+      list.innerHTML = '<p class="empty">' + esc(d.empty) + "</p>";
+      return;
+    }
+    list.innerHTML = entries.map(function(e){
+      var span = esc(e.start || "") + (e.stop ? " – " + esc(e.stop) : "");
+      return '<div class="item">' +
+        '<div class="top"><span class="when">' + esc(fmtDate(e.datum)) + (span ? " &nbsp;" + span : "") + "</span>" +
+        '<button type="button" class="del" data-id="' + esc(e.id) + '">' + esc(d.del) + "</button></div>" +
+        (e.omschrijving ? '<div class="desc">' + esc(e.omschrijving) + "</div>" : "") +
+        (Number(e.afwezig) ? '<div class="away">' + esc(d.away) + "</div>" : "") +
+      "</div>";
+    }).join("");
+  }
+
+  // ---- events ----
+  document.querySelectorAll(".lang button").forEach(function(b){
+    b.addEventListener("click", function(){ lang = b.getAttribute("data-lang"); applyLang(); });
+  });
+
+  document.querySelectorAll("[data-now]").forEach(function(b){
+    b.addEventListener("click", function(ev){
+      ev.preventDefault();
+      $(b.getAttribute("data-now")).value = clock();
+    });
+  });
+
+  $("saveProfile").addEventListener("click", function(){
+    saveProfile().then(function(){ toast(T[lang].saved); }).catch(function(){ toast(T[lang].err); });
+  });
+
+  $("printBtn").addEventListener("click", function(){ window.print(); });
+
+  $("formNew").addEventListener("submit", function(ev){
+    ev.preventDefault();
+    var oms = $("omschrijving").value.trim();
+    if (!oms && !$("afwezig").checked){ toast(T[lang].need_oms); $("omschrijving").focus(); return; }
+    var entry = {
+      datum: $("datum").value || today(),
+      start: $("start").value,
+      stop: $("stop").value,
+      omschrijving: oms,
+      afwezig: $("afwezig").checked
+    };
+    saveProfile().then(function(id){
+      entry.report_id = id;
+      return api("/api/entry", entry);
+    }).then(function(res){
+      entries = res.entries;
+      render();
+      $("omschrijving").value = "";
+      $("afwezig").checked = false;
+      $("start").value = clock();
+      $("stop").value = "";
+      $("datum").value = today();
+      toast(T[lang].added);
+    }).catch(function(){ toast(T[lang].err); });
+  });
+
+  $("list").addEventListener("click", function(ev){
+    var b = ev.target.closest(".del");
+    if (!b || !reportId) return;
+    if (!confirm(T[lang].confirm)) return;
+    api("/api/entry/delete", { id: b.getAttribute("data-id"), report_id: reportId })
+      .then(function(res){ entries = res.entries; render(); })
+      .catch(function(){ toast(T[lang].err); });
+  });
+
+  // ---- init ----
+  $("datum").value = today();
+  $("start").value = clock();
+
+  if (reportId){
+    api("/api/report/" + encodeURIComponent(reportId)).then(function(res){
+      fillProfile(res.report);
+      entries = res.entries || [];
+      render();
+    }).catch(function(){
+      try { localStorage.removeItem("gt_report"); } catch(e){}
+      reportId = null;
+    });
+  }
+
+  applyLang();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="robots" content="noindex" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 fill=%22%23000%22/%3E%3Ctext x=%2216%22 y=%2223%22 font-family=%22Helvetica,Arial%22 font-size=%2220%22 font-weight=%22bold%22 fill=%22%23fff%22 text-anchor=%22middle%22%3Eg%3C/text%3E%3C/svg%3E" />
+<title>geluidstesten — dashboard</title>
+<style>
+  :root{ --line:#000; --muted:#666; --bg:#fff; --ink:#000; --soft:#f4f4f4; }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{background:var(--bg);color:var(--ink);font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;padding-bottom:48px}
+  .wrap{max-width:900px;margin:0 auto;padding:0 16px}
+
+  header{border-bottom:2px solid var(--line);position:sticky;top:0;background:var(--bg);z-index:10}
+  .bar{max-width:900px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .logo{font-size:19px;font-weight:800;letter-spacing:-.02em}
+  .logo span{font-weight:400;color:var(--muted)}
+  .lang{display:flex;border:1px solid var(--line)}
+  .lang button{font:inherit;font-size:13px;font-weight:600;padding:5px 10px;background:var(--bg);color:var(--ink);border:0;cursor:pointer;min-width:40px}
+  .lang button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+
+  h1{font-size:22px;margin:22px 0 12px;letter-spacing:-.02em}
+  input[type=password],input[type=search]{width:100%;font:inherit;padding:10px;border:1px solid var(--line);border-radius:0;background:var(--bg);color:var(--ink);min-height:44px}
+  button.btn{font:inherit;font-weight:700;padding:12px 16px;background:var(--ink);color:var(--bg);border:1px solid var(--ink);cursor:pointer;min-height:46px}
+  button.btn.ghost{background:var(--bg);color:var(--ink)}
+  .login{border:1px solid var(--line);padding:16px;max-width:360px;margin:24px auto}
+  .login button{width:100%;margin-top:10px}
+  .err{color:var(--ink);font-size:13px;font-weight:700;border:1px solid var(--line);padding:7px 10px;margin-top:10px;display:none}
+  .err.on{display:block}
+
+  .tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:14px 0}
+  .tools input{flex:1;min-width:180px}
+  .stats{font-size:13px;color:var(--muted);margin-bottom:6px}
+
+  .card{border:1px solid var(--line);margin:14px 0}
+  .card > summary{list-style:none;cursor:pointer;padding:12px 14px;display:flex;justify-content:space-between;gap:12px;align-items:flex-start;background:var(--soft)}
+  .card > summary::-webkit-details-marker{display:none}
+  .who{font-weight:800;font-size:16px;overflow-wrap:anywhere}
+  .sub{display:block;font-size:13px;color:var(--muted);margin-top:2px;overflow-wrap:anywhere}
+  .badge{border:1px solid var(--line);background:var(--bg);font-size:12px;font-weight:700;padding:2px 7px;white-space:nowrap}
+  .body{padding:12px 14px;border-top:1px solid var(--line)}
+  .meta{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+  @media (max-width:560px){ .meta{grid-template-columns:1fr} }
+  .meta h3{font-size:11px;text-transform:uppercase;letter-spacing:.09em;margin-bottom:3px}
+  .meta p{font-size:14px;overflow-wrap:anywhere}
+
+  .tblwrap{overflow-x:auto}
+  table{border-collapse:collapse;width:100%;font-size:14px;min-width:520px}
+  th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+  th{font-size:11px;text-transform:uppercase;letter-spacing:.06em;background:var(--soft)}
+  td.desc{overflow-wrap:anywhere}
+  .away{font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.05em}
+  .empty{color:var(--muted);font-size:14px;padding:16px 0}
+  footer{text-align:center;font-size:12px;color:var(--muted);padding:22px 16px 0}
+  footer a{color:var(--muted)}
+  @media print{ header,.tools,footer,summary .badge{display:none!important} .card{break-inside:avoid} }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="bar">
+    <div class="logo">geluidstesten <span>/ dashboard</span></div>
+    <div class="lang" role="group" aria-label="Taal / Language">
+      <button type="button" data-lang="nl" aria-pressed="true">NL</button>
+      <button type="button" data-lang="en" aria-pressed="false">EN</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div id="loginView">
+    <form class="login" id="loginForm">
+      <label for="pw" style="display:block;font-size:13px;font-weight:700;margin-bottom:5px" data-t="pw">Wachtwoord</label>
+      <input type="password" id="pw" autocomplete="current-password" inputmode="numeric" />
+      <button type="submit" class="btn" data-t="login">Inloggen</button>
+      <div class="err" id="err" data-t="wrong">Onjuist wachtwoord.</div>
+    </form>
+  </div>
+
+  <div id="dataView" hidden>
+    <h1 data-t="h1">Meldingen</h1>
+    <div class="tools">
+      <input type="search" id="q" data-tp="search" placeholder="Zoek op naam, adres, plaats of omschrijving…" />
+      <button type="button" class="btn ghost" id="csvBtn" data-t="csv">CSV</button>
+      <button type="button" class="btn ghost" id="reloadBtn" data-t="reload">Vernieuwen</button>
+    </div>
+    <p class="stats" id="stats"></p>
+    <div id="list"></div>
+  </div>
+
+  <footer><a href="/" data-t="back">&larr; Terug naar het formulier</a></footer>
+</main>
+
+<script>
+(function(){
+  "use strict";
+
+  var T = {
+    nl:{
+      pw:"Wachtwoord", login:"Inloggen", wrong:"Onjuist wachtwoord.",
+      h1:"Meldingen", search:"Zoek op naam, adres, plaats of omschrijving…",
+      csv:"CSV", reload:"Vernieuwen", back:"&larr; Terug naar het formulier",
+      melder:"Melder", veroorzaker:"Veroorzaker", richting:"Geluid komt van",
+      datum:"Datum", start:"Start", stop:"Stop", oms:"Omschrijving", thuis:"Niet thuis",
+      geen:"Nog geen registraties.", none:"Geen meldingen gevonden.",
+      dagen:"dagen", regs:"registraties", periode:"Periode", laatst:"Laatst bijgewerkt",
+      onbekend:"(geen naam ingevuld)", leeg:"—", ja:"Ja",
+      stats:function(r,e){ return r + " melding" + (r===1?"":"en") + " · " + e + " registratie" + (e===1?"":"s"); }
+    },
+    en:{
+      pw:"Password", login:"Log in", wrong:"Wrong password.",
+      h1:"Reports", search:"Search name, address, city or description…",
+      csv:"CSV", reload:"Refresh", back:"&larr; Back to the form",
+      melder:"Reporter", veroorzaker:"Source", richting:"Noise comes from",
+      datum:"Date", start:"Start", stop:"End", oms:"Description", thuis:"Not at home",
+      geen:"No entries yet.", none:"No reports found.",
+      dagen:"days", regs:"entries", periode:"Period", laatst:"Last updated",
+      onbekend:"(no name entered)", leeg:"—", ja:"Yes",
+      stats:function(r,e){ return r + " report" + (r===1?"":"s") + " · " + e + " entr" + (e===1?"y":"ies"); }
+    }
+  };
+
+  var lang = "nl", pw = "", data = { reports: [], entries: [] };
+  var $ = function(id){ return document.getElementById(id); };
+
+  try { lang = localStorage.getItem("gt_lang") === "en" ? "en" : "nl"; } catch(e){}
+  try { pw = sessionStorage.getItem("gt_pw") || ""; } catch(e){}
+
+  function esc(s){
+    return String(s == null ? "" : s).replace(/[&<>"']/g, function(c){
+      return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c];
+    });
+  }
+  function fmtDate(iso){
+    var p = String(iso || "").split("-");
+    return p.length === 3 ? p[2] + "-" + p[1] + "-" + p[0] : (iso || "");
+  }
+  function fmtStamp(iso){
+    var d = new Date(iso);
+    return isNaN(d) ? "" : fmtDate(iso.slice(0,10)) + " " + iso.slice(11,16);
+  }
+
+  function applyLang(){
+    var d = T[lang];
+    document.documentElement.lang = lang;
+    document.querySelectorAll("[data-t]").forEach(function(el){
+      var v = d[el.getAttribute("data-t")];
+      if (typeof v === "string") el.innerHTML = v;
+    });
+    document.querySelectorAll("[data-tp]").forEach(function(el){
+      var v = d[el.getAttribute("data-tp")];
+      if (typeof v === "string") el.placeholder = v;
+    });
+    document.querySelectorAll(".lang button").forEach(function(b){
+      b.setAttribute("aria-pressed", String(b.getAttribute("data-lang") === lang));
+    });
+    if (!$("dataView").hidden) render();
+    try { localStorage.setItem("gt_lang", lang); } catch(e){}
+  }
+
+  function load(){
+    return fetch("/api/admin", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ password: pw })
+    }).then(function(r){
+      if (!r.ok) throw new Error("auth");
+      return r.json();
+    }).then(function(res){
+      data = res;
+      $("loginView").hidden = true;
+      $("dataView").hidden = false;
+      render();
+    });
+  }
+
+  function grouped(){
+    var byReport = {};
+    data.entries.forEach(function(e){
+      (byReport[e.report_id] = byReport[e.report_id] || []).push(e);
+    });
+    return data.reports.map(function(r){ return { r: r, e: byReport[r.id] || [] }; });
+  }
+
+  function matches(g, q){
+    if (!q) return true;
+    var hay = [g.r.m_naam, g.r.m_adres, g.r.m_plaats, g.r.v_naam, g.r.v_adres, g.r.v_plaats]
+      .concat(g.e.map(function(x){ return x.omschrijving; })).join(" ").toLowerCase();
+    return hay.indexOf(q) !== -1;
+  }
+
+  function render(){
+    var d = T[lang];
+    var q = $("q").value.trim().toLowerCase();
+    var groups = grouped().filter(function(g){ return matches(g, q); });
+
+    $("stats").textContent = d.stats(groups.length, groups.reduce(function(n,g){ return n + g.e.length; }, 0));
+
+    if (!groups.length){ $("list").innerHTML = '<p class="empty">' + esc(d.none) + "</p>"; return; }
+
+    $("list").innerHTML = groups.map(function(g){
+      var r = g.r, es = g.e;
+      var dates = {};
+      es.forEach(function(x){ if (x.datum) dates[x.datum] = 1; });
+      var keys = Object.keys(dates).sort();
+      var period = keys.length ? fmtDate(keys[0]) + (keys.length > 1 ? " – " + fmtDate(keys[keys.length-1]) : "") : d.leeg;
+
+      var rows = es.length ? es.map(function(x){
+        return "<tr><td>" + esc(fmtDate(x.datum)) + "</td><td>" + esc(x.start || d.leeg) +
+          "</td><td>" + esc(x.stop || d.leeg) + '</td><td class="desc">' + esc(x.omschrijving || d.leeg) +
+          '</td><td class="away">' + (Number(x.afwezig) ? esc(d.ja) : "") + "</td></tr>";
+      }).join("") : "";
+
+      return '<details class="card" open><summary><span><span class="who">' +
+        esc(r.m_naam || d.onbekend) + '</span><span class="sub">' +
+        esc([r.m_adres, r.m_plaats].filter(Boolean).join(", ") || d.leeg) + "</span></span>" +
+        '<span class="badge">' + keys.length + " " + esc(d.dagen) + " · " + es.length + " " + esc(d.regs) + "</span></summary>" +
+        '<div class="body"><div class="meta">' +
+          "<div><h3>" + esc(d.melder) + "</h3><p>" + esc(r.m_naam || d.leeg) + "<br>" +
+            esc([r.m_adres, r.m_plaats].filter(Boolean).join(", ") || d.leeg) + "</p></div>" +
+          "<div><h3>" + esc(d.veroorzaker) + "</h3><p>" + esc(r.v_naam || d.leeg) + "<br>" +
+            esc([r.v_adres, r.v_plaats].filter(Boolean).join(", ") || d.leeg) + "</p></div>" +
+          "<div><h3>" + esc(d.richting) + "</h3><p>" + esc(r.richting ? r.richting.split(",").join(", ") : d.leeg) + "</p></div>" +
+          "<div><h3>" + esc(d.periode) + "</h3><p>" + esc(period) + "<br><span class='sub'>" +
+            esc(d.laatst) + ": " + esc(fmtStamp(r.updated_at)) + "</span></p></div>" +
+        "</div>" +
+        (rows
+          ? '<div class="tblwrap"><table><thead><tr><th>' + esc(d.datum) + "</th><th>" + esc(d.start) +
+            "</th><th>" + esc(d.stop) + "</th><th>" + esc(d.oms) + "</th><th>" + esc(d.thuis) +
+            "</th></tr></thead><tbody>" + rows + "</tbody></table></div>"
+          : '<p class="empty">' + esc(d.geen) + "</p>") +
+        "</div></details>";
+    }).join("");
+  }
+
+  function csv(){
+    var d = T[lang];
+    var head = ["melder_naam","melder_adres","melder_plaats","veroorzaker_naam","veroorzaker_adres",
+                "veroorzaker_plaats","richting","datum","start","stop","omschrijving","niet_thuis"];
+    var lines = [head.join(";")];
+    grouped().forEach(function(g){
+      var base = [g.r.m_naam, g.r.m_adres, g.r.m_plaats, g.r.v_naam, g.r.v_adres, g.r.v_plaats, g.r.richting];
+      (g.e.length ? g.e : [{}]).forEach(function(x){
+        lines.push(base.concat([x.datum || "", x.start || "", x.stop || "", x.omschrijving || "",
+          Number(x.afwezig) ? d.ja : ""]).map(function(v){
+            return '"' + String(v == null ? "" : v).replace(/"/g, '""') + '"';
+          }).join(";"));
+      });
+    });
+    var url = URL.createObjectURL(new Blob(["﻿" + lines.join("\r\n")], { type: "text/csv;charset=utf-8" }));
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = "geluidstesten-" + new Date().toISOString().slice(0,10) + ".csv";
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
+  }
+
+  document.querySelectorAll(".lang button").forEach(function(b){
+    b.addEventListener("click", function(){ lang = b.getAttribute("data-lang"); applyLang(); });
+  });
+
+  $("loginForm").addEventListener("submit", function(ev){
+    ev.preventDefault();
+    pw = $("pw").value;
+    load().then(function(){
+      try { sessionStorage.setItem("gt_pw", pw); } catch(e){}
+    }).catch(function(){
+      $("err").classList.add("on");
+      $("pw").select();
+    });
+  });
+
+  $("q").addEventListener("input", render);
+  $("csvBtn").addEventListener("click", csv);
+  $("reloadBtn").addEventListener("click", function(){ load().catch(function(){}); });
+
+  applyLang();
+  if (pw) load().catch(function(){ pw = ""; });
+})();
+</script>
+</body>
+</html>

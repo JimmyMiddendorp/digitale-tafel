@@ -1,2 +1,5 @@
 .claude/
 .DS_Store
+geluidstesten/node_modules/
+geluidstesten/.wrangler/
+geluidstesten/package-lock.json
