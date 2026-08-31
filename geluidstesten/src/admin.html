@@ -116,23 +116,27 @@
   var T = {
     nl:{
       pw:"Wachtwoord", login:"Inloggen", wrong:"Onjuist wachtwoord.",
-      h1:"Meldingen", search:"Zoek op naam, adres, plaats of omschrijving…",
+      h1:"Meldingen", search:"Zoek op postcode, naam, plaats of omschrijving…",
       csv:"CSV", reload:"Vernieuwen", back:"&larr; Terug naar het formulier",
-      melder:"Melder", veroorzaker:"Veroorzaker", richting:"Geluid komt van",
+      melder:"Melder", veroorzaker:"Veroorzaker", richting:"Geluid komt van", adres:"Adres",
       datum:"Datum", start:"Start", stop:"Stop", oms:"Omschrijving", thuis:"Niet thuis",
       geen:"Nog geen registraties.", none:"Geen meldingen gevonden.",
-      dagen:"dagen", regs:"registraties", periode:"Periode", laatst:"Laatst bijgewerkt",
+      dagen:function(n){ return n + (n===1 ? " dag" : " dagen"); },
+      regs:function(n){ return n + (n===1 ? " registratie" : " registraties"); },
+      periode:"Periode", laatst:"Laatst bijgewerkt",
       onbekend:"(geen naam ingevuld)", leeg:"—", ja:"Ja",
       stats:function(r,e){ return r + " melding" + (r===1?"":"en") + " · " + e + " registratie" + (e===1?"":"s"); }
     },
     en:{
       pw:"Password", login:"Log in", wrong:"Wrong password.",
-      h1:"Reports", search:"Search name, address, city or description…",
+      h1:"Reports", search:"Search postcode, name, city or description…",
       csv:"CSV", reload:"Refresh", back:"&larr; Back to the form",
-      melder:"Reporter", veroorzaker:"Source", richting:"Noise comes from",
+      melder:"Reporter", veroorzaker:"Source", richting:"Noise comes from", adres:"Address",
       datum:"Date", start:"Start", stop:"End", oms:"Description", thuis:"Not at home",
       geen:"No entries yet.", none:"No reports found.",
-      dagen:"days", regs:"entries", periode:"Period", laatst:"Last updated",
+      dagen:function(n){ return n + (n===1 ? " day" : " days"); },
+      regs:function(n){ return n + (n===1 ? " entry" : " entries"); },
+      periode:"Period", laatst:"Last updated",
       onbekend:"(no name entered)", leeg:"—", ja:"Yes",
       stats:function(r,e){ return r + " report" + (r===1?"":"s") + " · " + e + " entr" + (e===1?"y":"ies"); }
     }
@@ -152,6 +156,13 @@
   function fmtDate(iso){
     var p = String(iso || "").split("-");
     return p.length === 3 ? p[2] + "-" + p[1] + "-" + p[0] : (iso || "");
+  }
+  function prettyPc(p){
+    p = String(p || "");
+    return p.length === 6 ? p.slice(0,4) + " " + p.slice(4) : p;
+  }
+  function adresLine(r){
+    return (prettyPc(r.postcode) + " " + (r.huisnummer || "")).trim();
   }
   function fmtStamp(iso){
     var d = new Date(iso);
@@ -202,7 +213,8 @@
 
   function matches(g, q){
     if (!q) return true;
-    var hay = [g.r.m_naam, g.r.m_adres, g.r.m_plaats, g.r.v_naam, g.r.v_adres, g.r.v_plaats]
+    var hay = [g.r.postcode, g.r.huisnummer, g.r.postcode + " " + g.r.huisnummer,
+               g.r.m_naam, g.r.m_straat, g.r.m_plaats, g.r.v_naam, g.r.v_adres, g.r.v_plaats]
       .concat(g.e.map(function(x){ return x.omschrijving; })).join(" ").toLowerCase();
     return hay.indexOf(q) !== -1;
   }
@@ -210,6 +222,7 @@
   function render(){
     var d = T[lang];
     var q = $("q").value.trim().toLowerCase();
+    if (/^[0-9]{4}\s*[a-z]{2}/.test(q)) q = q.replace(/\s+/g, "");
     var groups = grouped().filter(function(g){ return matches(g, q); });
 
     $("stats").textContent = d.stats(groups.length, groups.reduce(function(n,g){ return n + g.e.length; }, 0));
@@ -234,12 +247,13 @@
       }).join("") : "";
 
       return '<details class="card" open><summary><span><span class="who">' +
-        esc(r.m_naam || d.onbekend) + '</span><span class="sub">' +
-        esc([r.m_adres, r.m_plaats].filter(Boolean).join(", ") || d.leeg) + "</span></span>" +
-        '<span class="badge">' + keys.length + " " + esc(d.dagen) + " · " + es.length + " " + esc(d.regs) + "</span></summary>" +
+        esc(adresLine(r)) + '</span><span class="sub">' +
+        esc([r.m_naam, r.m_plaats].filter(Boolean).join(" · ") || d.onbekend) + "</span></span>" +
+        '<span class="badge">' + esc(d.dagen(keys.length)) + " · " + esc(d.regs(es.length)) + "</span></summary>" +
         '<div class="body"><div class="meta">' +
           "<div><h3>" + esc(d.melder) + "</h3><p>" + esc(r.m_naam || d.leeg) + "<br>" +
-            esc([r.m_adres, r.m_plaats].filter(Boolean).join(", ") || d.leeg) + "</p></div>" +
+            esc([r.m_straat ? r.m_straat + " " + r.huisnummer : "", prettyPc(r.postcode),
+                 r.m_plaats].filter(Boolean).join(", ")) + "</p></div>" +
           "<div><h3>" + esc(d.veroorzaker) + "</h3><p>" + esc(r.v_naam || d.leeg) + "<br>" +
             esc([r.v_adres, r.v_plaats].filter(Boolean).join(", ") || d.leeg) + "</p></div>" +
           "<div><h3>" + esc(d.richting) + "</h3><p>" + esc(r.richting ? r.richting.split(",").join(", ") : d.leeg) + "</p></div>" +
@@ -257,11 +271,13 @@
 
   function csv(){
     var d = T[lang];
-    var head = ["melder_naam","melder_adres","melder_plaats","veroorzaker_naam","veroorzaker_adres",
-                "veroorzaker_plaats","richting","datum","start","stop","omschrijving","niet_thuis"];
+    var head = ["postcode","huisnummer","melder_naam","melder_straat","melder_plaats",
+                "veroorzaker_naam","veroorzaker_adres","veroorzaker_plaats","richting",
+                "datum","start","stop","omschrijving","niet_thuis"];
     var lines = [head.join(";")];
     grouped().forEach(function(g){
-      var base = [g.r.m_naam, g.r.m_adres, g.r.m_plaats, g.r.v_naam, g.r.v_adres, g.r.v_plaats, g.r.richting];
+      var base = [prettyPc(g.r.postcode), g.r.huisnummer, g.r.m_naam, g.r.m_straat, g.r.m_plaats,
+                  g.r.v_naam, g.r.v_adres, g.r.v_plaats, g.r.richting];
       (g.e.length ? g.e : [{}]).forEach(function(x){
         lines.push(base.concat([x.datum || "", x.start || "", x.stop || "", x.omschrijving || "",
           Number(x.afwezig) ? d.ja : ""]).map(function(v){

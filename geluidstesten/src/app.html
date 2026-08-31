@@ -10,65 +10,122 @@
   :root{ --line:#000; --muted:#666; --bg:#fff; --ink:#000; --soft:#f4f4f4; }
   *{box-sizing:border-box;margin:0;padding:0}
   html{-webkit-text-size-adjust:100%}
-  body{background:var(--bg);color:var(--ink);font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;padding-bottom:48px}
-  .wrap{max-width:720px;margin:0 auto;padding:0 16px}
+  body{background:var(--bg);color:var(--ink);font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;padding-bottom:56px}
+  .wrap{max-width:1000px;margin:0 auto;padding:0 16px}
+  [hidden]{display:none!important}
 
-  header{border-bottom:2px solid var(--line);position:sticky;top:0;background:var(--bg);z-index:10}
-  .bar{max-width:720px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+  header{border-bottom:2px solid var(--line);background:var(--bg)}
+  .bar{max-width:1000px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px}
   .logo{font-size:19px;font-weight:800;letter-spacing:-.02em}
-  .lang{display:flex;border:1px solid var(--line)}
+  .lang{display:flex;border:1px solid var(--line);flex:none}
   .lang button{font:inherit;font-size:13px;font-weight:600;padding:5px 10px;background:var(--bg);color:var(--ink);border:0;cursor:pointer;min-width:40px}
   .lang button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
 
-  h1{font-size:22px;line-height:1.25;margin:22px 0 8px;letter-spacing:-.02em}
-  h2{font-size:13px;text-transform:uppercase;letter-spacing:.09em;margin:0 0 10px;font-weight:700}
-  section{border:1px solid var(--line);padding:14px;margin:14px 0}
+  h1{font-size:23px;line-height:1.25;margin:24px 0 10px;letter-spacing:-.02em}
+  h2{font-size:13px;text-transform:uppercase;letter-spacing:.09em;font-weight:700}
+  label{display:block;font-size:13px;font-weight:600;margin:0 0 4px}
+  input[type=text],input[type=date],input[type=time],input[type=password]{
+    width:100%;font:inherit;padding:10px;border:1px solid var(--line);border-radius:0;background:var(--bg);color:var(--ink);min-height:44px}
+  input:focus,textarea:focus,button:focus-visible{outline:2px solid var(--ink);outline-offset:-2px}
+  button.btn{font:inherit;font-weight:700;padding:12px 16px;background:var(--ink);color:var(--bg);border:1px solid var(--ink);cursor:pointer;min-height:46px}
+  button.btn.ghost{background:var(--bg);color:var(--ink)}
+  button.btn:active{opacity:.75}
+  .full{width:100%}
 
-  .note{background:var(--soft);border:1px solid var(--line);padding:14px;margin:14px 0}
+  /* ---------- startscherm ---------- */
+  .login{border:1px solid var(--line);padding:18px;max-width:440px;margin:0 auto}
+  .login .pcrow{display:grid;grid-template-columns:1.4fr 1fr;gap:10px;margin-bottom:12px}
+  .err{font-size:13px;font-weight:700;border:1px solid var(--line);padding:8px 10px;margin-bottom:12px;display:none}
+  .err.on{display:block}
+  .note{background:var(--soft);border:1px solid var(--line);padding:14px;margin:16px auto;max-width:440px}
   .note ul{margin:8px 0 0 18px}
   .note li{margin-bottom:5px}
   .note li:last-child{margin-bottom:0}
+  .adminlink{text-align:center;margin:18px 0 0;font-size:13px}
+  .adminlink a{color:var(--muted)}
 
-  label{display:block;font-size:13px;font-weight:600;margin:0 0 4px}
-  input[type=text],input[type=date],input[type=time],textarea,input[type=password]{
-    width:100%;font:inherit;padding:10px;border:1px solid var(--line);border-radius:0;background:var(--bg);color:var(--ink);min-height:44px}
-  textarea{min-height:76px;resize:vertical}
-  input:focus,textarea:focus{outline:2px solid var(--ink);outline-offset:-2px}
-  .field{margin-bottom:10px}
-  .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-  @media (max-width:480px){ .row{grid-template-columns:1fr} }
+  /* ---------- opslagbalk ---------- */
+  .savebar{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:2px solid var(--line)}
+  .savebar .inner{max-width:1000px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .addr{font-weight:800;font-size:15px;letter-spacing:.01em}
+  .addr small{display:block;font-weight:400;font-size:12px;color:var(--muted);letter-spacing:0}
+  .savebar .spacer{flex:1}
+  .status{font-size:13px;font-weight:700;display:flex;align-items:center;gap:6px;white-space:nowrap}
+  .status .dot{width:10px;height:10px;border:1px solid var(--line);border-radius:50%;flex:none}
+  .status.dirty .dot{background:var(--ink)}
+  .status.saved .dot{border:0;border-radius:0;width:auto;height:auto;font-weight:900}
+  .status.saved .dot::after{content:"\2713"}
+  .status.err{text-decoration:underline}
+  #saveBtn{padding:10px 18px;min-height:42px}
+  @media (max-width:560px){
+    .savebar .inner{display:grid;grid-template-columns:1fr auto;gap:6px 10px;align-items:center}
+    .savebar .spacer{display:none}
+    .addr{grid-column:1;grid-row:1}
+    #saveBtn{grid-column:2;grid-row:1}
+    .status{grid-column:1/-1;grid-row:2;justify-content:flex-start}
+  }
+  #switchBtn{font:inherit;font-size:12px;font-weight:600;background:none;border:0;border-bottom:1px solid var(--line);cursor:pointer;padding:0;color:var(--muted)}
 
+  /* ---------- profiel ---------- */
+  details.prof{border:1px solid var(--line);margin:16px 0}
+  details.prof > summary{list-style:none;cursor:pointer;padding:12px 14px;background:var(--soft);display:flex;justify-content:space-between;gap:10px;align-items:center}
+  details.prof > summary::-webkit-details-marker{display:none}
+  details.prof > summary .chev{font-size:12px;font-weight:700;color:var(--muted)}
+  details.prof[open] > summary .chev::after{content:"–"}
+  details.prof:not([open]) > summary .chev::after{content:"+"}
+  .profbody{padding:14px;border-top:1px solid var(--line)}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+  @media (max-width:640px){ .grid3,.grid2{grid-template-columns:1fr} }
+  .sub{font-size:11px;text-transform:uppercase;letter-spacing:.08em;font-weight:700;color:var(--muted);margin:14px 0 8px}
+  .sub:first-child{margin-top:0}
   .dirs{display:flex;flex-wrap:wrap;gap:8px}
   .dirs label{display:flex;align-items:center;gap:7px;border:1px solid var(--line);padding:9px 12px;font-size:14px;font-weight:600;margin:0;cursor:pointer;min-height:44px}
   .dirs input{width:18px;height:18px;accent-color:#000}
-  .check{display:flex;align-items:flex-start;gap:9px;margin:10px 0;font-size:14px;font-weight:600;cursor:pointer}
-  .check input{width:20px;height:20px;margin-top:1px;accent-color:#000;flex:none}
+  .locked{background:var(--soft);color:var(--muted)}
 
-  button.btn{font:inherit;font-weight:700;width:100%;padding:13px;background:var(--ink);color:var(--bg);border:1px solid var(--ink);cursor:pointer;min-height:48px}
-  button.btn.ghost{background:var(--bg);color:var(--ink)}
-  button.btn:active{opacity:.75}
-  .btn-row{display:flex;gap:8px;margin-top:10px}
-  .hint{font-size:12px;color:var(--muted);margin-top:6px}
-  .now{font:inherit;font-size:12px;font-weight:700;border:1px solid var(--line);background:var(--bg);padding:3px 8px;cursor:pointer;float:right}
+  /* ---------- registratietabel ---------- */
+  .tablehead{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:22px 0 8px;flex-wrap:wrap}
+  .cnt{font-size:13px;color:var(--muted)}
+  .cols,.row{display:grid;grid-template-columns:150px 96px 96px 1fr 92px 40px;gap:8px;align-items:start}
+  .cols{padding:8px 10px;background:var(--soft);border:1px solid var(--line);border-bottom:0;font-size:11px;text-transform:uppercase;letter-spacing:.07em;font-weight:700}
+  .rows{border:1px solid var(--line)}
+  .row{padding:8px 10px;border-bottom:1px solid var(--line)}
+  .row:last-child{border-bottom:0}
+  .row:nth-child(even){background:#fafafa}
+  .row .lbl{display:none}
+  .row input[type=text],.row input[type=date],.row input[type=time]{padding:8px;min-height:40px}
+  .row .away{display:flex;align-items:center;justify-content:center;min-height:40px}
+  .row .away input{width:20px;height:20px;accent-color:#000}
+  .row .rm{font:inherit;font-size:18px;line-height:1;font-weight:700;background:none;border:1px solid var(--line);cursor:pointer;width:36px;height:40px;color:var(--ink)}
+  .addrow{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap}
+  .empty{padding:18px 10px;color:var(--muted);font-size:14px;text-align:center}
 
-  .item{border-top:1px solid var(--line);padding:11px 0}
-  .item:first-child{border-top:0}
-  .item .top{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
-  .item .when{font-weight:700;font-size:15px}
-  .item .desc{margin-top:3px;white-space:pre-wrap;overflow-wrap:anywhere}
-  .item .away{display:inline-block;border:1px solid var(--line);font-size:11px;font-weight:700;padding:1px 6px;margin-top:5px;text-transform:uppercase;letter-spacing:.05em}
-  .del{font:inherit;font-size:12px;font-weight:600;background:none;border:0;border-bottom:1px solid var(--line);cursor:pointer;padding:0;color:var(--muted);flex:none}
-  .empty{color:var(--muted);font-size:14px}
-  .count{font-size:12px;color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0}
+  @media (max-width:760px){
+    .cols{display:none}
+    .rows{border:0}
+    .row{grid-template-columns:1fr;gap:6px;border:1px solid var(--line);margin-bottom:10px;padding:10px}
+    .row:last-child{border-bottom:1px solid var(--line)}
+    .row:nth-child(even){background:var(--bg)}
+    .row .lbl{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.07em;font-weight:700;color:var(--muted);margin-bottom:3px}
+    .row .cell{display:block}
+    .row .two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+    .row{grid-template-columns:1fr 1fr;gap:6px 8px}
+    .row .cell{grid-column:1/-1}
+    .row .two-a{grid-column:1}
+    .row .two-b{grid-column:2}
+    .row .away{grid-column:1;justify-content:flex-start;gap:9px;border-top:1px solid var(--line);padding-top:10px;margin-top:2px}
+    .row .rm{grid-column:2;justify-self:end;align-self:end;width:44px;height:40px;margin-bottom:2px}
+  }
 
-  .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:18px;background:var(--ink);color:var(--bg);padding:11px 16px;font-size:14px;font-weight:600;z-index:50;opacity:0;pointer-events:none;transition:opacity .18s;max-width:92vw}
+  .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:18px;background:var(--ink);color:var(--bg);padding:11px 16px;font-size:14px;font-weight:600;z-index:50;opacity:0;pointer-events:none;transition:opacity .18s;max-width:92vw;text-align:center}
   .toast.on{opacity:1}
-  footer{text-align:center;font-size:12px;color:var(--muted);padding:22px 16px 0}
+  footer{text-align:center;font-size:12px;color:var(--muted);padding:26px 16px 0}
   footer a{color:var(--muted)}
 
   @media print{
-    header,.note,.btn-row,button,.del,footer,#formNew{display:none!important}
-    section{border:0;padding:0}
+    header,.savebar,.note,.addrow,.rm,footer,#printBtn,.lang{display:none!important}
+    .row{break-inside:avoid}
     body{padding:0}
   }
 </style>
@@ -85,79 +142,107 @@
   </div>
 </header>
 
-<main class="wrap">
-  <h1 data-t="h1">Geluidsoverlast — registratieformulier</h1>
+<!-- ===================== startscherm ===================== -->
+<div id="viewLogin">
+  <main class="wrap">
+    <h1 style="text-align:center" data-t="login_h1">Geluidsoverlast bijhouden</h1>
+    <p style="text-align:center;color:var(--muted);font-size:14px;margin-bottom:18px" data-t="login_sub">
+      Vul uw postcode en huisnummer in. U komt altijd op uw eigen overzicht.
+    </p>
 
-  <div class="note">
-    <strong data-t="note_title">Vul alleen dit in</strong>
-    <ul>
-      <li data-t="note_1">Noteer alléén geluid dat <strong>niet van uzelf</strong> is.</li>
-      <li data-t="note_2">Geef ook aan wanneer u <strong>weg bent</strong>. Zet tijdens uw afwezigheid ieder geluid uit, zoals de televisie of radio.</li>
-      <li data-t="note_3">De tijd staat automatisch op <strong>nu</strong>. U kunt die altijd aanpassen.</li>
-    </ul>
+    <form class="login" id="loginForm">
+      <div class="pcrow">
+        <div>
+          <label for="postcode" data-t="f_postcode">Postcode</label>
+          <input type="text" id="postcode" autocomplete="postal-code" inputmode="text"
+                 placeholder="1234 AB" maxlength="8" autocapitalize="characters" spellcheck="false" />
+        </div>
+        <div>
+          <label for="huisnummer" data-t="f_huisnr">Huisnummer</label>
+          <input type="text" id="huisnummer" autocomplete="address-line2" inputmode="text"
+                 placeholder="12A" maxlength="8" autocapitalize="characters" spellcheck="false" />
+        </div>
+      </div>
+      <div class="err" id="loginErr"></div>
+      <button type="submit" class="btn full" data-t="b_open">Mijn overzicht openen</button>
+    </form>
+
+    <div class="note">
+      <strong data-t="note_title">Vul alleen dit in</strong>
+      <ul>
+        <li data-t="note_1">Noteer alléén geluid dat <strong>niet van uzelf</strong> is.</li>
+        <li data-t="note_2">Geef ook aan wanneer u <strong>weg bent</strong>. Zet tijdens uw afwezigheid ieder geluid uit, zoals de televisie of radio.</li>
+        <li data-t="note_3">Datum en tijd staan automatisch op <strong>nu</strong>. U kunt ze aanpassen.</li>
+      </ul>
+    </div>
+
+    <p class="adminlink"><a href="/dashboard" data-t="f_dash">Beheerder? Naar het dashboard</a></p>
+  </main>
+</div>
+
+<!-- ===================== dossier ===================== -->
+<div id="viewApp" hidden>
+  <div class="savebar">
+    <div class="inner">
+      <div class="addr" id="addrLabel">—<small><button type="button" id="switchBtn" data-t="b_switch">ander adres</button></small></div>
+      <div class="spacer"></div>
+      <div class="status" id="status"><span class="dot"></span><span id="statusText"></span></div>
+      <button type="button" class="btn" id="saveBtn" data-t="b_save">Opslaan</button>
+    </div>
   </div>
 
-  <section>
-    <h2 data-t="s_melder">Adres melder</h2>
-    <div class="field"><label for="m_naam" data-t="f_naam">Naam</label><input type="text" id="m_naam" autocomplete="name" /></div>
-    <div class="row">
-      <div class="field"><label for="m_adres" data-t="f_adres">Adres</label><input type="text" id="m_adres" autocomplete="street-address" /></div>
-      <div class="field"><label for="m_plaats" data-t="f_plaats">Plaats</label><input type="text" id="m_plaats" autocomplete="address-level2" /></div>
-    </div>
-  </section>
-
-  <section>
-    <h2 data-t="s_veroorzaker">Adres veroorzaker</h2>
-    <div class="field"><label for="v_naam" data-t="f_naam">Naam</label><input type="text" id="v_naam" /></div>
-    <div class="row">
-      <div class="field"><label for="v_adres" data-t="f_adres">Adres</label><input type="text" id="v_adres" /></div>
-      <div class="field"><label for="v_plaats" data-t="f_plaats">Plaats</label><input type="text" id="v_plaats" /></div>
-    </div>
-  </section>
-
-  <section>
-    <h2 data-t="s_richting">Geluid komt van</h2>
-    <div class="dirs" id="dirs">
-      <label><input type="checkbox" value="boven" /><span data-t="d_boven">Boven</span></label>
-      <label><input type="checkbox" value="beneden" /><span data-t="d_beneden">Beneden</span></label>
-      <label><input type="checkbox" value="links" /><span data-t="d_links">Links</span></label>
-      <label><input type="checkbox" value="rechts" /><span data-t="d_rechts">Rechts</span></label>
-    </div>
-    <div class="btn-row"><button type="button" class="btn ghost" id="saveProfile" data-t="b_save">Gegevens opslaan</button></div>
-  </section>
-
-  <form id="formNew">
-    <section>
-      <h2 data-t="s_nieuw">Nieuwe registratie</h2>
-      <div class="field"><label for="datum" data-t="f_datum">Datum</label><input type="date" id="datum" required /></div>
-      <div class="row">
-        <div class="field">
-          <label for="start"><button type="button" class="now" data-now="start" data-t="b_nu">Nu</button><span data-t="f_start">Tijdstip start</span></label>
-          <input type="time" id="start" />
+  <main class="wrap">
+    <details class="prof" id="prof">
+      <summary><h2 data-t="s_prof">Mijn gegevens</h2><span class="chev"></span></summary>
+      <div class="profbody">
+        <div class="sub" data-t="s_melder">Adres melder</div>
+        <div class="grid3">
+          <div><label for="m_naam" data-t="f_naam">Naam</label><input type="text" id="m_naam" autocomplete="name" /></div>
+          <div><label for="m_straat" data-t="f_straat">Straat</label><input type="text" id="m_straat" autocomplete="street-address" /></div>
+          <div><label for="m_plaats" data-t="f_plaats">Plaats</label><input type="text" id="m_plaats" autocomplete="address-level2" /></div>
         </div>
-        <div class="field">
-          <label for="stop"><button type="button" class="now" data-now="stop" data-t="b_nu">Nu</button><span data-t="f_stop">Tijdstip stop</span></label>
-          <input type="time" id="stop" />
+        <div class="grid2" style="margin-top:10px">
+          <div><label data-t="f_postcode">Postcode</label><input type="text" id="pc_show" class="locked" readonly tabindex="-1" /></div>
+          <div><label data-t="f_huisnr">Huisnummer</label><input type="text" id="hn_show" class="locked" readonly tabindex="-1" /></div>
+        </div>
+
+        <div class="sub" data-t="s_veroorzaker">Adres veroorzaker</div>
+        <div class="grid3">
+          <div><label for="v_naam" data-t="f_naam">Naam</label><input type="text" id="v_naam" /></div>
+          <div><label for="v_adres" data-t="f_adres">Adres</label><input type="text" id="v_adres" /></div>
+          <div><label for="v_plaats" data-t="f_plaats">Plaats</label><input type="text" id="v_plaats" /></div>
+        </div>
+
+        <div class="sub" data-t="s_richting">Geluid komt van</div>
+        <div class="dirs" id="dirs">
+          <label><input type="checkbox" value="boven" /><span data-t="d_boven">Boven</span></label>
+          <label><input type="checkbox" value="beneden" /><span data-t="d_beneden">Beneden</span></label>
+          <label><input type="checkbox" value="links" /><span data-t="d_links">Links</span></label>
+          <label><input type="checkbox" value="rechts" /><span data-t="d_rechts">Rechts</span></label>
         </div>
       </div>
-      <div class="field">
-        <label for="omschrijving" data-t="f_oms">Korte omschrijving</label>
-        <textarea id="omschrijving" maxlength="1000"></textarea>
-      </div>
-      <label class="check"><input type="checkbox" id="afwezig" /><span data-t="f_afwezig">Ik was op dit moment niet thuis (al mijn eigen geluid stond uit)</span></label>
-      <button type="submit" class="btn" data-t="b_add">Toevoegen aan overzicht</button>
-      <div class="hint" data-t="hint_save">Uw overzicht wordt bewaard op dit apparaat, u kunt later gewoon terugkomen.</div>
-    </section>
-  </form>
+    </details>
 
-  <section>
-    <h2><span data-t="s_overzicht">Mijn overzicht</span> <span class="count" id="count"></span></h2>
-    <div id="list"><p class="empty" data-t="empty">Nog geen registraties.</p></div>
-    <div class="btn-row"><button type="button" class="btn ghost" id="printBtn" data-t="b_print">Afdrukken / opslaan als PDF</button></div>
-  </section>
+    <div class="tablehead">
+      <h2 data-t="s_regs">Registraties</h2>
+      <span class="cnt" id="cnt"></span>
+    </div>
 
-  <footer><a href="/dashboard" data-t="f_dash">Dashboard (beheer)</a></footer>
-</main>
+    <div class="cols" aria-hidden="true">
+      <div data-t="c_datum">Datum</div><div data-t="c_start">Start</div><div data-t="c_stop">Stop</div>
+      <div data-t="c_oms">Korte omschrijving</div><div data-t="c_away">Niet thuis</div><div></div>
+    </div>
+    <div class="rows" id="rows"></div>
+
+    <div class="addrow">
+      <button type="button" class="btn" id="addBtn" data-t="b_add">+ Regel toevoegen</button>
+      <button type="button" class="btn ghost" id="printBtn" data-t="b_print">Afdrukken / PDF</button>
+    </div>
+
+    <div class="note" style="max-width:none" data-t="note_box"></div>
+    <footer><a href="/dashboard" data-t="f_dash">Beheerder? Naar het dashboard</a></footer>
+  </main>
+</div>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
@@ -166,222 +251,345 @@
   "use strict";
 
   var T = {
-    nl: {
-      h1:"Geluidsoverlast — registratieformulier",
+    nl:{
+      login_h1:"Geluidsoverlast bijhouden",
+      login_sub:"Vul uw postcode en huisnummer in. U komt altijd op uw eigen overzicht.",
+      f_postcode:"Postcode", f_huisnr:"Huisnummer", b_open:"Mijn overzicht openen",
       note_title:"Vul alleen dit in",
       note_1:"Noteer alléén geluid dat <strong>niet van uzelf</strong> is.",
       note_2:"Geef ook aan wanneer u <strong>weg bent</strong>. Zet tijdens uw afwezigheid ieder geluid uit, zoals de televisie of radio.",
-      note_3:"De tijd staat automatisch op <strong>nu</strong>. U kunt die altijd aanpassen.",
-      s_melder:"Adres melder", s_veroorzaker:"Adres veroorzaker", s_richting:"Geluid komt van",
-      f_naam:"Naam", f_adres:"Adres", f_plaats:"Plaats",
+      note_3:"Datum en tijd staan automatisch op <strong>nu</strong>. U kunt ze aanpassen.",
+      f_dash:"Beheerder? Naar het dashboard",
+      b_switch:"ander adres", b_save:"Opslaan",
+      s_prof:"Mijn gegevens", s_melder:"Adres melder", s_veroorzaker:"Adres veroorzaker",
+      s_richting:"Geluid komt van",
+      f_naam:"Naam", f_straat:"Straat", f_plaats:"Plaats", f_adres:"Adres",
       d_boven:"Boven", d_beneden:"Beneden", d_links:"Links", d_rechts:"Rechts",
-      b_save:"Gegevens opslaan", s_nieuw:"Nieuwe registratie",
-      f_datum:"Datum", f_start:"Tijdstip start", f_stop:"Tijdstip stop", f_oms:"Korte omschrijving",
-      b_nu:"Nu", f_afwezig:"Ik was op dit moment niet thuis (al mijn eigen geluid stond uit)",
-      b_add:"Toevoegen aan overzicht",
-      hint_save:"Uw overzicht wordt bewaard op dit apparaat, u kunt later gewoon terugkomen.",
-      s_overzicht:"Mijn overzicht", empty:"Nog geen registraties.",
-      b_print:"Afdrukken / opslaan als PDF", f_dash:"Dashboard (beheer)",
-      del:"Verwijderen", away:"Niet thuis", saved:"Opgeslagen", added:"Registratie toegevoegd",
-      err:"Opslaan mislukt. Probeer het opnieuw.", need_oms:"Vul een korte omschrijving in.",
-      cnt:function(n){ return n + (n===1 ? " registratie" : " registraties"); },
-      confirm:"Deze registratie verwijderen?"
+      s_regs:"Registraties",
+      c_datum:"Datum", c_start:"Start", c_stop:"Stop", c_oms:"Korte omschrijving", c_away:"Niet thuis",
+      b_add:"+ Regel toevoegen", b_print:"Afdrukken / PDF",
+      note_box:"<strong>Zo werkt het</strong><br>Vul een regel in en klik bovenaan op <strong>Opslaan</strong>. Uw regels worden ook automatisch bewaard zodra u even stopt met typen. Kom later terug met dezelfde postcode en huisnummer, dan staat alles er weer.",
+      st_saved:"Opgeslagen", st_dirty:"Niet opgeslagen", st_saving:"Opslaan…",
+      st_err:"Opslaan mislukt — klik Opslaan",
+      saved_at:function(t){ return "Opgeslagen om " + t; },
+      cnt:function(n){ return n + (n===1 ? " regel" : " regels"); },
+      err_pc:"Vul een geldige postcode in, bijvoorbeeld 1234 AB.",
+      err_hn:"Vul een geldig huisnummer in, bijvoorbeeld 12 of 12A.",
+      err_net:"Geen verbinding. Probeer het opnieuw.",
+      rm_confirm:"Deze regel verwijderen?",
+      leave:"U heeft wijzigingen die nog niet zijn opgeslagen.",
+      toast_saved:"Opgeslagen"
     },
-    en: {
-      h1:"Noise nuisance — logging form",
+    en:{
+      login_h1:"Log noise nuisance",
+      login_sub:"Enter your postcode and house number. You always land on your own overview.",
+      f_postcode:"Postcode", f_huisnr:"House number", b_open:"Open my overview",
       note_title:"Only fill in this",
       note_1:"Only log noise that is <strong>not your own</strong>.",
       note_2:"Also note when you are <strong>away</strong>. While you are out, switch off all your own sound, such as the TV or radio.",
-      note_3:"The time is filled in with <strong>the current time</strong>. You can always change it.",
-      s_melder:"Address of reporter", s_veroorzaker:"Address of the source", s_richting:"Noise comes from",
-      f_naam:"Name", f_adres:"Address", f_plaats:"City",
+      note_3:"Date and time are filled in with <strong>the current time</strong>. You can change them.",
+      f_dash:"Admin? Go to the dashboard",
+      b_switch:"other address", b_save:"Save",
+      s_prof:"My details", s_melder:"Address of reporter", s_veroorzaker:"Address of the source",
+      s_richting:"Noise comes from",
+      f_naam:"Name", f_straat:"Street", f_plaats:"City", f_adres:"Address",
       d_boven:"Above", d_beneden:"Below", d_links:"Left", d_rechts:"Right",
-      b_save:"Save details", s_nieuw:"New log entry",
-      f_datum:"Date", f_start:"Start time", f_stop:"End time", f_oms:"Short description",
-      b_nu:"Now", f_afwezig:"I was not at home at this moment (all my own sound was off)",
-      b_add:"Add to overview",
-      hint_save:"Your overview is kept on this device, you can simply come back later.",
-      s_overzicht:"My overview", empty:"No entries yet.",
-      b_print:"Print / save as PDF", f_dash:"Dashboard (admin)",
-      del:"Delete", away:"Not at home", saved:"Saved", added:"Entry added",
-      err:"Saving failed. Please try again.", need_oms:"Please add a short description.",
-      cnt:function(n){ return n + (n===1 ? " entry" : " entries"); },
-      confirm:"Delete this entry?"
+      s_regs:"Entries",
+      c_datum:"Date", c_start:"Start", c_stop:"End", c_oms:"Short description", c_away:"Not at home",
+      b_add:"+ Add row", b_print:"Print / PDF",
+      note_box:"<strong>How it works</strong><br>Fill in a row and click <strong>Save</strong> at the top. Your rows are also saved automatically as soon as you pause typing. Come back later with the same postcode and house number and everything is still there.",
+      st_saved:"Saved", st_dirty:"Not saved", st_saving:"Saving…",
+      st_err:"Saving failed — click Save",
+      saved_at:function(t){ return "Saved at " + t; },
+      cnt:function(n){ return n + (n===1 ? " row" : " rows"); },
+      err_pc:"Enter a valid Dutch postcode, for example 1234 AB.",
+      err_hn:"Enter a valid house number, for example 12 or 12A.",
+      err_net:"No connection. Please try again.",
+      rm_confirm:"Delete this row?",
+      leave:"You have changes that have not been saved yet.",
+      toast_saved:"Saved"
     }
   };
 
   var lang = "nl";
-  var reportId = null;
-  var entries = [];
+  var addr = null;              // { postcode:"1234AB", huisnummer:"12" }
+  var dirty = false, saving = false, failed = false, savedTime = "";
+  var autoTimer = null, toastTimer = null;
   var $ = function(id){ return document.getElementById(id); };
 
   try { lang = localStorage.getItem("gt_lang") === "en" ? "en" : "nl"; } catch(e){}
-  try { reportId = localStorage.getItem("gt_report") || null; } catch(e){}
 
-  function esc(s){
-    return String(s == null ? "" : s).replace(/[&<>"']/g, function(c){
-      return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c];
-    });
-  }
+  function d(){ return T[lang]; }
+  function pad(n){ return (n < 10 ? "0" : "") + n; }
+  function today(){ var x = new Date(); return x.getFullYear() + "-" + pad(x.getMonth()+1) + "-" + pad(x.getDate()); }
+  function clock(){ var x = new Date(); return pad(x.getHours()) + ":" + pad(x.getMinutes()); }
 
-  function applyLang(){
-    var d = T[lang];
-    document.documentElement.lang = lang;
-    document.querySelectorAll("[data-t]").forEach(function(el){
-      var v = d[el.getAttribute("data-t")];
-      if (typeof v === "string") el.innerHTML = v;
-    });
-    document.querySelectorAll(".lang button").forEach(function(b){
-      b.setAttribute("aria-pressed", String(b.getAttribute("data-lang") === lang));
-    });
-    render();
-    try { localStorage.setItem("gt_lang", lang); } catch(e){}
-  }
+  var normPc = function(v){ return String(v||"").toUpperCase().replace(/[^0-9A-Z]/g, ""); };
+  var normHn = normPc;
+  var okPc = function(v){ return /^[1-9][0-9]{3}[A-Z]{2}$/.test(v); };
+  var okHn = function(v){ return /^[0-9]{1,5}[A-Z0-9]{0,6}$/.test(v); };
+  function prettyPc(p){ return p.slice(0,4) + " " + p.slice(4); }
 
-  var toastTimer;
   function toast(msg){
     var t = $("toast");
     t.textContent = msg;
     t.classList.add("on");
     clearTimeout(toastTimer);
-    toastTimer = setTimeout(function(){ t.classList.remove("on"); }, 2200);
+    toastTimer = setTimeout(function(){ t.classList.remove("on"); }, 1800);
   }
 
-  function pad(n){ return (n < 10 ? "0" : "") + n; }
-  function today(){ var d = new Date(); return d.getFullYear() + "-" + pad(d.getMonth()+1) + "-" + pad(d.getDate()); }
-  function clock(){ var d = new Date(); return pad(d.getHours()) + ":" + pad(d.getMinutes()); }
-
-  function fmtDate(iso){
-    var p = String(iso || "").split("-");
-    if (p.length !== 3) return iso || "";
-    return p[2] + "-" + p[1] + "-" + p[0];
+  // ---------- taal ----------
+  function applyLang(){
+    var dd = d();
+    document.documentElement.lang = lang;
+    document.querySelectorAll("[data-t]").forEach(function(el){
+      var v = dd[el.getAttribute("data-t")];
+      if (typeof v === "string") el.innerHTML = v;
+    });
+    document.querySelectorAll(".lang button").forEach(function(b){
+      b.setAttribute("aria-pressed", String(b.getAttribute("data-lang") === lang));
+    });
+    document.querySelectorAll("#rows .row").forEach(relabelRow);
+    paintStatus();
+    updateCount();
+    try { localStorage.setItem("gt_lang", lang); } catch(e){}
   }
 
-  var PROFILE = ["m_naam","m_adres","m_plaats","v_naam","v_adres","v_plaats"];
+  // ---------- status ----------
+  function paintStatus(){
+    var el = $("status"), txt = $("statusText"), dd = d();
+    el.className = "status";
+    if (saving){ txt.textContent = dd.st_saving; return; }
+    if (failed){ el.classList.add("err","dirty"); txt.textContent = dd.st_err; return; }
+    if (dirty){ el.classList.add("dirty"); txt.textContent = dd.st_dirty; return; }
+    el.classList.add("saved");
+    txt.textContent = savedTime ? dd.saved_at(savedTime) : dd.st_saved;
+  }
+  function markDirty(){
+    dirty = true; failed = false;
+    paintStatus();
+    clearTimeout(autoTimer);
+    autoTimer = setTimeout(function(){ save(false); }, 1200);
+  }
+  function updateCount(){ $("cnt").textContent = d().cnt($("rows").querySelectorAll(".row").length); }
 
-  function readProfile(){
-    var out = {};
-    PROFILE.forEach(function(k){ out[k] = $(k).value.trim(); });
-    var dirs = [];
-    $("dirs").querySelectorAll("input:checked").forEach(function(i){ dirs.push(i.value); });
-    out.richting = dirs.join(",");
-    if (reportId) out.id = reportId;
+  // ---------- regels ----------
+  var PROFILE = ["m_naam","m_straat","m_plaats","v_naam","v_adres","v_plaats"];
+
+  function relabelRow(row){
+    var dd = d(), map = { datum:"c_datum", start:"c_start", stop:"c_stop", oms:"c_oms", away:"c_away" };
+    row.querySelectorAll("[data-lbl]").forEach(function(el){ el.textContent = dd[map[el.getAttribute("data-lbl")]]; });
+    var rm = row.querySelector(".rm");
+    if (rm) rm.setAttribute("aria-label", dd.rm_confirm);
+  }
+
+  function makeRow(e){
+    e = e || {};
+    var row = document.createElement("div");
+    row.className = "row";
+    row.innerHTML =
+      '<div class="cell"><span class="lbl" data-lbl="datum"></span><input type="date" data-f="datum" /></div>' +
+      '<div class="cell two-a"><span class="lbl" data-lbl="start"></span><input type="time" data-f="start" /></div>' +
+      '<div class="cell two-b"><span class="lbl" data-lbl="stop"></span><input type="time" data-f="stop" /></div>' +
+      '<div class="cell"><span class="lbl" data-lbl="oms"></span><input type="text" data-f="omschrijving" maxlength="1000" /></div>' +
+      '<label class="away"><input type="checkbox" data-f="afwezig" /><span class="lbl" data-lbl="away" style="margin:0"></span></label>' +
+      '<button type="button" class="rm" title="×">&times;</button>';
+    row.querySelector('[data-f=datum]').value = e.datum || "";
+    row.querySelector('[data-f=start]').value = e.start || "";
+    row.querySelector('[data-f=stop]').value = e.stop || "";
+    row.querySelector('[data-f=omschrijving]').value = e.omschrijving || "";
+    row.querySelector('[data-f=afwezig]').checked = !!Number(e.afwezig);
+    relabelRow(row);
+    return row;
+  }
+
+  function addRow(prefill){
+    var row = makeRow(prefill ? { datum: today(), start: clock() } : null);
+    $("rows").appendChild(row);
+    updateCount();
+    return row;
+  }
+
+  function readEntries(){
+    var out = [];
+    $("rows").querySelectorAll(".row").forEach(function(row){
+      var e = {};
+      row.querySelectorAll("[data-f]").forEach(function(i){
+        e[i.getAttribute("data-f")] = i.type === "checkbox" ? i.checked : i.value;
+      });
+      if (e.datum || e.start || e.stop || (e.omschrijving||"").trim() || e.afwezig) out.push(e);
+    });
     return out;
   }
 
+  function readProfile(){
+    var p = {};
+    PROFILE.forEach(function(k){ p[k] = $(k).value.trim(); });
+    var dirs = [];
+    $("dirs").querySelectorAll("input:checked").forEach(function(i){ dirs.push(i.value); });
+    p.richting = dirs.join(",");
+    return p;
+  }
+
   function fillProfile(r){
-    PROFILE.forEach(function(k){ if (r[k]) $(k).value = r[k]; });
+    PROFILE.forEach(function(k){ $(k).value = r[k] || ""; });
     var dirs = String(r.richting || "").split(",");
     $("dirs").querySelectorAll("input").forEach(function(i){ i.checked = dirs.indexOf(i.value) !== -1; });
   }
 
-  function api(path, body){
+  // ---------- server ----------
+  function post(path, body){
     return fetch(path, {
-      method: body ? "POST" : "GET",
-      headers: body ? { "content-type": "application/json" } : undefined,
-      body: body ? JSON.stringify(body) : undefined
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(body)
     }).then(function(r){
-      if (!r.ok) throw new Error("http " + r.status);
-      return r.json();
+      return r.json().catch(function(){ return {}; }).then(function(j){
+        if (!r.ok) throw Object.assign(new Error(j.error || "http_" + r.status), { code: j.error });
+        return j;
+      });
     });
   }
 
-  function saveProfile(){
-    return api("/api/report", readProfile()).then(function(res){
-      reportId = res.id;
-      try { localStorage.setItem("gt_report", reportId); } catch(e){}
-      return reportId;
+  function payload(){
+    return { postcode: addr.postcode, huisnummer: addr.huisnummer, profile: readProfile(), entries: readEntries() };
+  }
+
+  function save(manual){
+    if (!addr) return Promise.resolve();
+    clearTimeout(autoTimer);
+    if (saving){ dirty = true; return Promise.resolve(); }
+    saving = true; paintStatus();
+    return post("/api/save", payload()).then(function(){
+      saving = false; dirty = false; failed = false;
+      savedTime = clock();
+      paintStatus();
+      if (manual) toast(d().toast_saved);
+    }).catch(function(){
+      saving = false; failed = true;
+      paintStatus();
+      if (manual) toast(d().err_net);
+      // stil opnieuw proberen, zodat een korte hapering geen data kost
+      clearTimeout(autoTimer);
+      autoTimer = setTimeout(function(){ save(false); }, 8000);
     });
   }
 
-  function render(){
-    var d = T[lang];
-    var list = $("list");
-    $("count").textContent = entries.length ? d.cnt(entries.length) : "";
-    if (!entries.length){
-      list.innerHTML = '<p class="empty">' + esc(d.empty) + "</p>";
-      return;
-    }
-    list.innerHTML = entries.map(function(e){
-      var span = esc(e.start || "") + (e.stop ? " – " + esc(e.stop) : "");
-      return '<div class="item">' +
-        '<div class="top"><span class="when">' + esc(fmtDate(e.datum)) + (span ? " &nbsp;" + span : "") + "</span>" +
-        '<button type="button" class="del" data-id="' + esc(e.id) + '">' + esc(d.del) + "</button></div>" +
-        (e.omschrijving ? '<div class="desc">' + esc(e.omschrijving) + "</div>" : "") +
-        (Number(e.afwezig) ? '<div class="away">' + esc(d.away) + "</div>" : "") +
-      "</div>";
-    }).join("");
+  function openDossier(res){
+    addr = { postcode: res.report.postcode, huisnummer: res.report.huisnummer };
+    try { localStorage.setItem("gt_addr", addr.postcode + "|" + addr.huisnummer); } catch(e){}
+
+    $("addrLabel").childNodes[0].nodeValue = prettyPc(addr.postcode) + "  " + addr.huisnummer;
+    $("pc_show").value = prettyPc(addr.postcode);
+    $("hn_show").value = addr.huisnummer;
+
+    fillProfile(res.report);
+    $("rows").innerHTML = "";
+    (res.entries || []).forEach(function(e){ $("rows").appendChild(makeRow(e)); });
+    addRow(true);                       // altijd één lege regel klaar om in te vullen
+    if (!res.report.m_naam) $("prof").open = true;
+
+    dirty = false; failed = false; savedTime = "";
+    updateCount();
+    paintStatus();
+    $("viewLogin").hidden = true;
+    $("viewApp").hidden = false;
+    window.scrollTo(0, 0);
   }
 
-  // ---- events ----
+  // ---------- events ----------
   document.querySelectorAll(".lang button").forEach(function(b){
     b.addEventListener("click", function(){ lang = b.getAttribute("data-lang"); applyLang(); });
   });
 
-  document.querySelectorAll("[data-now]").forEach(function(b){
-    b.addEventListener("click", function(ev){
-      ev.preventDefault();
-      $(b.getAttribute("data-now")).value = clock();
+  $("loginForm").addEventListener("submit", function(ev){
+    ev.preventDefault();
+    var pc = normPc($("postcode").value), hn = normHn($("huisnummer").value);
+    var err = $("loginErr");
+    if (!okPc(pc)){ err.textContent = d().err_pc; err.classList.add("on"); $("postcode").focus(); return; }
+    if (!okHn(hn)){ err.textContent = d().err_hn; err.classList.add("on"); $("huisnummer").focus(); return; }
+    err.classList.remove("on");
+
+    var btn = this.querySelector("button[type=submit]");
+    btn.disabled = true;
+    post("/api/open", { postcode: pc, huisnummer: hn })
+      .then(openDossier)
+      .catch(function(){ err.textContent = d().err_net; err.classList.add("on"); })
+      .then(function(){ btn.disabled = false; });
+  });
+
+  $("saveBtn").addEventListener("click", function(){ save(true); });
+
+  $("switchBtn").addEventListener("click", function(){
+    save(true).then(function(){
+      try { localStorage.removeItem("gt_addr"); } catch(e){}
+      addr = null; dirty = false; failed = false;
+      $("viewApp").hidden = true;
+      $("viewLogin").hidden = false;
+      $("postcode").value = ""; $("huisnummer").value = "";
+      $("postcode").focus();
     });
   });
 
-  $("saveProfile").addEventListener("click", function(){
-    saveProfile().then(function(){ toast(T[lang].saved); }).catch(function(){ toast(T[lang].err); });
+  $("addBtn").addEventListener("click", function(){
+    var row = addRow(true);
+    row.querySelector('[data-f=omschrijving]').focus();
+    markDirty();
   });
 
   $("printBtn").addEventListener("click", function(){ window.print(); });
 
-  $("formNew").addEventListener("submit", function(ev){
-    ev.preventDefault();
-    var oms = $("omschrijving").value.trim();
-    if (!oms && !$("afwezig").checked){ toast(T[lang].need_oms); $("omschrijving").focus(); return; }
-    var entry = {
-      datum: $("datum").value || today(),
-      start: $("start").value,
-      stop: $("stop").value,
-      omschrijving: oms,
-      afwezig: $("afwezig").checked
-    };
-    saveProfile().then(function(id){
-      entry.report_id = id;
-      return api("/api/entry", entry);
-    }).then(function(res){
-      entries = res.entries;
-      render();
-      $("omschrijving").value = "";
-      $("afwezig").checked = false;
-      $("start").value = clock();
-      $("stop").value = "";
-      $("datum").value = today();
-      toast(T[lang].added);
-    }).catch(function(){ toast(T[lang].err); });
+  // één luisteraar voor alle velden: nieuwe regels doen vanzelf mee
+  $("viewApp").addEventListener("input", function(ev){
+    if (ev.target.closest("#rows, .profbody")) markDirty();
+  });
+  $("viewApp").addEventListener("change", function(ev){
+    if (ev.target.closest("#rows, .profbody")) markDirty();
   });
 
-  $("list").addEventListener("click", function(ev){
-    var b = ev.target.closest(".del");
-    if (!b || !reportId) return;
-    if (!confirm(T[lang].confirm)) return;
-    api("/api/entry/delete", { id: b.getAttribute("data-id"), report_id: reportId })
-      .then(function(res){ entries = res.entries; render(); })
-      .catch(function(){ toast(T[lang].err); });
-  });
-
-  // ---- init ----
-  $("datum").value = today();
-  $("start").value = clock();
-
-  if (reportId){
-    api("/api/report/" + encodeURIComponent(reportId)).then(function(res){
-      fillProfile(res.report);
-      entries = res.entries || [];
-      render();
-    }).catch(function(){
-      try { localStorage.removeItem("gt_report"); } catch(e){}
-      reportId = null;
+  $("rows").addEventListener("click", function(ev){
+    var b = ev.target.closest(".rm");
+    if (!b) return;
+    var row = b.closest(".row");
+    var filled = Array.prototype.some.call(row.querySelectorAll("[data-f]"), function(i){
+      return i.type === "checkbox" ? i.checked : i.value.trim();
     });
-  }
+    if (filled && !confirm(d().rm_confirm)) return;
+    row.remove();
+    if (!$("rows").querySelector(".row")) addRow(true);
+    updateCount();
+    markDirty();
+  });
 
+  // laatste redmiddel: wegnavigeren mag nooit een ingevulde regel kosten
+  window.addEventListener("pagehide", function(){
+    if (!addr || (!dirty && !failed)) return;
+    try {
+      navigator.sendBeacon("/api/save", new Blob([JSON.stringify(payload())], { type: "application/json" }));
+    } catch(e){}
+  });
+  window.addEventListener("beforeunload", function(ev){
+    if (!addr || (!dirty && !failed)) return;
+    ev.preventDefault();
+    ev.returnValue = d().leave;
+    return d().leave;
+  });
+  document.addEventListener("visibilitychange", function(){
+    if (document.visibilityState === "hidden" && (dirty || failed)) save(false);
+  });
+
+  // ---------- start ----------
   applyLang();
+  var saved = null;
+  try { saved = localStorage.getItem("gt_addr"); } catch(e){}
+  if (saved && saved.indexOf("|") > 0){
+    var parts = saved.split("|");
+    post("/api/open", { postcode: parts[0], huisnummer: parts[1] })
+      .then(openDossier)
+      .catch(function(){ try { localStorage.removeItem("gt_addr"); } catch(e){} });
+  } else {
+    $("postcode").focus();
+  }
 })();
 </script>
 </body>
