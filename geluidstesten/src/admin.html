@@ -31,7 +31,10 @@
   .err.on{display:block}
 
   .tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:14px 0}
-  .tools input{flex:1;min-width:180px}
+  .tools input{flex:1 1 220px}
+  .tools .btn{flex:1 1 auto}
+  @media (min-width:561px){ .tools .btn{flex:0 0 auto} }
+  @media (max-width:560px){ .tools input{flex:1 1 100%} .tools .btn{flex:1 1 0} }
   .stats{font-size:13px;color:var(--muted);margin-bottom:6px}
 
   .card{border:1px solid var(--line);margin:14px 0}
@@ -47,10 +50,22 @@
   .meta p{font-size:14px;overflow-wrap:anywhere}
 
   .tblwrap{overflow-x:auto}
-  table{border-collapse:collapse;width:100%;font-size:14px;min-width:520px}
+  table{border-collapse:collapse;width:100%;font-size:14px}
   th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
   th{font-size:11px;text-transform:uppercase;letter-spacing:.06em;background:var(--soft)}
   td.desc{overflow-wrap:anywhere}
+
+  /* mobiel: geen horizontaal geschuif, elke registratie als blok met labels */
+  @media (max-width:560px){
+    table,tbody,tr,td{display:block;width:100%}
+    thead{position:absolute;left:-9999px}
+    tr{border:1px solid var(--line);margin-bottom:8px}
+    tr:last-child{margin-bottom:0}
+    td{border:0;border-top:1px solid var(--line);padding:6px 9px;display:grid;grid-template-columns:104px 1fr;gap:8px}
+    td:first-child{border-top:0;background:var(--soft);font-weight:700}
+    td:empty{display:none}
+    td::before{content:attr(data-label);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);padding-top:2px}
+  }
   .away{font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.05em}
   .empty{color:var(--muted);font-size:14px;padding:16px 0}
   footer{text-align:center;font-size:12px;color:var(--muted);padding:22px 16px 0}
@@ -209,9 +224,13 @@
       var period = keys.length ? fmtDate(keys[0]) + (keys.length > 1 ? " – " + fmtDate(keys[keys.length-1]) : "") : d.leeg;
 
       var rows = es.length ? es.map(function(x){
-        return "<tr><td>" + esc(fmtDate(x.datum)) + "</td><td>" + esc(x.start || d.leeg) +
-          "</td><td>" + esc(x.stop || d.leeg) + '</td><td class="desc">' + esc(x.omschrijving || d.leeg) +
-          '</td><td class="away">' + (Number(x.afwezig) ? esc(d.ja) : "") + "</td></tr>";
+        return "<tr>" +
+          '<td data-label="' + esc(d.datum) + '">' + esc(fmtDate(x.datum)) + "</td>" +
+          '<td data-label="' + esc(d.start) + '">' + esc(x.start || d.leeg) + "</td>" +
+          '<td data-label="' + esc(d.stop) + '">' + esc(x.stop || d.leeg) + "</td>" +
+          '<td class="desc" data-label="' + esc(d.oms) + '">' + esc(x.omschrijving || d.leeg) + "</td>" +
+          '<td class="away" data-label="' + esc(d.thuis) + '">' + (Number(x.afwezig) ? esc(d.ja) : "") + "</td>" +
+        "</tr>";
       }).join("") : "";
 
       return '<details class="card" open><summary><span><span class="who">' +
