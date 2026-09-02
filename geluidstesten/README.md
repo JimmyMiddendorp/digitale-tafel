@@ -14,9 +14,11 @@ git clone -b claude/geluidstesten-form-7jymja https://github.com/JimmyMiddendorp
 cd digitale-tafel/geluidstesten
 npm install
 npx wrangler login          # opent je browser, klik op Allow
-npm run db:init             # maakt de tabellen aan (eenmalig)
-npm run deploy
+./golive.sh                 # tabellen aanmaken, uitrollen, controleren
 ```
+
+`golive.sh` print de live URL. Werkt ook met een API-token in plaats van
+`wrangler login`: `CLOUDFLARE_API_TOKEN=... ./golive.sh`.
 
 Wrangler print de live URL, iets als `https://geluidstesten.<jouw-subdomein>.workers.dev`.
 Die deel je met bewoners. Het dashboard zit op `/dashboard`.
