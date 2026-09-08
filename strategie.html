@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Authority Engine — Offerstrategie | De Digitale Tafel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#050a14; --bg-2:#0a1424; --surface:#0f1b2e; --surface-2:#142339;
+    --line:#1c2d47; --line-soft:#16243a;
+    --ink:#f4f7fb; --ink-2:#c7d2e0; --ink-3:#8a97ab; --ink-4:#5d6b80;
+    --accent:#4d8bff; --accent-2:#6ea4ff; --accent-3:#a8c6ff;
+    --accent-soft:#1a3160; --accent-glow:rgba(77,139,255,.35);
+    --cream:#f1ece1; --cream-2:#e6dfd0; --ink-on-cream:#131820;
+    --good:#3fbf7f; --warn:#e0a33e; --bad:#d96a6a;
+    --r:16px; --r-lg:26px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth;scroll-padding-top:76px}
+  html,body{background:var(--bg);color:var(--ink);font-family:'Inter Tight',sans-serif;-webkit-font-smoothing:antialiased;line-height:1.55}
+  body{overflow-x:hidden}
+  a{color:inherit;text-decoration:none}
+  .display{font-family:'Fraunces',serif;font-weight:400;letter-spacing:-.022em;line-height:1.06}
+  .display em{font-style:italic;color:var(--accent);font-weight:400}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 26px}
+
+  /* ===== NAV ===== */
+  .topnav{position:sticky;top:0;z-index:60;background:rgba(5,10,20,.82);backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
+  .topnav-inner{display:flex;align-items:center;justify-content:space-between;gap:20px;max-width:1080px;margin:0 auto;padding:14px 26px}
+  .brand{display:flex;align-items:center;gap:10px;font-family:'Fraunces',serif;font-size:18px;font-weight:500;white-space:nowrap}
+  .brand-mark{width:22px;height:22px;border-radius:50%;background:radial-gradient(circle at 30% 30%,var(--accent-2),var(--accent) 60%,#1c47a8);box-shadow:0 0 20px var(--accent-glow)}
+  .jump{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
+  .jump::-webkit-scrollbar{display:none}
+  .jump a{padding:7px 13px;border-radius:999px;font-size:13px;color:var(--ink-3);white-space:nowrap;transition:all .2s}
+  .jump a:hover{color:var(--ink);background:var(--surface)}
+  .jump a.on{color:var(--accent);background:var(--accent-soft)}
+
+  /* ===== HERO ===== */
+  .hero{position:relative;padding:74px 0 64px;overflow:hidden;border-bottom:1px solid var(--line)}
+  .hero::before{content:"";position:absolute;inset:0;background:
+    radial-gradient(900px 420px at 50% -10%,rgba(77,139,255,.20),transparent 70%),
+    radial-gradient(600px 340px at 88% 60%,rgba(77,139,255,.09),transparent 70%);pointer-events:none}
+  .hero-in{position:relative;z-index:2}
+  .kicker{display:inline-flex;align-items:center;gap:9px;font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:18px}
+  .kicker::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent-glow)}
+  h1{font-size:clamp(34px,5.4vw,60px);max-width:900px}
+  .lede{margin-top:22px;font-size:17px;color:var(--ink-2);max-width:660px;line-height:1.62}
+  .hero-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:42px}
+  .hstat{padding:18px 20px;border:1px solid var(--line);border-radius:var(--r);background:rgba(15,27,46,.5)}
+  .hstat b{display:block;font-family:'Fraunces',serif;font-size:26px;color:var(--accent);letter-spacing:-.02em}
+  .hstat span{display:block;margin-top:5px;font-size:12.5px;color:var(--ink-3);line-height:1.4}
+
+  /* ===== SECTIES ===== */
+  section.blk{padding:78px 0;border-bottom:1px solid var(--line);position:relative}
+  section.blk.cream{background:var(--cream);color:var(--ink-on-cream);border-bottom:0}
+  .cream .kicker{color:#1e3a8a}
+  .cream .kicker::before{background:#1e3a8a;box-shadow:none}
+  .cream .display em{color:#1e3a8a}
+  .sec-h{font-size:clamp(27px,3.6vw,42px);max-width:760px}
+  .sec-sub{margin-top:18px;color:var(--ink-2);font-size:15.5px;max-width:640px;line-height:1.62}
+  .cream .sec-sub{color:#48536a}
+  .num{font-family:'Fraunces',serif;font-size:13px;color:var(--ink-4);letter-spacing:.08em;margin-bottom:10px}
+
+  /* Bron-chips */
+  .src{display:inline-block;margin-top:12px;padding:5px 11px;border-radius:7px;background:rgba(77,139,255,.09);
+    border:1px solid var(--accent-soft);color:var(--accent-2);font-size:11.5px;letter-spacing:.02em}
+  .cream .src{background:rgba(30,58,138,.07);border-color:rgba(30,58,138,.22);color:#1e3a8a}
+
+  /* Voor/na */
+  .vsgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:38px}
+  .vs{padding:28px;border-radius:var(--r-lg);border:1px solid var(--line);background:var(--surface)}
+  .vs.after{background:linear-gradient(180deg,rgba(77,139,255,.10),rgba(77,139,255,.02));border-color:var(--accent-soft)}
+  .vs-tag{font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-3);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+  .vs.after .vs-tag{color:var(--accent)}
+  .vs-tag i{width:18px;height:18px;border-radius:5px;background:var(--line);display:inline-flex;align-items:center;justify-content:center;font-style:normal;font-size:12px;color:var(--ink-3)}
+  .vs.after .vs-tag i{background:var(--accent);color:#031024}
+  .vs p{font-family:'Fraunces',serif;font-size:19px;line-height:1.38;color:var(--ink-2)}
+  .vs.after p{color:var(--ink)}
+  .vs small{display:block;margin-top:14px;font-size:13.5px;color:var(--ink-3);font-family:'Inter Tight';line-height:1.55}
+
+  /* Value equation */
+  .veq{margin-top:38px;padding:34px 30px;border-radius:var(--r-lg);border:1px solid var(--line);background:var(--surface);text-align:center}
+  .veq-row{display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap}
+  .veq-frac{display:inline-flex;flex-direction:column;align-items:center;gap:8px}
+  .veq-frac .bar{width:100%;height:1px;background:var(--line)}
+  .veq-part{display:inline-flex;align-items:center;gap:8px;padding:9px 15px;border-radius:10px;background:var(--bg-2);border:1px solid var(--line);font-size:13.5px;color:var(--ink-2);white-space:nowrap}
+  .veq-part.up{border-color:rgba(63,191,127,.35);color:#8ee0b5}
+  .veq-part.down{border-color:rgba(217,106,106,.32);color:#f0a5a5}
+  .veq-op{font-family:'Fraunces',serif;font-size:20px;color:var(--ink-3)}
+  .veq-legend{display:flex;gap:20px;justify-content:center;margin-top:20px;flex-wrap:wrap;font-size:12.5px;color:var(--ink-3)}
+  .veq-legend span{display:inline-flex;align-items:center;gap:7px}
+  .dotg{width:8px;height:8px;border-radius:2px;background:var(--good)}
+  .dotr{width:8px;height:8px;border-radius:2px;background:var(--bad)}
+
+  .lever{display:grid;grid-template-columns:170px 1fr;gap:22px;padding:22px 0;border-bottom:1px solid var(--line-soft)}
+  .lever:last-child{border-bottom:0}
+  .lever h4{font-family:'Fraunces',serif;font-size:19px;color:var(--ink)}
+  .lever .arrow{font-size:13px;color:var(--ink-3);margin-top:4px}
+  .lever .up{color:#8ee0b5}
+  .lever .dn{color:#f0a5a5}
+  .lever p{font-size:14.5px;color:var(--ink-2);line-height:1.6}
+  .lever .quote{margin-top:12px;padding:14px 16px;border-left:2px solid var(--accent);background:rgba(77,139,255,.06);border-radius:0 10px 10px 0;font-family:'Fraunces',serif;font-size:16px;color:var(--ink);line-height:1.4}
+
+  /* ===== RANKING (scorebalken) ===== */
+  .rank{margin-top:36px;display:flex;flex-direction:column;gap:2px}
+  .rk{display:grid;grid-template-columns:34px 1fr 210px 62px;gap:16px;align-items:center;
+    padding:15px 16px;border-radius:12px;border:1px solid transparent;transition:background .2s,border-color .2s}
+  .rk:hover{background:var(--surface);border-color:var(--line)}
+  .rk-n{font-family:'Fraunces',serif;font-size:17px;color:var(--ink-4);text-align:right}
+  .rk.tier1 .rk-n{color:var(--accent)}
+  .rk-name{font-size:15px;color:var(--ink);font-weight:500}
+  .rk-model{display:block;margin-top:3px;font-size:12.5px;color:var(--ink-3);font-weight:400}
+  .rk-track{height:8px;border-radius:999px;background:var(--line-soft);overflow:hidden}
+  .rk-fill{height:100%;border-radius:999px;width:0;transition:width 1s cubic-bezier(.22,.61,.36,1)}
+  .rk-score{font-family:'Fraunces',serif;font-size:16px;text-align:right;color:var(--ink-2)}
+  .rk.tier1 .rk-score{color:var(--accent-2)}
+  .rk-why{grid-column:2 / -1;margin-top:-4px;font-size:13px;color:var(--ink-3);line-height:1.5}
+  .tierlabel{display:flex;align-items:center;gap:12px;margin:26px 0 6px;font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-4)}
+  .tierlabel::after{content:"";flex:1;height:1px;background:var(--line-soft)}
+
+  /* ===== KAARTEN ===== */
+  .cards{display:grid;gap:16px;margin-top:34px}
+  .cards.c2{grid-template-columns:1fr 1fr}
+  .cards.c3{grid-template-columns:repeat(3,1fr)}
+  .card{padding:26px;border-radius:var(--r-lg);border:1px solid var(--line);background:var(--surface)}
+  .card.hi{background:linear-gradient(180deg,var(--surface-2),var(--surface));border-color:var(--accent-soft)}
+  .card h3{font-family:'Fraunces',serif;font-size:21px;margin-bottom:12px;color:var(--ink)}
+  .card p{font-size:14.5px;color:var(--ink-2);line-height:1.6}
+  .card ul{margin-top:14px;display:flex;flex-direction:column;gap:9px}
+  .card li{list-style:none;display:flex;gap:10px;font-size:14px;color:var(--ink-2);line-height:1.5}
+  .card li::before{content:"→";color:var(--accent);flex:none}
+  .card.cream-card{background:var(--cream);color:var(--ink-on-cream);border:0}
+  .card.cream-card h3,.card.cream-card p,.card.cream-card li{color:var(--ink-on-cream)}
+  .card.cream-card p,.card.cream-card li{color:#3a4458}
+
+  .prob{padding:22px 24px;border-radius:var(--r);border:1px solid var(--line);background:var(--surface);display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:start}
+  .prob + .prob{margin-top:12px}
+  .prob .lbl{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-4);margin-bottom:8px}
+  .prob .pain{font-family:'Fraunces',serif;font-size:17px;color:var(--ink-2);line-height:1.35}
+  .prob .fix{font-size:14.5px;color:var(--ink);line-height:1.55}
+  .prob .fix strong{color:var(--accent-2);font-weight:600;display:block;margin-bottom:5px}
+
+  /* ===== MONEY MODEL FLOW ===== */
+  .flow{margin-top:38px;display:flex;flex-direction:column;align-items:center;gap:0}
+  .fnode{width:100%;max-width:560px;padding:20px 24px;border-radius:var(--r);border:1px solid var(--line);
+    background:var(--surface);text-align:center;position:relative}
+  .fnode.core{background:linear-gradient(180deg,rgba(77,139,255,.16),rgba(77,139,255,.04));border-color:var(--accent);box-shadow:0 0 40px -12px var(--accent-glow)}
+  .fnode.side{max-width:460px;background:var(--bg-2);border-style:dashed}
+  .fnode .ftag{font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-4);margin-bottom:7px}
+  .fnode.core .ftag{color:var(--accent)}
+  .fnode b{font-family:'Fraunces',serif;font-size:19px;font-weight:400;color:var(--ink);display:block}
+  .fnode span{display:block;margin-top:6px;font-size:13px;color:var(--ink-3);line-height:1.5}
+  .fconn{width:2px;height:26px;background:linear-gradient(180deg,var(--line),var(--accent));position:relative}
+  .fconn::after{content:"";position:absolute;bottom:-1px;left:50%;transform:translateX(-50%);
+    border-left:5px solid transparent;border-right:5px solid transparent;border-top:7px solid var(--accent)}
+
+  /* ===== TABEL ===== */
+  .tbl-wrap{margin-top:32px;overflow-x:auto;border:1px solid var(--line);border-radius:var(--r)}
+  table{width:100%;border-collapse:collapse;min-width:520px}
+  th,td{text-align:left;padding:14px 18px;font-size:14px;border-bottom:1px solid var(--line-soft)}
+  th{font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-4);background:var(--bg-2);font-weight:500}
+  td{color:var(--ink-2)}
+  td:first-child{color:var(--ink);font-weight:500}
+  tr:last-child td{border-bottom:0}
+  .cream .tbl-wrap{border-color:rgba(19,24,32,.14)}
+  .cream th{background:rgba(19,24,32,.05);color:#5a6478}
+  .cream td{color:#3a4458;border-color:rgba(19,24,32,.09)}
+  .cream td:first-child{color:var(--ink-on-cream)}
+
+  /* Hooks */
+  .hooks{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:32px}
+  .hook{padding:20px 22px;border-radius:var(--r);border:1px solid var(--line);background:var(--surface);transition:transform .2s,border-color .2s}
+  .hook:hover{transform:translateY(-3px);border-color:var(--accent-soft)}
+  .hook .ht{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:9px}
+  .hook q{font-family:'Fraunces',serif;font-size:16.5px;color:var(--ink);line-height:1.38;quotes:'“' '”'}
+
+  /* Recept */
+  .recipe{margin-top:34px;border-radius:var(--r-lg);overflow:hidden;border:1px solid var(--accent-soft)}
+  .rrow{display:grid;grid-template-columns:150px 1fr;gap:20px;padding:20px 26px;border-bottom:1px solid var(--line);background:var(--surface);align-items:start}
+  .rrow:last-child{border-bottom:0}
+  .rrow .rk2{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);padding-top:3px}
+  .rrow .rv{font-size:15px;color:var(--ink);line-height:1.55}
+  .rrow .rv em{font-family:'Fraunces',serif;font-style:normal;font-size:19px;display:block;margin-bottom:4px}
+  .rrow ul{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+  .rrow li{list-style:none;padding:6px 12px;border-radius:999px;background:var(--bg-2);border:1px solid var(--line);font-size:13px;color:var(--ink-2)}
+
+  /* Viz-gids */
+  .vizcard{display:grid;grid-template-columns:52px 1fr;gap:18px;padding:24px;border-radius:var(--r);border:1px solid var(--line);background:var(--surface)}
+  .vizcard + .vizcard{margin-top:12px}
+  .vizno{width:52px;height:52px;border-radius:14px;background:var(--accent-soft);color:var(--accent-2);display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:20px}
+  .vizcard h4{font-family:'Fraunces',serif;font-size:19px;margin-bottom:7px}
+  .vizcard p{font-size:14.5px;color:var(--ink-2);line-height:1.6}
+  .vizcard .how{margin-top:10px;font-size:13.5px;color:var(--ink-3)}
+  .vizcard .how b{color:var(--accent-2);font-weight:600}
+  .cream .vizcard .how b{color:#1b3a8f}
+
+  .callout{margin-top:34px;padding:26px 28px;border-radius:var(--r-lg);border:1px solid var(--accent-soft);
+    background:linear-gradient(180deg,rgba(77,139,255,.12),rgba(77,139,255,.03))}
+  .callout h3{font-family:'Fraunces',serif;font-size:21px;margin-bottom:10px;color:var(--accent-2)}
+  .callout p{font-size:15px;color:var(--ink-2);line-height:1.6}
+
+  footer{padding:52px 0 64px;text-align:center;color:var(--ink-4);font-size:13px}
+  footer a{color:var(--ink-2);text-decoration:underline;text-underline-offset:3px}
+
+  /* Reveal */
+  .rv-anim{opacity:0;transform:translateY(22px);transition:opacity .7s cubic-bezier(.22,.61,.36,1),transform .7s cubic-bezier(.22,.61,.36,1)}
+  .rv-anim.in{opacity:1;transform:none}
+
+  @media (max-width:900px){
+    .hero-stats{grid-template-columns:1fr 1fr}
+    .vsgrid,.cards.c2,.cards.c3,.hooks{grid-template-columns:1fr}
+    .prob{grid-template-columns:1fr;gap:14px}
+    .lever{grid-template-columns:1fr;gap:8px}
+    .rk{grid-template-columns:26px 1fr auto;gap:9px 12px;align-items:start}
+    .rk-n{grid-column:1;grid-row:1;text-align:left;padding-top:1px}
+    .rk > div:nth-child(2){grid-column:2;grid-row:1}
+    .rk-score{grid-column:3;grid-row:1}
+    .rk-track{grid-column:2 / -1;grid-row:2;margin-top:0}
+    .rk-why{grid-column:2 / -1;grid-row:3;margin-top:0}
+    .brand span{display:none}
+  }
+  @media (max-width:600px){
+    .wrap{padding:0 18px}
+    .topnav-inner{padding:12px 18px;gap:12px}
+    section.blk{padding:56px 0}
+    .hero{padding:52px 0 46px}
+    .hero-stats{grid-template-columns:1fr}
+    .rrow{grid-template-columns:1fr;gap:8px}
+    .veq-row{gap:10px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation:none!important;transition:none!important}
+    .rv-anim{opacity:1;transform:none}
+  }
+  @media print{
+    .topnav{display:none}
+    body{background:#fff;color:#000}
+    section.blk{page-break-inside:avoid;border-color:#ccc}
+  }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="topnav-inner">
+    <a class="brand" href="/"><span class="brand-mark"></span><span>De Digitale Tafel</span></a>
+    <div class="jump" id="jump">
+      <a href="#kern">Kern</a>
+      <a href="#value">Value Equation</a>
+      <a href="#ranking">Ranking</a>
+      <a href="#nummer1">De #1</a>
+      <a href="#stack">Offer Stack</a>
+      <a href="#model">Money Model</a>
+      <a href="#avatar">Avatar</a>
+      <a href="#hooks">Hooks</a>
+      <a href="#math">Math</a>
+      <a href="#viz">Presenteren</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ================= HERO ================= -->
+<header class="hero">
+  <div class="wrap hero-in">
+    <div class="kicker">Offerstrategie · Grand Slam Offer</div>
+    <h1 class="display">Van contentproductie naar een <em>Authority Engine.</em></h1>
+    <p class="lede">Het huidige aanbod verkoopt een high-end interview plus 20 clips. Dat plaatst De Digitale Tafel in dezelfde vergelijking als videografen, podcaststudio's en contentbureaus — waar de keuze op prijs valt. Deze strategie herpositioneert het aanbod naar een meetbare businesstransformatie, zodat de keuze op waarde valt.</p>
+
+    <div class="hero-stats">
+      <div class="hstat"><b>1</b><span>Strategisch interview als bron</span></div>
+      <div class="hstat"><b>60 dgn</b><span>Authority-, sales- en ad-assets</span></div>
+      <div class="hstat"><b>€99</b><span>Betaalde front-end i.p.v. gratis call</span></div>
+      <div class="hstat"><b>4/mnd</b><span>Productieslots — schaarste is echt</span></div>
+    </div>
+  </div>
+</header>
+
+<!-- ================= 1. KERN ================= -->
+<section class="blk" id="kern">
+  <div class="wrap">
+    <div class="num rv-anim">01</div>
+    <div class="kicker rv-anim">De kern van het aanbod</div>
+    <h2 class="sec-h display rv-anim">Verkoop geen productie. Verkoop <em>vertrouwen vóór de salescall.</em></h2>
+
+    <div class="vsgrid">
+      <div class="vs rv-anim">
+        <div class="vs-tag"><i>×</i> Nu</div>
+        <p>“High-end interview + 20 clips.”</p>
+        <small>Een deliverable-lijst. Direct vergelijkbaar met elke videograaf of podcaststudio. De prospect rekent per clip en onderhandelt op prijs.</small>
+      </div>
+      <div class="vs after rv-anim">
+        <div class="vs-tag"><i>✓</i> Wordt</div>
+        <p>“Laat prospects jouw expertise al begrijpen en vertrouwen vóór de salescall — met één strategisch interview dat 60 dagen aan authority-, sales- en ad-assets oplevert, zonder dat jij iedere week content hoeft te bedenken.”</p>
+        <small>Een businessuitkomst. Er is geen directe concurrent die exact dit verkoopt, dus de vergelijking op prijs valt weg.</small>
+      </div>
+    </div>
+    <div class="src">Doel van een Grand Slam Offer: de vergelijking met alternatieven zo moeilijk maken dat de keuze op waarde valt, niet op prijs — $100M Offers §Grand Slam Offers</div>
+
+    <div class="callout rv-anim">
+      <h3>De nieuwe hoofdpropositie om te testen</h3>
+      <p style="font-family:'Fraunces',serif;font-size:24px;color:var(--ink);line-height:1.25;margin-bottom:14px">1 strategisch interview. 60 dagen bewijs dat vóór je salescall voor je werkt.</p>
+      <p>Wij veranderen jouw expertise in een premium Authority Engine met short-form content, FAQ-video's, sales-assets en advertentiecreatives — zonder dat jij iedere week content hoeft te bedenken of opnemen.</p>
+      <p style="margin-top:16px;color:var(--accent-2);font-size:13.5px">90 min opname · 20+ commerciële assets · 60 dagen inzetbaar · voor content, nurture, sales &amp; ads</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 2. VALUE EQUATION ================= -->
+<section class="blk" id="value">
+  <div class="wrap">
+    <div class="num rv-anim">02</div>
+    <div class="kicker rv-anim">Het fundament</div>
+    <h2 class="sec-h display rv-anim">De Value Equation moet onder <em>elk</em> aanbod liggen.</h2>
+    <p class="sec-sub rv-anim">Verhoog de uitkomst en de zekerheid; verlaag de wachttijd en de moeite. Alle vier tegelijk — dat is wat een aanbod van goed naar onweerstaanbaar tilt.</p>
+
+    <div class="veq rv-anim">
+      <div class="veq-row">
+        <div class="veq-frac">
+          <div class="veq-part up">↑ Dream Outcome</div>
+          <div class="veq-part up">↑ Perceived Likelihood</div>
+          <div class="bar"></div>
+          <div class="veq-part down">↓ Time Delay</div>
+          <div class="veq-part down">↓ Effort &amp; Sacrifice</div>
+        </div>
+        <div class="veq-op">=</div>
+        <div class="veq-part" style="border-color:var(--accent);color:var(--accent-2)">Waarde</div>
+      </div>
+      <div class="veq-legend">
+        <span><i class="dotg"></i> Omhoog duwen</span>
+        <span><i class="dotr"></i> Omlaag duwen</span>
+      </div>
+    </div>
+
+    <div style="margin-top:34px">
+      <div class="lever rv-anim">
+        <div><h4>Dream Outcome</h4><div class="arrow up">↑ verhogen</div></div>
+        <div>
+          <p>Niet “20 clips krijgen”, maar de positie die de klant daarmee inneemt.</p>
+          <div class="quote">“Als dé expert in je markt overkomen voordat een prospect ooit met je spreekt.”</div>
+        </div>
+      </div>
+      <div class="lever rv-anim">
+        <div><h4>Perceived Likelihood</h4><div class="arrow up">↑ verhogen</div></div>
+        <div>
+          <p>Installeer veel meer bewijs in de propositie zelf: voor/na-content, voorbeeld-FAQ-salesclips, clips per use-case (organic / nurture / sales / ads), testimonials, screenshots van reacties, echte interviewfragmenten en case-timelines. De eigen dienst is hiervoor het perfecte materiaal.</p>
+          <div class="src">Verzamel before/during/after-klantmomenten systematisch en hergebruik ze als ads, content en sales collateral — $100M Marketing Machine §Lifecycle Ads</div>
+        </div>
+      </div>
+      <div class="lever rv-anim">
+        <div><h4>Time Delay</h4><div class="arrow dn">↓ verlagen</div></div>
+        <div>
+          <p>Niet alleen “30–60 dagen content”, maar een snelle eerste win: <strong style="color:var(--ink)">“Binnen 72 uur na je shoot ontvang je je eerste 3 Hero Assets.”</strong> Volledige levering daarna binnen 7–10 werkdagen. Alleen beloven als dit operationeel waargemaakt kan worden.</p>
+        </div>
+      </div>
+      <div class="lever rv-anim">
+        <div><h4>Effort &amp; Sacrifice</h4><div class="arrow dn">↓ verlagen</div></div>
+        <div>
+          <p>Zet de asymmetrie prominent neer — dit verkoopt harder dan twintig technische deliverables.</p>
+          <div class="quote" style="border-color:var(--good)">Jouw input: 30 min voorbereiding → 90 min studio → klaar.<br><span style="font-size:14px;font-family:'Inter Tight';color:var(--ink-3)">Onze output: strategie → vragen → opname → editing → selectie → formats → sales-assets → ads → contentplanning.</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="src">$100M Offers §Value Equation</div>
+  </div>
+</section>
+
+<!-- ================= 3. RANKING ================= -->
+<section class="blk" id="ranking">
+  <div class="wrap">
+    <div class="num rv-anim">03</div>
+    <div class="kicker rv-anim">10 Attraction Offers</div>
+    <h2 class="sec-h display rv-anim">Gerangschikt op <em>fit</em>, niet op leadvolume.</h2>
+    <p class="sec-sub rv-anim">Met maximaal vier trajecten per maand heb je meer aan 20 koopkrachtige experts dan aan 300 gratis-jagers. Dit zijn geen verzonnen frameworks — het zijn tien uitvoeringen van de vijf primaire Attraction Offers plus de Free Goodwill Offer, toegepast op dit bedrijf.</p>
+
+    <div class="tierlabel">Nu bouwen</div>
+    <div class="rank" id="rank"></div>
+
+    <div class="src rv-anim">Kwalificatie verwijderen kan leadvolume verhogen terwijl de winst juist daalt — $100M Lost Chapters §Your First Avatar · Attraction Offers &amp; combineren — $100M Money Models pp.26–65</div>
+  </div>
+</section>
+
+<!-- ================= 4. DE #1 ================= -->
+<section class="blk" id="nummer1">
+  <div class="wrap">
+    <div class="num rv-anim">04</div>
+    <div class="kicker rv-anim">De aanbevolen front-end</div>
+    <h2 class="sec-h display rv-anim">De B2B <em>Authority Gap Diagnostic™</em> — €99.</h2>
+    <p class="sec-sub rv-anim">Een betaalde front-end filtert. Volledig gratis geeft doorgaans méér leads; een discount offer geeft mínder leads maar een hogere show-up rate. Voor een capaciteitsschaarse B2B-service met echte fulfillmentkosten is dat tweede beter.</p>
+
+    <div class="cards c3">
+      <div class="card hi rv-anim">
+        <h3>De advertentie</h3>
+        <p style="font-family:'Fraunces',serif;font-size:18px;color:var(--ink);line-height:1.35">“Je hebt waarschijnlijk geen contentprobleem. Je hebt een Authority Gap.”</p>
+        <p style="margin-top:14px">Belofte: ontdek in 30 minuten welke 3 content-gaps prospects ervan weerhouden jou vóór de call als premium expert te zien.</p>
+      </div>
+      <div class="card rv-anim">
+        <h3>Wat ze krijgen</h3>
+        <ul>
+          <li>Authority Score</li>
+          <li>Analyse van content én propositie</li>
+          <li>3 grootste credibility gaps</li>
+          <li>10 commerciële interviewhoeken</li>
+          <li>Persoonlijk 60-Day Authority Blueprint</li>
+        </ul>
+      </div>
+      <div class="card rv-anim">
+        <h3>De bonussen</h3>
+        <ul>
+          <li><b>Objection-to-Content Map</b> — 5 salesbezwaren → 5 interviewvragen</li>
+          <li><b>60-Day Authority Map</b> — awareness → nurture → sales → ads</li>
+          <li><b>Hero Hook Sheet</b> — 10 openingen voor hun eerste clips</li>
+        </ul>
+        <div class="src">Bonussen als tools/checklists verlagen tijd en moeite — $100M Offers §Bonuses</div>
+      </div>
+    </div>
+
+    <div class="cards c3" style="margin-top:16px">
+      <div class="card rv-anim">
+        <h3>Risk reversal</h3>
+        <p>“Als we tijdens de sessie geen minimaal 10 bruikbare commerciële contenthoeken kunnen vinden, betalen we de diagnostic terug.”</p>
+        <p style="margin-top:12px;color:var(--ink-3);font-size:13.5px">Veel veiliger dan “meer leads gegarandeerd” — je hebt volledige controle over deze uitkomst.</p>
+      </div>
+      <div class="card rv-anim">
+        <h3>Rollover</h3>
+        <p>Start de klant binnen zeven dagen met Authority? Dan wordt de volledige €99 verrekend met de investering.</p>
+        <p style="margin-top:12px;color:var(--ink-3);font-size:13.5px">Discounted Decoy + Rollover-logica: eerdere betaling wordt toegepast op het grotere aanbod.</p>
+      </div>
+      <div class="card rv-anim">
+        <h3>Schaarste</h3>
+        <p>Maximaal <b style="color:var(--accent-2)">8 diagnostics</b> en <b style="color:var(--accent-2)">4 productieslots</b> per maand.</p>
+        <p style="margin-top:12px;color:var(--ink-3);font-size:13.5px">Alleen communiceren als dit daadwerkelijk de capaciteit is. Honest scarcity is de aanbevolen vorm voor services.</p>
+      </div>
+    </div>
+    <div class="src">$100M Money Models §Decoy Offer · $100M Offers §Scarcity</div>
+  </div>
+</section>
+
+<!-- ================= 5. OFFER STACK ================= -->
+<section class="blk" id="stack">
+  <div class="wrap">
+    <div class="num rv-anim">05</div>
+    <div class="kicker rv-anim">Het core aanbod</div>
+    <h2 class="sec-h display rv-anim">Maak van je deliverables een stack van <em>problemen en oplossingen.</em></h2>
+    <p class="sec-sub rv-anim">Nu staat er een lijst met wat je levert. Elk onderdeel moet in plaats daarvan één specifieke twijfel of hindernis wegnemen.</p>
+
+    <div style="margin-top:34px">
+      <div class="prob rv-anim">
+        <div><div class="lbl">Core — Authority Interview</div><div class="pain">“Mijn expertise komt online niet over.”</div></div>
+        <div><div class="lbl">Oplossing</div><div class="fix"><strong>Strategisch interview</strong>Ontworpen rondom visie, methode, proof en differentiatie.</div></div>
+      </div>
+      <div class="prob rv-anim">
+        <div><div class="lbl">Bonus — Objection Content Vault</div><div class="pain">“Prospects stellen iedere keer dezelfde vragen.”</div></div>
+        <div><div class="lbl">Oplossing</div><div class="fix"><strong>FAQ-clips</strong>Rondom prijs, aanpak, verschil, risico en methode.</div></div>
+      </div>
+      <div class="prob rv-anim">
+        <div><div class="lbl">Bonus — Sales Asset Library</div><div class="pain">“Sales moet vertrouwen elke keer opnieuw vanaf nul opbouwen.”</div></div>
+        <div><div class="lbl">Oplossing</div><div class="fix"><strong>Clips per bezwaar en koopfase</strong>Geordend zodat sales precies weet wat wanneer te sturen.</div></div>
+      </div>
+      <div class="prob rv-anim">
+        <div><div class="lbl">Bonus — Ad Creative Pack</div><div class="pain">“Onze ads voelen als advertenties.”</div></div>
+        <div><div class="lbl">Oplossing</div><div class="fix"><strong>Authentieke expert-fragmenten</strong>Geschikt om direct als creatives te testen.</div></div>
+      </div>
+      <div class="prob rv-anim">
+        <div><div class="lbl">Bonus — 60-Day Deployment Map</div><div class="pain">“We hebben content, maar weten niet wat wanneer online moet.”</div></div>
+        <div><div class="lbl">Oplossing</div><div class="fix"><strong>Concrete inzetplanning</strong>Waar, wanneer en waarom elk asset gebruikt wordt.</div></div>
+      </div>
+    </div>
+    <div class="src">Elk bonusonderdeel lost een afzonderlijke twijfel op en heeft bij voorkeur een tastbaar tool-karakter — $100M Offers §Bonuses</div>
+
+    <div class="cards c2" style="margin-top:38px">
+      <div class="card hi rv-anim">
+        <h3>De garantie die ik zou installeren</h3>
+        <p style="font-family:'Fraunces',serif;font-size:18px;color:var(--ink);margin-bottom:12px">Authority Alignment Guarantee</p>
+        <p>“Als de eerste drie Hero Assets niet aansluiten bij de vooraf door jou goedgekeurde Message Map, herwerken we ze zonder extra kosten totdat ze dat wel doen.”</p>
+        <p style="margin-top:12px">Aanvullend: leveren wij de overeengekomen assetlijst niet binnen de afgesproken termijn — mits feedback en approvals op tijd komen — dan werken we zonder extra productiekosten door tot de output compleet is.</p>
+        <div class="src">Conditional service guarantee i.p.v. roekeloos geld terug — $100M Offers §Conditional Service Guarantee</div>
+      </div>
+      <div class="card rv-anim">
+        <h3>Haal Foundation van de homepage</h3>
+        <p>Foundation en Authority staan nu vrijwel gelijkwaardig naast elkaar. Daarmee nodig je goede prospects uit om zelf naar beneden te shoppen.</p>
+        <ul>
+          <li><b>Homepage:</b> één offer — Authority Engine</li>
+          <li><b>Salescall:</b> eerst Authority</li>
+          <li><b>Alleen bij non-fit:</b> Foundation, als prescriptie — “je hebt het volledige systeem nu niet nodig”</li>
+        </ul>
+        <div class="src">Bied de lagere quantity/quality-optie aan wie níet kwalificeert, niet aan wie het premium aanbod zou kopen — $100M Lifetime Value Playbook §Downsell</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 6. MONEY MODEL ================= -->
+<section class="blk" id="model">
+  <div class="wrap">
+    <div class="num rv-anim">06</div>
+    <div class="kicker rv-anim">De volledige sequentie</div>
+    <h2 class="sec-h display rv-anim">Zo ziet het <em>Money Model</em> eruit.</h2>
+    <p class="sec-sub rv-anim">Get Cash → Get More Cash → Get The Most Cash. Eerst Attraction. Daarna upsells en downsells. Daarna continuity. Niet alles tegelijk implementeren.</p>
+
+    <div class="flow">
+      <div class="fnode rv-anim"><div class="ftag">Traffic</div><b>Paid ads · Cold outbound · LinkedIn organic · Referrals</b></div>
+      <div class="fconn"></div>
+      <div class="fnode rv-anim"><div class="ftag">Attraction Offer</div><b>€99 Authority Gap Diagnostic</b><span>Betaalde front-end. Filtert op intentie, verhoogt show-up, levert kwalificatiedata vóór de call.</span></div>
+      <div class="fconn"></div>
+      <div class="fnode core rv-anim"><div class="ftag">Core Premium Offer</div><b>The Authority Engine</b><span>Flagship Interview + Sales Asset System + 60-Day Deployment System. Je verkoopt geen video's — je verkoopt een systeem.</span></div>
+      <div class="fconn"></div>
+      <div class="fnode side rv-anim"><div class="ftag">Downsell — alleen bij non-fit</div><b>Foundation</b><span>Nooit op de homepage. Alleen als prescriptie op de call.</span></div>
+      <div class="fconn"></div>
+      <div class="fnode rv-anim"><div class="ftag">Immediate Upsells</div><b>Distribution · extra ad creatives · extra platform edits · sales enablement · executive &amp; team interviews</b></div>
+      <div class="fconn"></div>
+      <div class="fnode rv-anim"><div class="ftag">Continuity</div><b>Quarterly Authority System</b><span>Eén flagship interview per kwartaal + maandelijkse deployment en optimalisatie.</span></div>
+      <div class="fconn"></div>
+      <div class="fnode rv-anim"><div class="ftag">Cross-sells</div><b>Diensten die logisch het volgende probleem oplossen</b><span>Eventueel via partners uit te voeren.</span></div>
+    </div>
+    <div class="src">$100M Money Models §Make Your Money Model</div>
+
+    <div class="callout rv-anim">
+      <h3>De salescall na de Diagnostic</h3>
+      <p>Geen uur pitchen — gebruik wat ze tijdens de diagnostic zelf hebben aangegeven:</p>
+      <ol style="margin-top:14px;display:flex;flex-direction:column;gap:10px;padding-left:20px;color:var(--ink-2);font-size:14.5px">
+        <li><b style="color:var(--ink)">Dream Outcome</b> — “Als dit over zes maanden perfect werkt, wat moet je content dan concreet voor je bedrijf doen?”</li>
+        <li><b style="color:var(--ink)">Current Gap</b> — “Wat gebeurt er nu waardoor dat nog niet gebeurt?”</li>
+        <li><b style="color:var(--ink)">Economic Cost</b> — “Hoeveel salesgesprekken voer je waarin je nog veel tijd kwijt bent aan uitleggen wie je bent en waarom jullie anders zijn?”</li>
+        <li><b style="color:var(--ink)">Prescribe</b> — “Dan heb je niet meer posts nodig. Je hebt drie soorten bewijs nodig…” → Authority Engine.</li>
+      </ol>
+      <div class="src">Begrijp eerst wat ze willen, leg dan de opties naast dat resultaat, breng ze tot een echte beslissing — $100M Closing Playbook §Power</div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 7. AVATAR ================= -->
+<section class="blk cream" id="avatar">
+  <div class="wrap">
+    <div class="num rv-anim" style="color:#8a93a5">07</div>
+    <div class="kicker rv-anim">Doelgroep</div>
+    <h2 class="sec-h display rv-anim">Maak de avatar <em>smaller.</em></h2>
+    <p class="sec-sub rv-anim">“Coaches, consultants, agencies, SaaS founders, B2B experts, trainers, sprekers, premium dienstverleners” is bijna iedereen. Eén scherpe avatar maakt je messaging automatisch scherper.</p>
+
+    <div class="cards c2">
+      <div class="card cream-card rv-anim" style="background:#fff">
+        <h3>De eerste avatar</h3>
+        <p style="font-family:'Fraunces',serif;font-size:19px;color:var(--ink-on-cream);line-height:1.35">Founder-led B2B bedrijven met een high-ticket aanbod waarbij expertise en vertrouwen noodzakelijk zijn om te verkopen.</p>
+      </div>
+      <div class="card cream-card rv-anim" style="background:#fff">
+        <h3>Praktische qualifiers</h3>
+        <ul>
+          <li>Klantwaarde hoog genoeg dat één extra sale de productie ruimschoots verantwoordt</li>
+          <li>Founder/expert is onderdeel van de verkoop</li>
+          <li>Product vraagt uitleg</li>
+          <li>Bestaande expertise en cases aanwezig</li>
+          <li>Minimaal enige bestaande demand</li>
+          <li>Bereid content commercieel in sales en nurture te gebruiken</li>
+        </ul>
+      </div>
+    </div>
+    <div class="src">Kijk naar wie het meest betaalt, het langst blijft en het prettigst is om te bedienen; vind hun 3–5 gedeelde kenmerken — $100M Lost Chapters §Your First Avatar</div>
+  </div>
+</section>
+
+<!-- ================= 8. HOOKS ================= -->
+<section class="blk" id="hooks">
+  <div class="wrap">
+    <div class="num rv-anim">08</div>
+    <div class="kicker rv-anim">Messaging</div>
+    <h2 class="sec-h display rv-anim">Hooks op pijn en <em>economische context.</em></h2>
+    <p class="sec-sub rv-anim">Niet “wil jij betere content?”. Test over verschillende awareness levels, hergebruik winnaars en varieer verder.</p>
+
+    <div class="hooks">
+      <div class="hook rv-anim"><div class="ht">Problem aware</div><q>Je hebt geen contentprobleem. Je prospects hebben een vertrouwensprobleem.</q></div>
+      <div class="hook rv-anim"><div class="ht">Sales</div><q>Als jij de eerste 20 minuten van iedere salescall nog moet uitleggen waarom je anders bent, doet je content te weinig.</q></div>
+      <div class="hook rv-anim"><div class="ht">Effort</div><q>Je hoeft niet drie keer per week voor een camera te staan om drie keer per week zichtbaar te zijn.</q></div>
+      <div class="hook rv-anim"><div class="ht">Contrarian</div><q>Meer content maakt je niet automatisch meer autoriteit.</q></div>
+      <div class="hook rv-anim"><div class="ht">Mechanism</div><q>Wij bouwen 60 dagen commerciële content vanuit één strategisch interview.</q></div>
+      <div class="hook rv-anim"><div class="ht">Premium</div><q>Als je €10.000+ diensten verkoopt, moet je content aanvoelen alsof je €10.000+ diensten verkoopt.</q></div>
+      <div class="hook rv-anim"><div class="ht">Objection</div><q>De beste FAQ-video is degene die je prospect bekijkt vóór hij dezelfde vraag tijdens de salescall stelt.</q></div>
+      <div class="hook rv-anim"><div class="ht">Commodity</div><q>Zodra je content eruitziet als die van iedere andere consultant, vergelijkt de markt je ook als iedere andere consultant.</q></div>
+    </div>
+    <div class="src">Produceer veel variaties — circa 50 hooks — over verschillende awareness levels; hergebruik winnaars — $100M GOATed Ads §Scale It</div>
+  </div>
+</section>
+
+<!-- ================= 9. MATH ================= -->
+<section class="blk" id="math">
+  <div class="wrap">
+    <div class="num rv-anim">09</div>
+    <div class="kicker rv-anim">Meten</div>
+    <h2 class="sec-h display rv-anim">Beoordeel offers niet op laagste CPL, maar op <em>30-day gross profit.</em></h2>
+    <p class="sec-sub rv-anim">Prijs, COGS, CAC en close rate ontbreken nog — dus geen verzonnen financieel model. Wel de scorecard die je vanaf dag één moet bijhouden.</p>
+
+    <div class="tbl-wrap rv-anim">
+      <table>
+        <thead><tr><th>Metric</th><th>Formule / vraag</th></tr></thead>
+        <tbody>
+          <tr><td>Front-end CAC</td><td>alle attraction spend + saleskosten ÷ nieuwe klanten</td></tr>
+          <tr><td>Show rate</td><td>verschenen calls ÷ geboekte calls</td></tr>
+          <tr><td>Qualified rate</td><td>geschikte prospects ÷ verschenen calls</td></tr>
+          <tr><td>Authority close rate</td><td>Authority sales ÷ qualified calls</td></tr>
+          <tr><td>Day-0 gross profit</td><td>cash ontvangen − directe fulfillmentkosten</td></tr>
+          <tr><td>30-day contribution</td><td>cash 30 dagen − COGS − CAC</td></tr>
+          <tr><td>Continuity attach</td><td>klanten met kwartaalplan ÷ core klanten</td></tr>
+          <tr><td>LTGP</td><td>totale gross profit over klantlevensduur</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout rv-anim">
+      <h3>De lat</h3>
+      <p>De winst die je binnen de eerste 30 dagen aan één klant maakt, moet hoger zijn dan wat het kost om die klant te krijgen én te bedienen. De ambitie daarna: één nieuwe klant genereert genoeg cash om meerdere volgende klanten te financieren.</p>
+      <div class="src">$100M Money Models §Ten Years in Ten Minutes</div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 10. DEFINITIEVE FRONT-END ================= -->
+<section class="blk" id="recept">
+  <div class="wrap">
+    <div class="num rv-anim">10</div>
+    <div class="kicker rv-anim">Als je vandaag één ding installeert</div>
+    <h2 class="sec-h display rv-anim">De definitieve <em>front-end.</em></h2>
+
+    <div class="recipe">
+      <div class="rrow rv-anim"><div class="rk2">Ad</div><div class="rv"><em>“Je hebt waarschijnlijk geen contentprobleem. Je hebt een Authority Gap.”</em></div></div>
+      <div class="rrow rv-anim"><div class="rk2">Offer</div><div class="rv"><em>B2B Authority Gap Diagnostic — €99</em></div></div>
+      <div class="rrow rv-anim"><div class="rk2">Promise</div><div class="rv">Ontdek in 30 minuten welke 3 dingen jouw content mist om prospects vóór de salescall beter te laten begrijpen waarom jij de premium keuze bent.</div></div>
+      <div class="rrow rv-anim"><div class="rk2">Get</div><div class="rv"><ul><li>Authority Score</li><li>3 grootste credibility gaps</li><li>10 commerciële contenthoeken</li><li>Objection-to-Content Map</li><li>60-Day Authority Blueprint</li></ul></div></div>
+      <div class="rrow rv-anim"><div class="rk2">Risk reversal</div><div class="rv">Kunnen we geen tien bruikbare commerciële onderwerpen vinden? Dan betaal je niets.</div></div>
+      <div class="rrow rv-anim"><div class="rk2">Rollover</div><div class="rv">Start je binnen zeven dagen met Authority? Dan trekken we je volledige €99 van je investering af.</div></div>
+      <div class="rrow rv-anim"><div class="rk2">Scarcity</div><div class="rv">Maximaal 8 diagnostics → maximaal 4 productietrajecten per maand.</div></div>
+      <div class="rrow rv-anim"><div class="rk2">Core upsell</div><div class="rv"><em>The Authority Engine</em></div></div>
+      <div class="rrow rv-anim"><div class="rk2">Downsell</div><div class="rv">Foundation — uitsluitend wanneer Authority daadwerkelijk overkill is.</div></div>
+      <div class="rrow rv-anim"><div class="rk2">Continuity</div><div class="rv">Quarterly Authority System</div></div>
+    </div>
+
+    <div class="callout rv-anim">
+      <h3>Wat dit oplost</h3>
+      <p>Je CTA wordt een product in plaats van “plan een vrijblijvend strategiegesprek”. Je salescall krijgt context. Je lead heeft al betaald. Je weet vóór de call meer over hem. En je core offer voelt als de logische volgende stap in plaats van een pitch.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 11. VISUALISATIEGIDS ================= -->
+<section class="blk cream" id="viz">
+  <div class="wrap">
+    <div class="num rv-anim" style="color:#8a93a5">11</div>
+    <div class="kicker rv-anim">Presenteren</div>
+    <h2 class="sec-h display rv-anim">Hoe je dit het best <em>visualiseert.</em></h2>
+    <p class="sec-sub rv-anim">Een presentatie van elf secties verliest de zaal. Presenteer in deze volgorde — elk beeld doet één ding, en pas als het vorige geland is komt het volgende.</p>
+
+    <div style="margin-top:34px" id="vizlist"></div>
+
+    <div class="card cream-card rv-anim" style="background:#fff;margin-top:26px">
+      <h3>Vier regels voor elk beeld</h3>
+      <ul>
+        <li><b>Eén boodschap per slide.</b> Kan de kijker hem niet in vijf seconden navertellen, dan staan er twee dingen op.</li>
+        <li><b>Toon de verandering, niet de lijst.</b> Voor/na naast elkaar overtuigt; een opsomming van deliverables niet.</li>
+        <li><b>Kleur draagt betekenis, nooit decoratie.</b> Accentblauw = wat nieuw of aanbevolen is. Al het andere blijft grijs.</li>
+        <li><b>Getallen krijgen context.</b> “9,7/10” zegt niets zonder de schaal en zonder het nummer 2 ernaast.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<footer>
+  Interne offerstrategie · De Digitale Tafel · <a href="/">terug naar de website</a><br>
+  <span style="color:var(--ink-4);font-size:12px">Bronnen: $100M Offers · Money Models · Leads · Lost Chapters · Marketing Machine · Closing Playbook · Lifetime Value Playbook · GOATed Ads · Branding Playbook</span>
+</footer>
+
+<script>
+/* ===== Ranking data ===== */
+const OFFERS = [
+  {n:1,  naam:'€99 Authority Gap Diagnostic', model:'Discount Decoy + Rollover', score:9.7, why:'Hoge intentie, hoge show-up, bijna geen fulfillment, natuurlijke bridge naar Authority.'},
+  {n:2,  naam:'30-Day Authority Credit Challenge', model:'Win Your Money Back', score:9.3, why:'Sterke risk reversal én commitment; trekt doeners. Meer productiecapaciteit als inzet, dus hoger CAC/COGS-risico.'},
+  {n:3,  naam:'The 60-Day Authority Engine', model:'Buy X Get Y Free', score:9.0, why:'Beschermt de premium prijs terwijl de perceived value explodeert — mits de gratis componenten echte losse waarde hebben.'},
+  {n:4,  naam:'Free Authority Gap Audit', model:'Free Decoy', score:8.6, why:'Zeer schaalbaar en sterke leadgen; lagere leadkwaliteit en show-up dan de betaalde variant. Inzetten voor cold traffic.'},
+  {n:5,  naam:'Proof-First Authority Session', model:'Pay Less Now / Pay More Later', score:8.2, why:'Neemt veel risico weg en laat kwaliteit eerst ervaren. Vereist vooraf goedgekeurde, objectieve criteria.'},
+  {n:6,  naam:'Founder Authority Makeover', model:'Giveaway', score:7.8, why:'Veel bereik, goede kwalificatiedata en promotionele follow-up naar alle deelnemers. Kwalificatie vóór deelname is verplicht.'},
+  {n:7,  naam:'Authority Partner Giveaway', model:'Referral Giveaway', score:7.4, why:'Giveaway met ingebouwde referral-loop. Pas draaien nadat de front-end converteert.'},
+  {n:8,  naam:'Quarterly Authority Lock-In', model:'Buy X Get Y Free', score:7.1, why:'Fantastische cashflow, maar je verkoopt maandenlang toekomstige fulfillment zonder capaciteitsmodel.'},
+  {n:9,  naam:'Authority Scorecard Toolkit', model:'Free Goodwill', score:6.8, why:'Goede nurture- en lead magnet-asset, maar maakt van niemand een betalende klant. Nooit je hele money model.'},
+  {n:10, naam:'Free Full Interview Test Drive', model:'100% Free / Decoy', score:4.2, why:'Geweldige headline, slechte economics. Je geeft precies weg wat het duurste is en conditioneert de markt om je productie op €0 te waarderen.'}
+];
+
+const rankEl = document.getElementById('rank');
+OFFERS.forEach((o, i) => {
+  if (i === 3) rankEl.insertAdjacentHTML('beforeend', '<div class="tierlabel">Daarna testen</div>');
+  if (i === 8) rankEl.insertAdjacentHTML('beforeend', '<div class="tierlabel">Ondersteunend of afraden</div>');
+  const tier = o.score >= 9 ? 'tier1' : '';
+  // Sequentiële hue: één kleur, lichtheid volgt de score (magnitude, geen categorie)
+  const l = 34 + (o.score / 10) * 30;
+  const kleur = `hsl(219 100% ${l}%)`;
+  const row = document.createElement('div');
+  row.className = 'rk rv-anim ' + tier;
+  row.innerHTML = `
+    <div class="rk-n">${o.n}</div>
+    <div><div class="rk-name">${o.naam}<span class="rk-model">${o.model}</span></div></div>
+    <div class="rk-track"><div class="rk-fill" data-w="${o.score * 10}" style="background:${kleur}"></div></div>
+    <div class="rk-score">${o.score.toFixed(1)}</div>
+    <div class="rk-why">${o.why}</div>`;
+  rankEl.appendChild(row);
+});
+
+/* ===== Visualisatiegids ===== */
+const VIZ = [
+  {t:'Open met de vergelijking, niet met het aanbod',
+   p:'Eén slide, twee blokken naast elkaar: “high-end interview + 20 clips” tegenover de nieuwe kernbelofte. Laat de kijker zelf het verschil voelen voordat je iets uitlegt.',
+   h:'Vorm: <b>voor/na naast elkaar</b>. Links grijs en dof, rechts in accentblauw. Geen bullets.'},
+  {t:'Maak de Value Equation letterlijk zichtbaar',
+   p:'De breuk als beeld: twee groene pijlen omhoog boven de streep, twee rode omlaag eronder. Daarna per lever één slide met de concrete zin die je gaat gebruiken.',
+   h:'Vorm: <b>formulediagram</b> + vier detailslides. Kleur codeert richting (omhoog/omlaag), niet categorie.'},
+  {t:'Toon de ranking als één beeld, niet als tabel',
+   p:'Tien horizontale balken onder elkaar, gesorteerd hoog naar laag, met de score direct achter de balk. De top drie in vol accentblauw, de rest lichter. Zo zie je de beslissing in één oogopslag.',
+   h:'Vorm: <b>gerangschikte balken</b>, één hue waarvan de lichtheid de score volgt. Nooit tien verschillende kleuren — dat suggereert categorieën die er niet zijn.'},
+  {t:'Zoom in op de #1 met een productkaart',
+   p:'Behandel de €99 Diagnostic als een echt product: naam, belofte, wat je krijgt, bonussen, garantie, schaarste. Dit is de slide waar de beslissing valt.',
+   h:'Vorm: <b>één kaart met vaste rijen</b>. Dezelfde structuur later hergebruiken voor de Authority Engine, zodat de twee vergelijkbaar ogen.'},
+  {t:'Zet de Offer Stack als probleem → oplossing',
+   p:'Per rij links het citaat van de klant, rechts wat het oplost. Bouw de rijen één voor één op tijdens het praten; de stapel die ontstaat ís het argument.',
+   h:'Vorm: <b>tweekolomsrijen die opbouwen</b>. Het citaat in serif, de oplossing in de gewone tekstkleur.'},
+  {t:'Het Money Model is een verticale flow',
+   p:'Van traffic bovenaan naar continuity onderaan, met één duidelijk oplichtend blok in het midden: de Authority Engine. De downsell hangt er zichtbaar naast als zijtak, niet in de hoofdlijn.',
+   h:'Vorm: <b>verticaal stroomdiagram</b>. Alleen het core-blok krijgt gloed; de downsell krijgt een stippellijn zodat direct duidelijk is dat het geen standaardroute is.'},
+  {t:'Sluit af met de scorecard, niet met een belofte',
+   p:'De metrics-tabel plus één zin: de winst binnen 30 dagen moet hoger zijn dan de kosten om de klant te krijgen én te bedienen. Dat maakt de hele presentatie toetsbaar in plaats van meningachtig.',
+   h:'Vorm: <b>strakke tabel</b>, geen grafiek. Er is nog geen data, dus een grafiek zou nep zijn.'}
+];
+const vizEl = document.getElementById('vizlist');
+VIZ.forEach((v, i) => {
+  const d = document.createElement('div');
+  d.className = 'vizcard rv-anim';
+  d.style.background = '#fff';
+  d.style.borderColor = 'rgba(19,24,32,.10)';
+  d.innerHTML = `<div class="vizno">${i + 1}</div>
+    <div><h4 style="color:#131820">${v.t}</h4>
+    <p style="color:#48536a">${v.p}</p>
+    <div class="how" style="color:#5a6478">${v.h}</div></div>`;
+  vizEl.appendChild(d);
+});
+
+/* ===== Reveal + balken animeren ===== */
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+if (reduce){
+  document.querySelectorAll('.rv-anim').forEach(e => e.classList.add('in'));
+  document.querySelectorAll('.rk-fill').forEach(f => f.style.width = f.dataset.w + '%');
+} else {
+  const io = new IntersectionObserver(es => {
+    es.forEach(e => {
+      if (!e.isIntersecting) return;
+      e.target.classList.add('in');
+      const bar = e.target.querySelector('.rk-fill');
+      if (bar) setTimeout(() => bar.style.width = bar.dataset.w + '%', 120);
+      io.unobserve(e.target);
+    });
+  }, {threshold:.14, rootMargin:'0px 0px -6% 0px'});
+  document.querySelectorAll('.rv-anim').forEach(e => io.observe(e));
+}
+
+/* ===== Actieve sectie in de sprongnavigatie ===== */
+const links = [...document.querySelectorAll('.jump a')];
+const secties = links.map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+const spy = new IntersectionObserver(es => {
+  es.forEach(e => {
+    if (!e.isIntersecting) return;
+    links.forEach(l => l.classList.toggle('on', l.getAttribute('href') === '#' + e.target.id));
+  });
+}, {rootMargin:'-45% 0px -50% 0px'});
+secties.forEach(s => spy.observe(s));
+</script>
+
+</body>
+</html>
