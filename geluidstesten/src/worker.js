@@ -43,8 +43,10 @@ async function readBody(request) {
   }
 }
 
-/* Een regel telt alleen als er iets in staat. Zo levert een half ingevulde
-   lege regel onderaan het formulier geen spookrecord op.                       */
+/* Een regel telt alleen als de bewoner er zelf iets in zette: een omschrijving,
+   een eindtijd of het vinkje "niet thuis". Datum en starttijd staan al ingevuld
+   zodra een lege regel verschijnt, dus daarop afgaan zou elk bezoek een loze
+   regel in het dossier opleveren.                                              */
 function cleanEntries(list) {
   if (!Array.isArray(list)) return [];
   return list
@@ -56,7 +58,7 @@ function cleanEntries(list) {
       omschrijving: str(e && e.omschrijving, 1000),
       afwezig: e && e.afwezig ? 1 : 0,
     }))
-    .filter((e) => e.datum || e.start || e.stop || e.omschrijving || e.afwezig);
+    .filter((e) => e.omschrijving || e.stop || e.afwezig);
 }
 
 async function findOrCreate(env, postcode, huisnummer) {

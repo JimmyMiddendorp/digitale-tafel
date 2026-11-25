@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Neighbor Noise — keep a record of your neighbours' noise</title>
+<meta name="description" content="A free noise log. No app, no equipment, no appointment. Write down what you hear and get one tidy overview you can send on." />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 fill=%22%23000%22/%3E%3Ctext x=%2216%22 y=%2224%22 font-family=%22Helvetica,Arial%22 font-size=%2221%22 font-weight=%22bold%22 fill=%22%23fff%22 text-anchor=%22middle%22%3En%3C/text%3E%3C/svg%3E" />
+<style>
+  :root{ --line:#000; --muted:#666; --bg:#fff; --ink:#000; --soft:#f4f4f4; }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{background:var(--bg);color:var(--ink);font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;padding-bottom:40px}
+  .wrap{max-width:1000px;margin:0 auto;padding:0 16px}
+  .narrow{max-width:640px;margin:0 auto}
+  [hidden]{display:none!important}
+
+  header{border-bottom:2px solid var(--line);background:var(--bg)}
+  .bar{max-width:1000px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .logo{font-size:19px;font-weight:800;letter-spacing:-.025em}
+  .lang{display:flex;border:1px solid var(--line);flex:none}
+  .lang button{font:inherit;font-size:13px;font-weight:600;padding:5px 10px;background:var(--bg);color:var(--ink);border:0;cursor:pointer;min-width:40px}
+  .lang button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+
+  h1{font-size:clamp(28px,6.5vw,44px);line-height:1.08;letter-spacing:-.035em;margin:0 0 14px}
+  h2{font-size:13px;text-transform:uppercase;letter-spacing:.09em;font-weight:700}
+  h3{font-size:17px;letter-spacing:-.015em;margin-bottom:4px}
+  .lead{font-size:17px;color:var(--muted);margin-bottom:22px}
+  label{display:block;font-size:13px;font-weight:600;margin:0 0 4px}
+  input[type=text],input[type=date],input[type=time],input[type=password]{
+    width:100%;font:inherit;padding:11px;border:1px solid var(--line);border-radius:0;background:var(--bg);color:var(--ink);min-height:46px}
+  input:focus,button:focus-visible{outline:2px solid var(--ink);outline-offset:-2px}
+  button.btn{font:inherit;font-weight:700;padding:12px 18px;background:var(--ink);color:var(--bg);border:1px solid var(--ink);cursor:pointer;min-height:48px}
+  button.btn.ghost{background:var(--bg);color:var(--ink)}
+  button.btn:active{opacity:.75}
+  .full{width:100%}
+
+  /* ---------- voorpagina ---------- */
+  .hero{padding:44px 0 34px;border-bottom:1px solid var(--line)}
+  .start{border:2px solid var(--line);padding:16px;margin-top:4px}
+  .start .row{display:grid;grid-template-columns:1.5fr 1fr;gap:10px;margin-bottom:10px}
+  .err{font-size:13px;font-weight:700;border:1px solid var(--line);padding:8px 10px;margin-bottom:10px;display:none}
+  .err.on{display:block}
+  .micro{font-size:12px;color:var(--muted);margin-top:9px}
+
+  section.block{padding:30px 0;border-bottom:1px solid var(--line)}
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-top:14px}
+  .steps > div{background:var(--bg);padding:16px}
+  .steps .n{font-size:12px;font-weight:800;letter-spacing:.1em;color:var(--muted);margin-bottom:8px}
+  .steps p{font-size:14px;color:var(--muted)}
+  @media (max-width:700px){ .steps{grid-template-columns:1fr} }
+
+  .diffs{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+  @media (max-width:700px){ .diffs{grid-template-columns:1fr} }
+  .diffs > div{border-left:3px solid var(--line);padding-left:12px}
+  .diffs p{font-size:14px;color:var(--muted)}
+
+  .honest{background:var(--soft);border:1px solid var(--line);padding:18px;margin-top:14px}
+  .honest p{margin-top:9px;font-size:15px}
+  .honest p:first-of-type{margin-top:12px}
+
+  footer{text-align:center;font-size:12px;color:var(--muted);padding:24px 16px 0}
+  footer a{color:var(--muted)}
+
+  /* ---------- opslagbalk ---------- */
+  .savebar{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:2px solid var(--line)}
+  .savebar .inner{max-width:1000px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .addr{font-weight:800;font-size:15px}
+  .addr small{display:block;font-weight:400;font-size:12px;color:var(--muted)}
+  .savebar .spacer{flex:1}
+  .status{font-size:13px;font-weight:700;display:flex;align-items:center;gap:6px;white-space:nowrap}
+  .status .dot{width:10px;height:10px;border:1px solid var(--line);border-radius:50%;flex:none}
+  .status.dirty .dot{background:var(--ink)}
+  .status.saved .dot{border:0;border-radius:0;width:auto;height:auto;font-weight:900}
+  .status.saved .dot::after{content:"\2713"}
+  .status.err{text-decoration:underline}
+  #saveBtn{padding:10px 18px;min-height:42px}
+  #switchBtn{font:inherit;font-size:12px;font-weight:600;background:none;border:0;border-bottom:1px solid var(--line);cursor:pointer;padding:0;color:var(--muted)}
+  @media (max-width:560px){
+    .savebar .inner{display:grid;grid-template-columns:1fr auto;gap:6px 10px;align-items:center}
+    .savebar .spacer{display:none}
+    .addr{grid-column:1;grid-row:1}
+    #saveBtn{grid-column:2;grid-row:1}
+    .status{grid-column:1/-1;grid-row:2;justify-content:flex-start}
+  }
+
+  /* ---------- samenvatting ---------- */
+  .sum{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin:18px 0}
+  .sum > div{background:var(--bg);padding:11px 12px}
+  .sum .v{font-size:21px;font-weight:800;letter-spacing:-.02em;line-height:1.15}
+  .sum .k{font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-top:2px}
+  @media (max-width:600px){ .sum{grid-template-columns:1fr 1fr} }
+
+  /* ---------- profiel ---------- */
+  details.prof{border:1px solid var(--line);margin:16px 0}
+  details.prof > summary{list-style:none;cursor:pointer;padding:12px 14px;background:var(--soft);display:flex;justify-content:space-between;gap:10px;align-items:center}
+  details.prof > summary::-webkit-details-marker{display:none}
+  details.prof > summary .chev{font-size:13px;font-weight:700;color:var(--muted)}
+  details.prof[open] > summary .chev::after{content:"\2013"}
+  details.prof:not([open]) > summary .chev::after{content:"+"}
+  .profbody{padding:14px;border-top:1px solid var(--line)}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+  @media (max-width:640px){ .grid3,.grid2{grid-template-columns:1fr} }
+  .sub{font-size:11px;text-transform:uppercase;letter-spacing:.08em;font-weight:700;color:var(--muted);margin:14px 0 8px}
+  .sub:first-child{margin-top:0}
+  .dirs{display:flex;flex-wrap:wrap;gap:8px}
+  .dirs label{display:flex;align-items:center;gap:7px;border:1px solid var(--line);padding:9px 12px;font-size:14px;font-weight:600;margin:0;cursor:pointer;min-height:44px}
+  .dirs input{width:18px;height:18px;accent-color:#000}
+  .locked{background:var(--soft);color:var(--muted)}
+
+  /* ---------- regels ---------- */
+  .tablehead{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:22px 0 8px;flex-wrap:wrap}
+  .cols,.row{display:grid;grid-template-columns:148px 116px 116px 1fr 92px 40px;gap:8px;align-items:start}
+  .cols{padding:8px 10px;background:var(--soft);border:1px solid var(--line);border-bottom:0;font-size:11px;text-transform:uppercase;letter-spacing:.07em;font-weight:700}
+  .rows{border:1px solid var(--line)}
+  .row{padding:8px 10px;border-bottom:1px solid var(--line)}
+  .row:last-child{border-bottom:0}
+  .row:nth-child(even){background:#fafafa}
+  .row .lbl{display:none}
+  .row input{padding:8px;min-height:40px}
+  .row .away{display:flex;align-items:center;justify-content:center;min-height:40px}
+  .row .away input{width:20px;height:20px;accent-color:#000}
+  .row .rm{font:inherit;font-size:18px;line-height:1;font-weight:700;background:none;border:1px solid var(--line);cursor:pointer;width:36px;height:40px;color:var(--ink)}
+  .addrow{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap}
+  @media (max-width:760px){
+    .cols{display:none}
+    .rows{border:0}
+    .row{grid-template-columns:1fr 1fr;gap:6px 8px;border:1px solid var(--line);margin-bottom:10px;padding:10px}
+    .row:nth-child(even){background:var(--bg)}
+    .row .lbl{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.07em;font-weight:700;color:var(--muted);margin-bottom:3px}
+    .row .cell{grid-column:1/-1}
+    .row .two-a{grid-column:1}
+    .row .two-b{grid-column:2}
+    .row .away{grid-column:1;justify-content:flex-start;gap:9px;border-top:1px solid var(--line);padding-top:10px;margin-top:2px}
+    .row .rm{grid-column:2;justify-self:end;align-self:end;width:44px;height:40px;margin-bottom:2px}
+  }
+
+  .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:18px;background:var(--ink);color:var(--bg);padding:11px 16px;font-size:14px;font-weight:600;z-index:50;opacity:0;pointer-events:none;transition:opacity .18s;max-width:92vw;text-align:center}
+  .toast.on{opacity:1}
+
+  @media print{
+    header,.savebar,.addrow,.rm,footer,.honest,.lang{display:none!important}
+    .row{break-inside:avoid}
+    body{padding:0}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="bar">
+    <div class="logo">Neighbor Noise</div>
+    <div class="lang" role="group" aria-label="Language">
+      <button type="button" data-lang="en" aria-pressed="true">EN</button>
+      <button type="button" data-lang="nl" aria-pressed="false">NL</button>
+    </div>
+  </div>
+</header>
+
+<!-- ===================== voorpagina ===================== -->
+<div id="viewHome">
+  <div class="wrap">
+    <div class="hero narrow">
+      <h1 data-t="h1">Write it down. Every time.</h1>
+      <p class="lead" data-t="lead">A free log for noise from the neighbours. No app, no equipment in your living room, no appointment. Note what you heard and when — and get one tidy overview you can hand on.</p>
+
+      <form class="start" id="startForm">
+        <div class="row">
+          <div>
+            <label for="postcode" data-t="f_postcode">Postcode</label>
+            <input type="text" id="postcode" autocomplete="postal-code" placeholder="1234 AB"
+                   maxlength="10" autocapitalize="characters" spellcheck="false" />
+          </div>
+          <div>
+            <label for="huisnummer" data-t="f_huisnr">House number</label>
+            <input type="text" id="huisnummer" autocomplete="address-line2" placeholder="12A"
+                   maxlength="8" autocapitalize="characters" spellcheck="false" />
+          </div>
+        </div>
+        <div class="err" id="startErr"></div>
+        <button type="submit" class="btn full" data-t="b_start">Open my log</button>
+        <p class="micro" data-t="micro">No account, no email address. Your postcode and house number are the key — come back any time, on any device.</p>
+      </form>
+    </div>
+  </div>
+
+  <section class="block"><div class="wrap narrow">
+    <h2 data-t="s_how">How it works</h2>
+    <div class="steps">
+      <div><div class="n">01</div><h3 data-t="st1_h">Open your log</h3><p data-t="st1_p">Postcode and house number, nothing else. That address is your log.</p></div>
+      <div><div class="n">02</div><h3 data-t="st2_h">Add a line each time</h3><p data-t="st2_p">Date and time are already filled in. Write what you heard. Tick the box if you were not at home.</p></div>
+      <div><div class="n">03</div><h3 data-t="st3_h">Hand the overview on</h3><p data-t="st3_p">Download it as a spreadsheet or print it to PDF, and give it to your landlord, housing association or council.</p></div>
+    </div>
+  </div></section>
+
+  <section class="block"><div class="wrap narrow">
+    <h2 data-t="s_why">Why this is different</h2>
+    <div class="diffs">
+      <div><h3 data-t="d1_h">Start in ten seconds</h3><p data-t="d1_p">No quote, no sales call, no two-week waiting list. Type your address and you are logging.</p></div>
+      <div><h3 data-t="d2_h">Nothing in your home</h3><p data-t="d2_p">No measuring case on a tripod, nobody coming round to place it or collect it.</p></div>
+      <div><h3 data-t="d3_h">You do not need permission</h3><p data-t="d3_p">You do not have to go through your landlord or the council to begin. The record is yours.</p></div>
+      <div><h3 data-t="d4_h">Note when you were away</h3><p data-t="d4_p">Noise while your home stood empty cannot be yours. It is the one line most logs forget.</p></div>
+    </div>
+
+    <div class="honest">
+      <h2 data-t="s_honest">What this is, and what it is not</h2>
+      <p data-t="hon1"><strong>This is a logbook, not a sound measurement.</strong> It records no decibels, and we claim nothing about what will hold up in court.</p>
+      <p data-t="hon2">What it does give you is the part that is usually missing: dates and times, written down the same way every time, over weeks — instead of reconstructed from memory months later.</p>
+      <p data-t="hon3">Whether that is enough depends on who reads it. Finding out costs you nothing.</p>
+    </div>
+  </div></section>
+
+  <section class="block"><div class="wrap narrow">
+    <h2 data-t="s_priv">About privacy</h2>
+    <p style="margin-top:10px;font-size:15px" data-t="priv">Your log sits under your postcode and house number, so anyone who types that address can read it. Write nothing you would mind the neighbours seeing — and ask us and we delete the lot.</p>
+  </div></section>
+
+  <footer><a href="/dashboard" data-t="f_dash">Administrator? Open the dashboard</a></footer>
+</div>
+
+<!-- ===================== logboek ===================== -->
+<div id="viewApp" hidden>
+  <div class="savebar">
+    <div class="inner">
+      <div class="addr" id="addrLabel">—<small><button type="button" id="switchBtn" data-t="b_switch">another address</button></small></div>
+      <div class="spacer"></div>
+      <div class="status" id="status"><span class="dot"></span><span id="statusText"></span></div>
+      <button type="button" class="btn" id="saveBtn" data-t="b_save">Save</button>
+    </div>
+  </div>
+
+  <main class="wrap">
+    <div class="sum" id="sum">
+      <div><div class="v" id="sEntries">0</div><div class="k" data-t="k_entries">entries</div></div>
+      <div><div class="v" id="sDays">0</div><div class="k" data-t="k_days">days</div></div>
+      <div><div class="v" id="sNights">0</div><div class="k" data-t="k_nights">after 23:00</div></div>
+      <div><div class="v" id="sSpan">—</div><div class="k" data-t="k_span">period</div></div>
+    </div>
+
+    <details class="prof" id="prof">
+      <summary><h2 data-t="s_prof">My details</h2><span class="chev"></span></summary>
+      <div class="profbody">
+        <div class="sub" data-t="s_me">Your address</div>
+        <div class="grid3">
+          <div><label for="m_naam" data-t="f_naam">Name</label><input type="text" id="m_naam" autocomplete="name" /></div>
+          <div><label for="m_straat" data-t="f_straat">Street</label><input type="text" id="m_straat" autocomplete="street-address" /></div>
+          <div><label for="m_plaats" data-t="f_plaats">City</label><input type="text" id="m_plaats" autocomplete="address-level2" /></div>
+        </div>
+        <div class="grid2" style="margin-top:10px">
+          <div><label data-t="f_postcode">Postcode</label><input type="text" id="pc_show" class="locked" readonly tabindex="-1" /></div>
+          <div><label data-t="f_huisnr">House number</label><input type="text" id="hn_show" class="locked" readonly tabindex="-1" /></div>
+        </div>
+
+        <div class="sub" data-t="s_them">Where the noise comes from</div>
+        <div class="grid3">
+          <div><label for="v_naam" data-t="f_naam">Name</label><input type="text" id="v_naam" /></div>
+          <div><label for="v_adres" data-t="f_adres">Address</label><input type="text" id="v_adres" /></div>
+          <div><label for="v_plaats" data-t="f_plaats">City</label><input type="text" id="v_plaats" /></div>
+        </div>
+
+        <div class="sub" data-t="s_dir">Direction</div>
+        <div class="dirs" id="dirs">
+          <label><input type="checkbox" value="boven" /><span data-t="d_up">Above</span></label>
+          <label><input type="checkbox" value="beneden" /><span data-t="d_down">Below</span></label>
+          <label><input type="checkbox" value="links" /><span data-t="d_left">Left</span></label>
+          <label><input type="checkbox" value="rechts" /><span data-t="d_right">Right</span></label>
+        </div>
+      </div>
+    </details>
+
+    <div class="tablehead"><h2 data-t="s_log">The log</h2></div>
+
+    <div class="cols" aria-hidden="true">
+      <div data-t="c_date">Date</div><div data-t="c_start">Start</div><div data-t="c_stop">End</div>
+      <div data-t="c_desc">What did you hear</div><div data-t="c_away">Not home</div><div></div>
+    </div>
+    <div class="rows" id="rows"></div>
+
+    <div class="addrow">
+      <button type="button" class="btn" id="addBtn" data-t="b_add">+ Add a line</button>
+      <button type="button" class="btn ghost" id="csvBtn" data-t="b_csv">Download spreadsheet</button>
+      <button type="button" class="btn ghost" id="printBtn" data-t="b_print">Print / PDF</button>
+    </div>
+
+    <div class="honest" style="margin-top:22px" data-t="note_box"></div>
+    <footer><a href="/dashboard" data-t="f_dash">Administrator? Open the dashboard</a></footer>
+  </main>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+  "use strict";
+
+  var T = {
+    en:{
+      h1:"Write it down. Every time.",
+      lead:"A free log for noise from the neighbours. No app, no equipment in your living room, no appointment. Note what you heard and when — and get one tidy overview you can hand on.",
+      f_postcode:"Postcode", f_huisnr:"House number", b_start:"Open my log",
+      micro:"No account, no email address. Your postcode and house number are the key — come back any time, on any device.",
+      s_how:"How it works",
+      st1_h:"Open your log", st1_p:"Postcode and house number, nothing else. That address is your log.",
+      st2_h:"Add a line each time", st2_p:"Date and time are already filled in. Write what you heard. Tick the box if you were not at home.",
+      st3_h:"Hand the overview on", st3_p:"Download it as a spreadsheet or print it to PDF, and give it to your landlord, housing association or council.",
+      s_why:"Why this is different",
+      d1_h:"Start in ten seconds", d1_p:"No quote, no sales call, no two-week waiting list. Type your address and you are logging.",
+      d2_h:"Nothing in your home", d2_p:"No measuring case on a tripod, nobody coming round to place it or collect it.",
+      d3_h:"You do not need permission", d3_p:"You do not have to go through your landlord or the council to begin. The record is yours.",
+      d4_h:"Note when you were away", d4_p:"Noise while your home stood empty cannot be yours. It is the one line most logs forget.",
+      s_honest:"What this is, and what it is not",
+      hon1:"<strong>This is a logbook, not a sound measurement.</strong> It records no decibels, and we claim nothing about what will hold up in court.",
+      hon2:"What it does give you is the part that is usually missing: dates and times, written down the same way every time, over weeks — instead of reconstructed from memory months later.",
+      hon3:"Whether that is enough depends on who reads it. Finding out costs you nothing.",
+      s_priv:"About privacy",
+      priv:"Your log sits under your postcode and house number, so anyone who types that address can read it. Write nothing you would mind the neighbours seeing — and ask us and we delete the lot.",
+      f_dash:"Administrator? Open the dashboard",
+      b_switch:"another address", b_save:"Save",
+      k_entries:"entries", k_days:"days", k_nights:"after 23:00", k_span:"period",
+      s_prof:"My details", s_me:"Your address", s_them:"Where the noise comes from", s_dir:"Direction",
+      f_naam:"Name", f_straat:"Street", f_plaats:"City", f_adres:"Address",
+      d_up:"Above", d_down:"Below", d_left:"Left", d_right:"Right",
+      s_log:"The log",
+      c_date:"Date", c_start:"Start", c_stop:"End", c_desc:"What did you hear", c_away:"Not home",
+      b_add:"+ Add a line", b_csv:"Download spreadsheet", b_print:"Print / PDF",
+      note_box:"<strong>Saving</strong><p>Press <strong>Save</strong> at the top when you are done. It also saves by itself once you stop typing, so a closed tab costs you nothing. Come back with the same postcode and house number and it is all still here.</p>",
+      st_saved:"Saved", st_dirty:"Not saved", st_saving:"Saving…", st_err:"Could not save — press Save",
+      saved_at:function(t){ return "Saved at " + t; },
+      err_pc:"That postcode does not look right. Letters and digits only, for example 1234 AB.",
+      err_hn:"Enter a house number, for example 12 or 12A.",
+      err_net:"No connection. Please try again.",
+      rm_confirm:"Delete this line?", leave:"You have changes that are not saved yet.",
+      toast_saved:"Saved", csv_empty:"There is nothing to download yet."
+    },
+    nl:{
+      h1:"Schrijf het op. Elke keer.",
+      lead:"Een gratis logboek voor geluid van de buren. Geen app, geen apparaat in uw woonkamer, geen afspraak. Noteer wat u hoorde en wanneer — en krijg één net overzicht dat u kunt doorgeven.",
+      f_postcode:"Postcode", f_huisnr:"Huisnummer", b_start:"Mijn logboek openen",
+      micro:"Geen account, geen e-mailadres. Uw postcode en huisnummer zijn de sleutel — kom terug wanneer u wilt, op welk apparaat dan ook.",
+      s_how:"Zo werkt het",
+      st1_h:"Open uw logboek", st1_p:"Postcode en huisnummer, meer niet. Dat adres ís uw logboek.",
+      st2_h:"Zet er elke keer een regel bij", st2_p:"Datum en tijd staan al ingevuld. Schrijf op wat u hoorde. Vink aan als u niet thuis was.",
+      st3_h:"Geef het overzicht door", st3_p:"Download het als spreadsheet of print het naar PDF, en geef het aan uw verhuurder, woningcorporatie of gemeente.",
+      s_why:"Waarom dit anders is",
+      d1_h:"Binnen tien seconden begonnen", d1_p:"Geen offerte, geen verkoopgesprek, geen wachttijd van twee weken. Adres intypen en u houdt bij.",
+      d2_h:"Niets bij u in huis", d2_p:"Geen meetkoffer op een statief, niemand die langskomt om hem te plaatsen of op te halen.",
+      d3_h:"U heeft geen toestemming nodig", d3_p:"U hoeft niet eerst langs uw verhuurder of de gemeente. Het dossier is van u.",
+      d4_h:"Noteer wanneer u weg was", d4_p:"Geluid terwijl uw huis leegstond kan niet van u zijn. Dat is de regel die de meeste logboeken vergeten.",
+      s_honest:"Wat dit wel is, en wat niet",
+      hon1:"<strong>Dit is een logboek, geen geluidsmeting.</strong> Er worden geen decibellen vastgelegd, en wij beloven niets over wat standhoudt bij de rechter.",
+      hon2:"Wat het u wél geeft is het stuk dat meestal ontbreekt: datums en tijden, elke keer op dezelfde manier genoteerd, weken achter elkaar — in plaats van maanden later uit uw hoofd bij elkaar gezocht.",
+      hon3:"Of dat genoeg is, hangt af van wie het leest. Erachter komen kost u niets.",
+      s_priv:"Over privacy",
+      priv:"Uw logboek staat onder uw postcode en huisnummer, dus iedereen die dat adres intypt kan het lezen. Schrijf er niets in wat u de buren niet zou willen laten zien — en vraag het ons, dan verwijderen we alles.",
+      f_dash:"Beheerder? Naar het dashboard",
+      b_switch:"ander adres", b_save:"Opslaan",
+      k_entries:"regels", k_days:"dagen", k_nights:"na 23:00", k_span:"periode",
+      s_prof:"Mijn gegevens", s_me:"Uw adres", s_them:"Waar het geluid vandaan komt", s_dir:"Richting",
+      f_naam:"Naam", f_straat:"Straat", f_plaats:"Plaats", f_adres:"Adres",
+      d_up:"Boven", d_down:"Beneden", d_left:"Links", d_right:"Rechts",
+      s_log:"Het logboek",
+      c_date:"Datum", c_start:"Start", c_stop:"Stop", c_desc:"Wat hoorde u", c_away:"Niet thuis",
+      b_add:"+ Regel toevoegen", b_csv:"Spreadsheet downloaden", b_print:"Afdrukken / PDF",
+      note_box:"<strong>Opslaan</strong><p>Klik bovenaan op <strong>Opslaan</strong> als u klaar bent. Hij bewaart ook uit zichzelf zodra u stopt met typen, dus een dichtgeklapt tabblad kost u niets. Kom terug met dezelfde postcode en huisnummer en alles staat er nog.</p>",
+      st_saved:"Opgeslagen", st_dirty:"Niet opgeslagen", st_saving:"Opslaan…", st_err:"Opslaan mislukt — klik Opslaan",
+      saved_at:function(t){ return "Opgeslagen om " + t; },
+      err_pc:"Die postcode klopt niet. Alleen letters en cijfers, bijvoorbeeld 1234 AB.",
+      err_hn:"Vul een huisnummer in, bijvoorbeeld 12 of 12A.",
+      err_net:"Geen verbinding. Probeer het opnieuw.",
+      rm_confirm:"Deze regel verwijderen?", leave:"U heeft wijzigingen die nog niet zijn opgeslagen.",
+      toast_saved:"Opgeslagen", csv_empty:"Er valt nog niets te downloaden."
+    }
+  };
+
+  // Engelse naam, Nederlandse markt: laat de browser kiezen, de bezoeker mag overrulen.
+  var lang = (navigator.language || "en").toLowerCase().indexOf("nl") === 0 ? "nl" : "en";
+  try { var st = localStorage.getItem("nn_lang"); if (st === "nl" || st === "en") lang = st; } catch(e){}
+
+  var addr = null, dirty = false, saving = false, failed = false, savedTime = "";
+  var autoTimer = null, toastTimer = null;
+  var $ = function(id){ return document.getElementById(id); };
+  function d(){ return T[lang]; }
+
+  function pad(n){ return (n < 10 ? "0" : "") + n; }
+  function today(){ var x = new Date(); return x.getFullYear() + "-" + pad(x.getMonth()+1) + "-" + pad(x.getDate()); }
+  function clock(){ var x = new Date(); return pad(x.getHours()) + ":" + pad(x.getMinutes()); }
+  function fmtDate(iso){ var p = String(iso||"").split("-"); return p.length === 3 ? p[2]+"-"+p[1]+"-"+p[0] : (iso||""); }
+
+  var norm = function(v){ return String(v||"").toUpperCase().replace(/[^0-9A-Z]/g, ""); };
+  var okPc = function(v){ return /^[0-9A-Z]{3,10}$/.test(v); };
+  var okHn = function(v){ return /^[0-9A-Z]{1,8}$/.test(v) && /[0-9]/.test(v); };
+  function prettyPc(p){ return /^[0-9]{4}[A-Z]{2}$/.test(p) ? p.slice(0,4) + " " + p.slice(4) : p; }
+
+  function toast(msg){
+    var t = $("toast"); t.textContent = msg; t.classList.add("on");
+    clearTimeout(toastTimer); toastTimer = setTimeout(function(){ t.classList.remove("on"); }, 1900);
+  }
+
+  function applyLang(){
+    var dd = d();
+    document.documentElement.lang = lang;
+    document.querySelectorAll("[data-t]").forEach(function(el){
+      var v = dd[el.getAttribute("data-t")];
+      if (typeof v === "string") el.innerHTML = v;
+    });
+    document.querySelectorAll(".lang button").forEach(function(b){
+      b.setAttribute("aria-pressed", String(b.getAttribute("data-lang") === lang));
+    });
+    document.querySelectorAll("#rows .row").forEach(relabelRow);
+    paintStatus(); summarise();
+    try { localStorage.setItem("nn_lang", lang); } catch(e){}
+  }
+
+  function paintStatus(){
+    var el = $("status"), txt = $("statusText"), dd = d();
+    el.className = "status";
+    if (saving){ txt.textContent = dd.st_saving; return; }
+    if (failed){ el.classList.add("err","dirty"); txt.textContent = dd.st_err; return; }
+    if (dirty){ el.classList.add("dirty"); txt.textContent = dd.st_dirty; return; }
+    el.classList.add("saved");
+    txt.textContent = savedTime ? dd.saved_at(savedTime) : dd.st_saved;
+  }
+  function markDirty(){
+    dirty = true; failed = false; paintStatus(); summarise();
+    clearTimeout(autoTimer);
+    autoTimer = setTimeout(function(){ save(false); }, 1200);
+  }
+
+  var PROFILE = ["m_naam","m_straat","m_plaats","v_naam","v_adres","v_plaats"];
+
+  function relabelRow(row){
+    var dd = d(), map = { date:"c_date", start:"c_start", stop:"c_stop", desc:"c_desc", away:"c_away" };
+    row.querySelectorAll("[data-lbl]").forEach(function(el){ el.textContent = dd[map[el.getAttribute("data-lbl")]]; });
+  }
+
+  function makeRow(e){
+    e = e || {};
+    var row = document.createElement("div");
+    row.className = "row";
+    row.innerHTML =
+      '<div class="cell"><span class="lbl" data-lbl="date"></span><input type="date" data-f="datum" /></div>' +
+      '<div class="cell two-a"><span class="lbl" data-lbl="start"></span><input type="time" data-f="start" /></div>' +
+      '<div class="cell two-b"><span class="lbl" data-lbl="stop"></span><input type="time" data-f="stop" /></div>' +
+      '<div class="cell"><span class="lbl" data-lbl="desc"></span><input type="text" data-f="omschrijving" maxlength="1000" /></div>' +
+      '<label class="away"><input type="checkbox" data-f="afwezig" /><span class="lbl" data-lbl="away" style="margin:0"></span></label>' +
+      '<button type="button" class="rm" aria-label="x">&times;</button>';
+    row.querySelector('[data-f=datum]').value = e.datum || "";
+    row.querySelector('[data-f=start]').value = e.start || "";
+    row.querySelector('[data-f=stop]').value = e.stop || "";
+    row.querySelector('[data-f=omschrijving]').value = e.omschrijving || "";
+    row.querySelector('[data-f=afwezig]').checked = !!Number(e.afwezig);
+    relabelRow(row);
+    return row;
+  }
+
+  function addRow(prefill){
+    var row = makeRow(prefill ? { datum: today(), start: clock() } : null);
+    $("rows").appendChild(row);
+    summarise();
+    return row;
+  }
+
+  function readEntries(){
+    var out = [];
+    $("rows").querySelectorAll(".row").forEach(function(row){
+      var e = {};
+      row.querySelectorAll("[data-f]").forEach(function(i){
+        e[i.getAttribute("data-f")] = i.type === "checkbox" ? i.checked : i.value;
+      });
+      // Datum en starttijd staan al ingevuld zodra een lege regel verschijnt.
+      // Daarop afgaan zou elk bezoek een loze regel opleveren, dus een regel
+      // telt pas mee bij een omschrijving, een eindtijd, of "niet thuis".
+      if ((e.omschrijving||"").trim() || e.stop || e.afwezig) out.push(e);
+    });
+    return out;
+  }
+
+  function readProfile(){
+    var p = {};
+    PROFILE.forEach(function(k){ p[k] = $(k).value.trim(); });
+    var dirs = [];
+    $("dirs").querySelectorAll("input:checked").forEach(function(i){ dirs.push(i.value); });
+    p.richting = dirs.join(",");
+    return p;
+  }
+
+  function fillProfile(r){
+    PROFILE.forEach(function(k){ $(k).value = r[k] || ""; });
+    var dirs = String(r.richting || "").split(",");
+    $("dirs").querySelectorAll("input").forEach(function(i){ i.checked = dirs.indexOf(i.value) !== -1; });
+  }
+
+  // De samenvatting beantwoordt de vraag die elke verhuurder stelt:
+  // gaat dit structureel door, en speelt het 's nachts?
+  function summarise(){
+    var es = readEntries(), days = {}, nights = 0;
+    es.forEach(function(e){
+      if (e.datum) days[e.datum] = 1;
+      var h = parseInt(String(e.start || "").slice(0,2), 10);
+      if (!isNaN(h) && (h >= 23 || h < 7)) nights++;
+    });
+    var keys = Object.keys(days).sort();
+    $("sEntries").textContent = es.length;
+    $("sDays").textContent = keys.length;
+    $("sNights").textContent = nights;
+    $("sSpan").textContent = keys.length
+      ? (keys.length > 1 ? fmtDate(keys[0]) + " – " + fmtDate(keys[keys.length-1]) : fmtDate(keys[0]))
+      : "—";
+  }
+
+  function post(path, body){
+    return fetch(path, {
+      method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body)
+    }).then(function(r){
+      return r.json().catch(function(){ return {}; }).then(function(j){
+        if (!r.ok) throw new Error(j.error || "http_" + r.status);
+        return j;
+      });
+    });
+  }
+
+  function payload(){
+    return { postcode: addr.postcode, huisnummer: addr.huisnummer, profile: readProfile(), entries: readEntries() };
+  }
+
+  function save(manual){
+    if (!addr) return Promise.resolve();
+    clearTimeout(autoTimer);
+    if (saving){ dirty = true; return Promise.resolve(); }
+    saving = true; paintStatus();
+    return post("/api/save", payload()).then(function(){
+      saving = false; dirty = false; failed = false; savedTime = clock(); paintStatus();
+      if (manual) toast(d().toast_saved);
+    }).catch(function(){
+      saving = false; failed = true; paintStatus();
+      if (manual) toast(d().err_net);
+      clearTimeout(autoTimer);
+      autoTimer = setTimeout(function(){ save(false); }, 8000);
+    });
+  }
+
+  function openLog(res){
+    addr = { postcode: res.report.postcode, huisnummer: res.report.huisnummer };
+    try { localStorage.setItem("nn_addr", addr.postcode + "|" + addr.huisnummer); } catch(e){}
+
+    $("addrLabel").childNodes[0].nodeValue = prettyPc(addr.postcode) + "  " + addr.huisnummer;
+    $("pc_show").value = prettyPc(addr.postcode);
+    $("hn_show").value = addr.huisnummer;
+
+    fillProfile(res.report);
+    $("rows").innerHTML = "";
+    (res.entries || []).forEach(function(e){ $("rows").appendChild(makeRow(e)); });
+    addRow(true);
+    if (!res.report.m_naam) $("prof").open = true;
+
+    dirty = false; failed = false; savedTime = "";
+    summarise(); paintStatus();
+    $("viewHome").hidden = true;
+    $("viewApp").hidden = false;
+    window.scrollTo(0, 0);
+  }
+
+  function csv(){
+    var es = readEntries(), dd = d();
+    if (!es.length){ toast(dd.csv_empty); return; }
+    var p = readProfile();
+    var head = ["postcode","house_number","name","street","city","source_name","source_address",
+                "source_city","direction","date","start","end","description","not_home"];
+    var base = [prettyPc(addr.postcode), addr.huisnummer, p.m_naam, p.m_straat, p.m_plaats,
+                p.v_naam, p.v_adres, p.v_plaats, p.richting];
+    var lines = [head.join(";")];
+    es.forEach(function(e){
+      lines.push(base.concat([e.datum || "", e.start || "", e.stop || "", e.omschrijving || "",
+        e.afwezig ? "yes" : ""]).map(function(v){
+          return '"' + String(v == null ? "" : v).replace(/"/g, '""') + '"';
+        }).join(";"));
+    });
+    var url = URL.createObjectURL(new Blob(["﻿" + lines.join("\r\n")], { type: "text/csv;charset=utf-8" }));
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = "neighbor-noise-" + addr.postcode + "-" + addr.huisnummer + ".csv";
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
+  }
+
+  // ---------- events ----------
+  document.querySelectorAll(".lang button").forEach(function(b){
+    b.addEventListener("click", function(){ lang = b.getAttribute("data-lang"); applyLang(); });
+  });
+
+  $("startForm").addEventListener("submit", function(ev){
+    ev.preventDefault();
+    var pc = norm($("postcode").value), hn = norm($("huisnummer").value);
+    var err = $("startErr");
+    if (!okPc(pc)){ err.textContent = d().err_pc; err.classList.add("on"); $("postcode").focus(); return; }
+    if (!okHn(hn)){ err.textContent = d().err_hn; err.classList.add("on"); $("huisnummer").focus(); return; }
+    err.classList.remove("on");
+    var btn = this.querySelector("button[type=submit]");
+    btn.disabled = true;
+    post("/api/open", { postcode: pc, huisnummer: hn })
+      .then(openLog)
+      .catch(function(){ err.textContent = d().err_net; err.classList.add("on"); })
+      .then(function(){ btn.disabled = false; });
+  });
+
+  $("saveBtn").addEventListener("click", function(){ save(true); });
+  $("csvBtn").addEventListener("click", csv);
+  $("printBtn").addEventListener("click", function(){ window.print(); });
+
+  $("switchBtn").addEventListener("click", function(){
+    save(true).then(function(){
+      try { localStorage.removeItem("nn_addr"); } catch(e){}
+      addr = null; dirty = false; failed = false;
+      $("viewApp").hidden = true;
+      $("viewHome").hidden = false;
+      $("postcode").value = ""; $("huisnummer").value = "";
+      window.scrollTo(0, 0);
+      $("postcode").focus();
+    });
+  });
+
+  $("addBtn").addEventListener("click", function(){
+    addRow(true).querySelector('[data-f=omschrijving]').focus();
+    markDirty();
+  });
+
+  $("viewApp").addEventListener("input", function(ev){
+    if (ev.target.closest("#rows, .profbody")) markDirty();
+  });
+  $("viewApp").addEventListener("change", function(ev){
+    if (ev.target.closest("#rows, .profbody")) markDirty();
+  });
+
+  $("rows").addEventListener("click", function(ev){
+    var b = ev.target.closest(".rm");
+    if (!b) return;
+    var row = b.closest(".row");
+    var filled = Array.prototype.some.call(row.querySelectorAll("[data-f]"), function(i){
+      return i.type === "checkbox" ? i.checked : i.value.trim();
+    });
+    if (filled && !confirm(d().rm_confirm)) return;
+    row.remove();
+    if (!$("rows").querySelector(".row")) addRow(true);
+    markDirty();
+  });
+
+  window.addEventListener("pagehide", function(){
+    if (!addr || (!dirty && !failed)) return;
+    try {
+      navigator.sendBeacon("/api/save", new Blob([JSON.stringify(payload())], { type: "application/json" }));
+    } catch(e){}
+  });
+  window.addEventListener("beforeunload", function(ev){
+    if (!addr || (!dirty && !failed)) return;
+    ev.preventDefault(); ev.returnValue = d().leave; return d().leave;
+  });
+  document.addEventListener("visibilitychange", function(){
+    if (document.visibilityState === "hidden" && (dirty || failed)) save(false);
+  });
+
+  // ---------- start ----------
+  applyLang();
+  var saved = null;
+  try { saved = localStorage.getItem("nn_addr"); } catch(e){}
+  if (saved && saved.indexOf("|") > 0){
+    var parts = saved.split("|");
+    post("/api/open", { postcode: parts[0], huisnummer: parts[1] })
+      .then(openLog)
+      .catch(function(){ try { localStorage.removeItem("nn_addr"); } catch(e){} });
+  }
+})();
+</script>
+</body>
+</html>

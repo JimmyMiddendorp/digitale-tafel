@@ -1,0 +1,27 @@
+name = "neighbornoise"
+main = "src/worker.js"
+compatibility_date = "2025-08-01"
+workers_dev = true
+
+rules = [
+  { type = "Text", globs = ["**/*.html"], fallthrough = false }
+]
+
+[vars]
+ADMIN_PASSWORD = "333"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "neighbornoise"
+database_id = "local-dev-placeholder"
+
+# Eigen domein. Werkt zodra neighbornoise.com als zone in het Cloudflare-account
+# staat (nameservers overgezet). Lukt dat nog niet, dan zet golive.sh deze regels
+# tijdelijk uit en rolt hij uit op het workers.dev-adres.
+[[routes]]
+pattern = "neighbornoise.com"
+custom_domain = true
+
+[[routes]]
+pattern = "www.neighbornoise.com"
+custom_domain = true

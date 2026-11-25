@@ -417,7 +417,10 @@
       row.querySelectorAll("[data-f]").forEach(function(i){
         e[i.getAttribute("data-f")] = i.type === "checkbox" ? i.checked : i.value;
       });
-      if (e.datum || e.start || e.stop || (e.omschrijving||"").trim() || e.afwezig) out.push(e);
+      // Datum en starttijd staan al ingevuld zodra een lege regel verschijnt.
+      // Daarop afgaan zou elk bezoek een loze regel opleveren, dus een regel
+      // telt pas mee bij een omschrijving, een eindtijd, of "niet thuis".
+      if ((e.omschrijving||"").trim() || e.stop || e.afwezig) out.push(e);
     });
     return out;
   }
