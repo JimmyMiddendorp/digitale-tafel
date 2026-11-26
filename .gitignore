@@ -1,5 +1,5 @@
-.claude/
-.DS_Store
 node_modules/
 .wrangler/
 package-lock.json
+.DS_Store
+.claude/

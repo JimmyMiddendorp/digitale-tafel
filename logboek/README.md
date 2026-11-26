@@ -101,7 +101,7 @@ periode — precies de vragen die een verhuurder of VvE stelt.
 
 ```bash
 npm install
-npx wrangler d1 execute neighbornoise --local --file=./schema.sql
+npx wrangler d1 execute neighbornoise-logboek --local --file=./schema.sql
 npx wrangler dev
 ```
 

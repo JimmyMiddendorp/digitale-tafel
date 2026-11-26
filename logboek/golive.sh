@@ -12,12 +12,12 @@ if grep -q 'PLACEHOLDER_WORDT_INGEVULD_DOOR_GOLIVE' "$TOML"; then
   # Bestaat de database al, dan gebruiken we die; anders maken we hem aan.
   ID=$(npx wrangler d1 list --json 2>/dev/null \
        | node -e 'let s="";process.stdin.on("data",d=>s+=d).on("end",()=>{
-           try{const m=JSON.parse(s).find(d=>d.name==="neighbornoise");console.log(m?m.uuid:"")}catch(e){console.log("")}})')
+           try{const m=JSON.parse(s).find(d=>d.name==="neighbornoise-logboek");console.log(m?m.uuid:"")}catch(e){console.log("")}})')
   if [ -z "$ID" ]; then
-    npx wrangler d1 create neighbornoise --location weur 2>&1 | tee "$LOG"
+    npx wrangler d1 create neighbornoise-logboek --location weur 2>&1 | tee "$LOG"
     ID=$(grep -oE '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}' "$LOG" | head -1)
   fi
-  [ -n "$ID" ] || { echo "Kon geen database-id vinden. Maak hem met: npx wrangler d1 create neighbornoise"; exit 1; }
+  [ -n "$ID" ] || { echo "Kon geen database-id vinden. Maak hem met: npx wrangler d1 create neighbornoise-logboek"; exit 1; }
   sed -i.bak "s/PLACEHOLDER_WORDT_INGEVULD_DOOR_GOLIVE/$ID/" "$TOML" && rm -f "$TOML.bak"
   echo "   database-id ingevuld: $ID"
 else
@@ -25,7 +25,7 @@ else
 fi
 
 echo "== 2/4 tabellen (veilig om opnieuw te draaien) =="
-npx wrangler d1 execute neighbornoise --remote --file=./schema.sql --yes
+npx wrangler d1 execute neighbornoise-logboek --remote --file=./schema.sql --yes
 
 echo "== 3/4 uitrollen =="
 if ! npx wrangler deploy 2>&1 | tee "$LOG"; then
@@ -33,7 +33,7 @@ if ! npx wrangler deploy 2>&1 | tee "$LOG"; then
     echo
     echo "   Het eigen domein kon nog niet gekoppeld worden (zone nog niet actief in"
     echo "   Cloudflare?). Ik rol nu uit zonder domein; je site komt op workers.dev."
-    echo "   Zet neighbornoise.com later aan via: Workers & Pages > neighbornoise >"
+    echo "   Zet neighbornoise.com later aan via: Workers & Pages > neighbornoise-logboek >"
     echo "   Settings > Domains & Routes > Add > Custom domain."
     cp "$TOML" "$TOML.met-domein"
     node -e 'const f="wrangler.toml",fs=require("fs");fs.writeFileSync(f,fs.readFileSync(f,"utf8").split("[[routes]]")[0].trimEnd()+"\n")'

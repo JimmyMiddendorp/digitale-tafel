@@ -1,0 +1,20 @@
+{
+  "name": "neighbornoise",
+  "version": "1.0.0",
+  "description": "NeighborNoise platform fase 1 (Cloudflare Workers + D1 + R2 + Resend)",
+  "scripts": {
+    "dev": "wrangler dev --local --test-scheduled",
+    "db:local": "wrangler d1 migrations apply neighbornoise --local",
+    "db:remote": "wrangler d1 migrations apply neighbornoise --remote",
+    "deploy": "wrangler deploy",
+    "test": "node test/e2e.mjs"
+  },
+  "devDependencies": {
+    "wrangler": "^3.114.17"
+  },
+  "dependencies": {
+    "hono": "^4.13.22"
+  },
+  "private": true,
+  "type": "module"
+}
